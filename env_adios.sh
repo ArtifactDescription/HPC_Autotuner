@@ -1,0 +1,4 @@
+export ADIOS_HOME=$ROOT/adios
+export PATH=$ADIOS_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ADIOS_HOME/lib
+

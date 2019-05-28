@@ -1,0 +1,30 @@
+
+units		metal
+boundary	p p p
+atom_style	atomic
+read_restart	restart.liquid
+pair_style	eam/fs
+pair_coeff	* * CuZr.fs Cu Zr
+
+thermo_style custom step temp press vol lx ly lz
+
+reset_timestep 	0
+log 		log.quench
+
+fix 		1 all npt temp 2300 273 0.1 aniso 0.0 0.0 50
+timestep	0.004
+thermo		200
+
+dump 1 all custom/adios_staging 200 dump.bp id type x y z vx vy vz fx fy fy fz
+dump_modify 1 format line "method=FLEXPATH;have_metadata_file=0"
+
+# dump 1 all custom 500 dump.txt id type x y z vx vy vz fx fy fy fz
+
+run 		16000
+
+write_restart	restart.glass_273K
+
+unfix 		1
+fix 		2 all npt temp 273 273 0.1 aniso 0.0 0.0 50
+run		20000
+
