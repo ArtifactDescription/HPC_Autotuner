@@ -2,7 +2,6 @@
 
 set -a
 export ROOT=$PWD/install
-# export ROOT=$HOME/Public/sfw/bebop/codar-install
 mkdir -pv $ROOT
 
 BUILD_LOG=build-$( date "+%Y-%m-%d-%H:%M_%p" ).log
