@@ -43,6 +43,11 @@ if wget –q https://gtkorvo.github.io/korvo_bootstrap.pl
 then
 	echo WARNING: wget exited with: $?
 fi
+if [ ! -f korvo_bootstrap.pl ]
+then
+	echo "Failed to download korvo_bootstrap.pl !"
+	cp $ROOT/../resource/korvo_bootstrap.pl ./
+fi
 
 # Setup korvo
 # See 'perl ./korvo_bootstrap.pl -h'

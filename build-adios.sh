@@ -30,6 +30,11 @@ if wget -q https://users.nccs.gov/~pnorbert/adios-1.13.1.tar.gz
 then
 	echo WARNING: wget exited with: $?
 fi
+if [ ! -f adios-1.13.1.tar.gz ]
+then
+	echo "Failed to download adios-1.13.1.tar.gz !"
+	cp $ROOT/../resource/adios-1.13.1.tar.gz ./
+fi
 if [ -d adios-1.13.1 ]
 then
 	rm -rf adios-1.13.1
