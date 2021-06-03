@@ -36,6 +36,7 @@ export PATH=$ROOT/anaconda2/bin:$PATH
 conda create -n codar python=2.7
 export PATH=$ROOT/anaconda2/envs/codar/bin:$PATH
 
+rm -f Anaconda2-5.3.1-Linux-x86_64.sh 
 
 echo
 echo "Anaconda2 is done!"

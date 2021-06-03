@@ -38,21 +38,26 @@ set -eu
 # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$JAVA_HOME/lib
 
 # Download Ant
-if [ -f apache-ant-1.10.5-bin.tar.gz ]
+if [ -f apache-ant-1.10.10-bin.tar.gz ]
 then
-	rm -fv apache-ant-1.10.5-bin.tar.gz
+	rm -fv apache-ant-1.10.10-bin.tar.gz
 fi
-if wget -q https://www.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.tar.gz
+if wget -q https://www.apache.org/dist/ant/binaries/apache-ant-1.10.10-bin.tar.gz
 then
 	echo WARNING: wget exited with: $?
 fi
-if [ -d $ROOT/apache-ant-1.10.5 ]
+if [ ! -f apache-ant-1.10.10-bin.tar.gz ]
 then
-        rm -rf $ROOT/apache-ant-1.10.5
+	cp -f $ROOT/../resource/apache-ant-1.10.10-bin.tar.gz ./
 fi
-tar -zxvf apache-ant-1.10.5-bin.tar.gz -C $ROOT
+if [ -d $ROOT/apache-ant-1.10.10 ]
+then
+        rm -rf $ROOT/apache-ant-1.10.10
+fi
+tar -zxvf apache-ant-1.10.10-bin.tar.gz -C $ROOT
+rm -f apache-ant-1.10.10-bin.tar.gz
 source ./env_ant.sh
-# export ANT_HOME=$ROOT/apache-ant-1.10.5
+# export ANT_HOME=$ROOT/apache-ant-1.10.10
 # export PATH=$ANT_HOME/bin:$PATH
 # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ANT_HOME/lib
 
@@ -66,6 +71,8 @@ git clone https://github.com/swift-lang/swift-t.git
 
 # Setup swift-t
 cd swift-t
+git checkout tong01
+
 dev/build/init-settings.sh
 sed -i 's/^export SWIFT_T_PREFIX=\/tmp\/swift-t-install$/export SWIFT_T_PREFIX='"${ROOT//\//\\/}"'\/swift-t-install/' dev/build/swift-t-settings.sh
 

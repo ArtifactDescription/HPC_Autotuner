@@ -39,7 +39,8 @@ if [ -d adios-1.13.1 ]
 then
 	rm -rf adios-1.13.1
 fi
-tar -zxf adios-1.13.1.tar.gz
+tar -zxvf adios-1.13.1.tar.gz
+rm -f adios-1.13.1.tar.gz
 
 export LIBS=-pthread
 
@@ -55,6 +56,7 @@ make install
 set +x
 
 cd ..
+rm -rf adios-1.13.1
 
 source ./env_adios.sh
 # export ADIOS_HOME=$ROOT/adios

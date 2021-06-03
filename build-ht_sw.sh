@@ -13,6 +13,10 @@ then
 	rm -rf Example-Heat_Transfer
 fi
 git clone https://github.com/CODARcode/Example-Heat_Transfer.git
+if [! -d Example-Heat_Transfer ]
+then
+	tar -zxvf $ROOT/../resource/Example-Heat_Transfer.tar.gz
+fi
 
 echo
 echo "Build heat transfer ..."
