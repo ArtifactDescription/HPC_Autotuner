@@ -27,7 +27,7 @@ git checkout 547306a935d45204ec509e0af06540aac05d3045
 cd ..
 echo
 echo "Build Gray-scott and PDF calculation ..."
-echo 'mv adiosvm/Tutorial/gray-scott gray-scott'
+echo 'cp -r adiosvm/Tutorial/gray-scott gray-scott'
 cp -r adiosvm/Tutorial/gray-scott gray-scott
 echo 'rm -rf adiosvm'
 rm -rf adiosvm

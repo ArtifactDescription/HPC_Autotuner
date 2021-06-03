@@ -61,7 +61,7 @@ export ADIOS_HOME=$ROOT/adios
 export PATH=$ADIOS_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ADIOS_HOME/lib
 ```
-#### (4) Download, compile, and test the application Heat-transfer and Stage-write
+#### (4) Download, compile, and test the applications Heat-transfer and Stage-write
 Download coupled applications Heat-transfer and Stage-write:
 ```
 git clone https://github.com/CODARcode/Example-Heat_Transfer.git
@@ -159,7 +159,7 @@ conda create -n codar python=2.7
 export PATH=$ROOT/anaconda2/envs/codar/bin:$PATH
 ```
 #### (8) Reconfigure Swift/T with Python and Rebuild/reinstall Swift/T
-Edit swift-t/swift-t-settings.sh to set ENABLE_PYTHON as 1 and PYTHON_EXE as the path of python executable and rebuild Swift/T:
+Set ENABLE_PYTHON as 1 and PYTHON_EXE as the python launcher's path in dev/build/build-swift-t.sh and rebuild Swift/T:
 ```
 dev/build/build-swift-t.sh
 ```
