@@ -68,11 +68,11 @@ then
         rm -rf swift-t
 fi
 git clone https://github.com/swift-lang/swift-t.git
-
-# Setup swift-t
 cd swift-t
 git checkout tong01
+git checkout de99add30a64622a65f603e304f22f57ed3e20d4
 
+# Setup swift-t
 dev/build/init-settings.sh
 sed -i 's/^export SWIFT_T_PREFIX=\/tmp\/swift-t-install$/export SWIFT_T_PREFIX='"${ROOT//\//\\/}"'\/swift-t-install/' dev/build/swift-t-settings.sh
 
