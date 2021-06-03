@@ -101,7 +101,7 @@ Download Swift/T:
 ```
 git clone https://github.com/swift-lang/swift-t.git
 cd swift-t
-git checkout tong01
+git checkout remotes/origin/tong01
 git checkout de99add30a64622a65f603e304f22f57ed3e20d4
 ```
 Generate the compiling script:
