@@ -1,12 +1,14 @@
 # In-situ Workflow Autotuner
-## 1. Scenario for ADIOS1-coupled Applications
+## 1. Scenario 1 for ADIOS1-coupled Applications
 ### 1.1  Quick start
 ```
+cd scenario-1
 ./build-all.sh
 source env_all.sh
 ```
 ### 1.2  Manually setup Environments step by step
 ```
+cd scenario-1
 export ROOT=$PWD/install
 mkdir -pv $ROOT
 ```
@@ -65,7 +67,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ADIOS_HOME/lib
 
 ```
 #### (4) Download, compile and test the application Heat-transfer and Stage-write
-Download:
+Download coupled applications Heat-transfer and Stage-write with commit hash of e2353b06d0ded82ff00402e072987b7c1ed506a9:
 ```
 git clone https://github.com/CODARcode/Example-Heat_Transfer.git
 ```

@@ -1,0 +1,4 @@
+export KORVO_HOME=$ROOT/korvo
+export PATH=$KORVO_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$KORVO_HOME/lib
+
