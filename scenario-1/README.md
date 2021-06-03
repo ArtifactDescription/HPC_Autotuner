@@ -1,14 +1,11 @@
-# In-situ Workflow Autotuner
-## 1. Scenario 1 for ADIOS1-coupled Applications
-### 1.1  Quick start
+# Scenario for ADIOS1-coupled Applications
+## 1.  Quick start
 ```
-cd scenario-1
 ./build-all.sh
 source env_all.sh
 ```
-### 1.2  Manually setup Environments step by step
+## 2.  Manually setup Environments step by step
 ```
-cd scenario-1
 export ROOT=$PWD/install
 mkdir -pv $ROOT
 ```
