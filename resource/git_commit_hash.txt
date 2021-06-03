@@ -1,6 +1,0 @@
-https://github.com/swift-lang/swift-t/tree/tong01
-commit hash: de99add30a64622a65f603e304f22f57ed3e20d4
-
-https://github.com/CODARcode/Example-Heat_Transfer/
-commit hash: e2353b06d0ded82ff00402e072987b7c1ed506a9
-
