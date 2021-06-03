@@ -99,13 +99,18 @@ export ANT_HOME=$ROOT/apache-ant-1.10.10
 export PATH=$ANT_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ANT_HOME/lib
 ```
-Download Swift/T (branch tong01 with commit hash of de99add30a64622a65f603e304f22f57ed3e20d4) and install it into the directory SWIFT_T_PREFIX=$ROOT/swift-t-install:
+Download Swift/T (branch tong01 with commit hash of de99add30a64622a65f603e304f22f57ed3e20d4):
 ```
 git clone https://github.com/swift-lang/swift-t.git
 cd swift-t
 git checkout tong01
+```
+Generate the compiling script:
+```
 dev/build/init-settings.sh
-sed -i 's/^export SWIFT_T_PREFIX=\/tmp\/swift-t-install$/export SWIFT_T_PREFIX='"${ROOT//\//\\/}"'\/swift-t-install/' dev/build/swift-t-settings.sh
+```
+Set the installation path SWIFT_T_PREFIX=$ROOT/swift-t-install in the file dev/build/swift-t-settings.sh and compile/install Swift/T:
+```
 dev/build/build-swift-t.sh
 export SWIFT_T_HOME=$ROOT/swift-t-install
 export PATH=$SWIFT_T_HOME/turbine/bin:$SWIFT_T_HOME/stc/bin:$PATH
@@ -113,6 +118,7 @@ export PATH=$SWIFT_T_HOME/turbine/bin:$SWIFT_T_HOME/stc/bin:$PATH
 
 #### (6) Compile and test the application LAMMPS and Voro++
 Request accessing the source code https://github.com/CODARcode/Example-LAMMPS.git
+
 Download:
 ```
 git clone https://github.com/CODARcode/Example-LAMMPS.git
@@ -146,7 +152,16 @@ cd ../swift-all
 ./build-16k.sh
 ```
 #### (7) Download and install Conda
-
-
+```
+wget https://repo.anaconda.com/archive/Anaconda2-5.3.1-Linux-x86_64.sh
+chmod +x Anaconda2-5.3.1-Linux-x86_64.sh
+./Anaconda2-5.3.1-Linux-x86_64.sh -p $ROOT/anaconda2
+export PATH=$ROOT/anaconda2/bin:$PATH
+conda create -n codar python=2.7
+export PATH=$ROOT/anaconda2/envs/codar/bin:$PATH
+```
 #### (8) Reconfigure Swift/T with Python and Rebuild/reinstall Swift/T
-
+Edit swift-t/swift-t-settings.sh to set ENABLE_PYTHON as 1 and PYTHON_EXE as the path of python executable and rebuild Swift/T:
+```
+dev/build/build-swift-t.sh
+```
