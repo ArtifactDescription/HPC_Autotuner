@@ -1,10 +1,10 @@
 # Scenario for ADIOS1-coupled Applications
-## 1.  Quick start
+## 1.  Quick Start
 ```
 ./build-all.sh
 source env_all.sh
 ```
-## 2.  Manually setup Environments step by step
+## 2.  Manually Setup Environments
 ```
 export ROOT=$PWD/install
 mkdir -pv $ROOT
@@ -49,7 +49,6 @@ export KORVO_HOME=$ROOT/korvo
 export PATH=$KORVO_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$KORVO_HOME/lib
 ```
-
 #### (3) Download ADIOS 1 from https://users.nccs.gov/~pnorbert/adios-1.13.1.tar.gz and install ADIOS 1
 ```
 tar -zxvf adios-1.13.1.tar.gz
@@ -61,9 +60,8 @@ make install
 export ADIOS_HOME=$ROOT/adios
 export PATH=$ADIOS_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ADIOS_HOME/lib
-
 ```
-#### (4) Download, compile and test the application Heat-transfer and Stage-write
+#### (4) Download, compile, and test the application Heat-transfer and Stage-write
 Download coupled applications Heat-transfer and Stage-write:
 ```
 git clone https://github.com/CODARcode/Example-Heat_Transfer.git
@@ -90,7 +88,6 @@ Copy/link the configuration file heat_transfer.xml:
 mkdir -pv experiment
 ln -s heat_transfer.xml experiment/heat_transfer.xml
 ```
-
 #### (5) Download and install Swift/T
 Download and Install Ant:
 ```
@@ -117,7 +114,6 @@ dev/build/build-swift-t.sh
 export SWIFT_T_HOME=$ROOT/swift-t-install
 export PATH=$SWIFT_T_HOME/turbine/bin:$SWIFT_T_HOME/stc/bin:$PATH
 ```
-
 #### (6) Compile and test the application LAMMPS and Voro++
 Request accessing the source code https://github.com/CODARcode/Example-LAMMPS.git
 

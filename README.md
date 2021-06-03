@@ -5,7 +5,7 @@ cd scenario-1
 ```
 ## 2. Scenario for ADIOS2-coupled Applications
 ```
-cd scenario-1
+cd scenario-2
 ```
 ## 3. Collector: Measure Application Performance over Given Configurations
 ```
