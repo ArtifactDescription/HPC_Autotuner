@@ -1,0 +1,15 @@
+--- writer.cpp	2021-06-03 12:52:41.396183000 -0500
++++ writer_new.cpp	2021-06-03 13:05:04.603663000 -0500
+@@ -79,6 +79,12 @@ void Writer::open(const std::string &fna
+ 
+ void Writer::write(int step, const GrayScott &sim)
+ {
++    if (!sim.size_x || !sim.size_y || !sim.size_z) {
++        writer.BeginStep();
++        writer.EndStep();
++        return;
++    }
++
+     if (settings.adios_memory_selection) {
+         const std::vector<double> &u = sim.u_ghost();
+         const std::vector<double> &v = sim.v_ghost();

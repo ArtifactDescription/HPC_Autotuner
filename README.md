@@ -1,25 +1,25 @@
 # HPC Autotuner
 ## 1. Scenario for ADIOS1-coupled Applications
 ```
-cd scenario-1
+cd adios1-coupled
 ```
 ## 2. Scenario for ADIOS2-coupled Applications
 ```
-cd scenario-2
+cd adios2-coupled
 ```
 ## 3. Collector: Measuring Performance over Configurations
 ```
 cd collector
 ```
-## 4. Test Data: Measured Configuration-performance Samples
+## 4. Test Dataset: Measured Configuration-performance Samples
 ```
 cd data
 ```
-## 5. Performance Evaluation of Autotuning Algorithms
+## 5. Modeler: Implementation of Autotuning Algorithms
 ```
-cd analysis
+cd modeler
 ```
-## 6. Autotuner Systems
+## 6. Integrated Autotuner System
 ```
-cd autotuner
+cd system
 ```
