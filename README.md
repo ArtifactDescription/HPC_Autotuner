@@ -1,12 +1,11 @@
 # In-situ Workflow Autotuner
-## 1. Install Softwares and Run In-situ Workflow Applications
-### 1.1  Scenario for ADIOS1-coupled Applications
-Quick start:
+## 1. Scenario for ADIOS1-coupled Applications
+### 1.1  Quick start
 ```
 ./build-all.sh
 source env_all.sh
 ```
-Manually setup Environments step by step
+### 1.2  Manually setup Environments step by step
 ```
 export ROOT=$PWD/install
 mkdir -pv $ROOT
@@ -92,10 +91,62 @@ ln -s heat_transfer.xml experiment/heat_transfer.xml
 ```
 
 #### (5) Download and install Swift/T
+Download and Install Ant:
+```
+wget https://www.apache.org/dist/ant/binaries/apache-ant-1.10.10-bin.tar.gz
+tar -zxvf apache-ant-1.10.10-bin.tar.gz -C $ROOT
+export ANT_HOME=$ROOT/apache-ant-1.10.10
+export PATH=$ANT_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ANT_HOME/lib
+```
+Download Swift/T (branch tong01 with commit hash of de99add30a64622a65f603e304f22f57ed3e20d4) and install it into the directory SWIFT_T_PREFIX=$ROOT/swift-t-install:
+```
+git clone https://github.com/swift-lang/swift-t.git
+cd swift-t
+git checkout tong01
+dev/build/init-settings.sh
+sed -i 's/^export SWIFT_T_PREFIX=\/tmp\/swift-t-install$/export SWIFT_T_PREFIX='"${ROOT//\//\\/}"'\/swift-t-install/' dev/build/swift-t-settings.sh
+dev/build/build-swift-t.sh
+export SWIFT_T_HOME=$ROOT/swift-t-install
+export PATH=$SWIFT_T_HOME/turbine/bin:$SWIFT_T_HOME/stc/bin:$PATH
+```
 
 #### (6) Compile and test the application LAMMPS and Voro++
-
+Request accessing the source code https://github.com/CODARcode/Example-LAMMPS.git
+Download:
+```
+git clone https://github.com/CODARcode/Example-LAMMPS.git
+```
+Compile LAMMPS:
+```
+cd Example-LAMMPS/lammps/src
+make yes-kspace yes-manybody yes-molecule yes-user-adios_staging
+make mpi -j8
+make mpi -j8 mode=shlib
+```
+Compile Voro++-0.4.6:
+```
+cd Example-LAMMPS/voro++-0.4.6/src
+make -j8 CXX=mpicxx CFLAGS=-fPIC
+```
+Compile adios_integration (timeout_sec in voro_adios_omp_staging.h can be set.):
+```
+cd Example-LAMMPS/adios_integration
+make -j8
+```
+Edit swift-liblammps/build.sh to set MPICC as $( which mpicc ) and compile swift-liblammps
+```
+cd Example-LAMMPS/swift-liblammps
+sed -i 's/^MPICC=$( which cc )$/MPICC=$( which mpicc )/' build.sh
+./build.sh
+```
+Compile swift-all:
+```
+cd ../swift-all
+./build-16k.sh
+```
 #### (7) Download and install Conda
+
 
 #### (8) Reconfigure Swift/T with Python and Rebuild/reinstall Swift/T
 
