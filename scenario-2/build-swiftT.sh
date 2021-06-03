@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 echo
-echo "Swift/T starts ..."
+echo "Swift/T with Python starts ..."
 echo
 
 if (( ${#ROOT} == 0  ))
@@ -12,6 +12,8 @@ fi
 
 if [ -d $ROOT ]
 then
+	echo "Removing installed swift-t ..."
+	rm -rf $ROOT/swift-t-install
 	mkdir -pv $ROOT/swift-t-install
 else 
 	echo "There does not exist $ROOT!"
@@ -48,7 +50,7 @@ then
 fi
 if [ ! -f apache-ant-1.10.10-bin.tar.gz ]
 then
-	cp -f $ROOT/../resource/apache-ant-1.10.10-bin.tar.gz ./
+	cp -f $ROOT/../../scenario-1/resource/apache-ant-1.10.10-bin.tar.gz ./
 fi
 if [ -d $ROOT/apache-ant-1.10.10 ]
 then
@@ -56,7 +58,7 @@ then
 fi
 tar -zxvf apache-ant-1.10.10-bin.tar.gz -C $ROOT
 rm -f apache-ant-1.10.10-bin.tar.gz
-source ./env_ant.sh
+source env-ant.sh
 # export ANT_HOME=$ROOT/apache-ant-1.10.10
 # export PATH=$ANT_HOME/bin:$PATH
 # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ANT_HOME/lib
@@ -68,7 +70,18 @@ then
         rm -rf swift-t
 fi
 git clone https://github.com/swift-lang/swift-t.git
+
+# Setup Swift/T
 cd swift-t
+# git push origin --delete tong01
+# git checkout -b tong01
+# cp -f ../MPIX_Comm_launch.c turbine/code/src/tcl/launch/MPIX_Comm_launch.c
+# cp -f ../launch.c turbine/code/src/tcl/launch/launch.c
+# git add turbine/code/src/tcl/launch/MPIX_Comm_launch.c turbine/code/src/tcl/launch/launch.c
+# git commit -m "launch"
+# git push --set-upstream origin tong01
+# git branch
+# git status
 git checkout remotes/origin/tong01
 git checkout de99add30a64622a65f603e304f22f57ed3e20d4
 
@@ -76,17 +89,18 @@ git checkout de99add30a64622a65f603e304f22f57ed3e20d4
 dev/build/init-settings.sh
 sed -i 's/^export SWIFT_T_PREFIX=.*$/export SWIFT_T_PREFIX='"${ROOT//\//\\/}"'\/swift-t-install/' dev/build/swift-t-settings.sh
 
+PYTHON_EXE=$( which python )
+sed -i 's/^ENABLE_PYTHON=0/ENABLE_PYTHON=1/' dev/build/swift-t-settings.sh
+sed -i 's@^PYTHON_EXE=.*$@PYTHON_EXE='"$PYTHON_EXE"'@' dev/build/swift-t-settings.sh
+
 echo
 echo "Build Swift/T ..."
 dev/build/build-swift-t.sh
-
 cd ..
 
-source ./env_swiftT.sh
-# export SWIFT_T_HOME=$ROOT/swift-t-install
-# export PATH=$SWIFT_T_HOME/turbine/bin:$SWIFT_T_HOME/stc/bin:$PATH
+source env-swiftT.sh
 
 echo
-echo "Swift/T is done!"
+echo "Swift/T with Python is done!"
 echo
 

@@ -31,9 +31,8 @@ then
 fi
 if [ -d adios2-build ]
 then
-	echo "Backing up the previous adios2-build"
-	rm -rf adios2-build-bak
-	mv adios2-build adios2-build-bak
+	echo "removing the previous adios2-build"
+	rm -rf adios2-build
 fi
 git clone https://github.com/ornladios/ADIOS2.git
 cd ADIOS2
