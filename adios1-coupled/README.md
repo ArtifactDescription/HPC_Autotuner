@@ -1,14 +1,18 @@
 # Scenario for ADIOS1-coupled Applications
+Environment setting in the cluster Bebop at LCRC in ANL is as follows. Either of quick start and manual setup can be used.
+
 ## 1.  Quick Start
 ```
 ./build-all.sh
 source env_all.sh
 ```
+
 ## 2.  Manually Setup Environments
 ```
 export ROOT=$PWD/install
 mkdir -pv $ROOT
 ```
+
 #### (1) Load modules
 ```
 module unload intel-mkl/2017.3.196-v7uuj6z
@@ -18,6 +22,7 @@ module load cmake/3.12.2-4zllpyo
 module load jdk/8u141-b15-mopj6qr
 module load tcl/8.6.6-x4wnbsg
 ```
+
 #### (2) Download and install FlexPath
 ```
 mkdir korvo_build
@@ -49,6 +54,7 @@ export KORVO_HOME=$ROOT/korvo
 export PATH=$KORVO_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$KORVO_HOME/lib
 ```
+
 #### (3) Download ADIOS 1 from https://users.nccs.gov/~pnorbert/adios-1.13.1.tar.gz and install ADIOS 1
 ```
 tar -zxvf adios-1.13.1.tar.gz
@@ -61,6 +67,7 @@ export ADIOS_HOME=$ROOT/adios
 export PATH=$ADIOS_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ADIOS_HOME/lib
 ```
+
 #### (4) Download, compile, and test the applications Heat-transfer and Stage-write
 Download coupled applications Heat-transfer and Stage-write:
 ```
@@ -88,6 +95,7 @@ Copy/link the configuration file heat_transfer.xml:
 mkdir -pv experiment
 ln -s heat_transfer.xml experiment/heat_transfer.xml
 ```
+
 #### (5) Download and install Swift/T
 Download and Install Ant:
 ```
@@ -114,6 +122,7 @@ dev/build/build-swift-t.sh
 export SWIFT_T_HOME=$ROOT/swift-t-install
 export PATH=$SWIFT_T_HOME/turbine/bin:$SWIFT_T_HOME/stc/bin:$PATH
 ```
+
 #### (6) Compile and test the application LAMMPS and Voro++
 Request accessing the source code https://github.com/CODARcode/Example-LAMMPS.git
 
@@ -149,6 +158,7 @@ Compile swift-all:
 cd ../swift-all
 ./build-16k.sh
 ```
+
 #### (7) Download and install Conda
 ```
 wget https://repo.anaconda.com/archive/Anaconda2-5.3.1-Linux-x86_64.sh
@@ -158,6 +168,7 @@ export PATH=$ROOT/anaconda2/bin:$PATH
 conda create -n codar python=2.7
 export PATH=$ROOT/anaconda2/envs/codar/bin:$PATH
 ```
+
 #### (8) Reconfigure Swift/T with Python and Rebuild/reinstall Swift/T
 Set ENABLE_PYTHON as 1 and PYTHON_EXE as the python launcher's path in dev/build/build-swift-t.sh and rebuild Swift/T:
 ```

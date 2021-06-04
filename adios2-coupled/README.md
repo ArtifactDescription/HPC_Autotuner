@@ -1,4 +1,5 @@
 # Scenario for ADIOS2-coupled Applications
+Environment setting in the cluster Bebop at LCRC in ANL is as follows. Either of quick start and manual setup can be used.
 
 ## 1.  Quick Start
 ```
