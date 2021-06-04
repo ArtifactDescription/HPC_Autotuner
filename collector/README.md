@@ -1,6 +1,26 @@
 # Collector: Measuring Performance over Configurations
 
-### 1. Select a scenario and setup the environment
+### 1. Application/Workflow Name
+- lmp: LAMMPS;
+- vr: Voro++;
+- lv: LAMMPS and Voro++ coupled by ADIOS 1 (LV) with preset input parameters.
+- lvi: LAMMPS and Voro++ coupled by ADIOS 1 (LV) with configurable input parameters.
+
+- ht: Heat-transfer;
+- sw: Stage-write;
+- hs: Heat-transfer and Stage-write coupled by ADIOS 1 (HS) with preset input parameters.
+- hsi: Heat-transfer and Stage-write coupled by ADIOS 1 (HS) with configurable input parameters.
+
+- gs: Gray-Scott;
+- pdf: PDF Calculator;
+- pplot: PDF Plot;
+- gplot: Gray Plot;
+- gp: Gray-Scott and PDF Calculator coupled by ADIOS 2;
+- gv: Gray-Scott and Gray Plot coupled by ADIOS 2;
+- gpv: Gray-Scott, PDF Calculator, and PDF Plot coupled by ADIOS 2;
+- wf: Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot coupled by ADIOS 2.
+
+### 2. Select a scenario and setup the environment
 - If the scenario for ADIOS1-coupled applications is selected, follow README in the directory adios1-coupled to setup the environment.
 - If the scenario for ADIOS2-coupled applications is selected, follow README in the directory adios2-coupled to setup the environment.
 
@@ -10,26 +30,6 @@ cd adios2-coupled
 ./build.sh
 source env.sh
 ```
-
-### 2. Application/Workflow Name
-- lmp: LAMMPS;
-- vr: Voro++;
-- lv: LAMMPS and Voro++ coupled (LV) with preset input parameters.
-- lvi: LAMMPS and Voro++ coupled (LV) with configurable input parameters.
-
-- ht: Heat-transfer;
-- sw: Stage-write;
-- hs: Heat-transfer and Stage-write coupled (HS) with preset input parameters.
-- hsi: Heat-transfer and Stage-write coupled (HS) with configurable input parameters.
-
-- gs: Gray-Scott;
-- pdf: PDF Calculator;
-- pplot: PDF Plot;
-- gplot: Gray Plot;
-- gp: Gray-Scott and PDF Calculator coupled;
-- gv: Gray-Scott and Gray Plot coupled;
-- gpv: Gray-Scott, PDF Calculator, and PDF Plot coupled;
-- wf: Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot coupled.
 
 ### 2. Inputs
 In each input file including configurations to be measured, each line is one configuration and each column is one parameter value separated by '\t'.
