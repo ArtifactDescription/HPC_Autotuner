@@ -4,6 +4,13 @@
 - If the scenario for ADIOS1-coupled applications is selected, follow README in the directory adios1-coupled to setup the environment.
 - If the scenario for ADIOS2-coupled applications is selected, follow README in the directory adios2-coupled to setup the environment.
 
+For example, 
+```
+cd adios2-coupled
+./build.sh
+source env.sh
+```
+
 ### 2. Application/Workflow Name
 - lmp: LAMMPS;
 - vr: Voro++;
@@ -52,6 +59,11 @@ The input file for each application/workflow:
 - [No_of_Nodes] is the number of computing nodes requested;
 - [Experiment_ID] should be a unique ID for each experiment.
 
+For example, 
+```
+./workflow wf 6 wf1
+```
+
 ### 4. Collect the measured configuration-performance samples
 ```
 ./collect.sh [Experiment_ID] [No_of_Components]
@@ -61,4 +73,9 @@ The path of collect.sh is
 - For Gray-Scott, PDF Calculator, PDF Plot, Gray Plot: collector/bp4/collect.sh
 - For any applications coupled from Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot: collector/sst/collect.sh
 
-The collected data is Experiment_ID/time_list.csv .
+The collected data is in Experiment_ID/time_list.csv .
+
+For example,
+```
+./collect.sh wf1 4
+```
