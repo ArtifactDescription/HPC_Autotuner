@@ -4,19 +4,16 @@
 - If the scenario for ADIOS1-coupled applications is selected, follow README in the directory adios1-coupled to setup the environment.
 - If the scenario for ADIOS2-coupled applications is selected, follow README in the directory adios2-coupled to setup the environment.
 
-### 2. Launch the collector in the directory collector
-```
-./workflow [App/Workflow_Name] [No_of_Nodes] [Experiment_ID]
-```
-App/Workflow_Name:
-
+### 2. Application/Workflow Name
 - lmp: LAMMPS;
 - vr: Voro++;
-- lvi: LAMMPS and Voro++ coupled (LV).
+- lv: LAMMPS and Voro++ coupled (LV) with preset input parameters.
+- lvi: LAMMPS and Voro++ coupled (LV) with configurable input parameters.
 
 - ht: Heat-transfer;
 - sw: Stage-write;
-- hsi: Heat-transfer and Stage-write coupled (HS).
+- hs: Heat-transfer and Stage-write coupled (HS) with preset input parameters.
+- hsi: Heat-transfer and Stage-write coupled (HS) with configurable input parameters.
 
 - gs: Gray-Scott;
 - pdf: PDF Calculator;
@@ -27,9 +24,35 @@ App/Workflow_Name:
 - gpv: Gray-Scott, PDF Calculator, and PDF Plot coupled;
 - wf: Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot coupled.
 
-No_of_Nodes: the number of computing nodes requested
+### 2. Inputs
+In the files including configurations to be measured, each line is one configuration and each column is one parameter value separated by '\t'.
 
-### 3. Collect the measured configuration-performance samples
+The input file for each application/workflow:
+- lmp: each line includes (#process, PPN, #thread per process, #iterations per output) in the file lv/conf_lmp_smpls.csv. 
+- vr: each line includes (#process, PPN, #thread per process) in the file lv/conf_vr_smpls.csv.
+- lv: each line includes (lmp--#process, lmp--PPN, lmp--#thread per process, lmp--#iterations per output, vr--#process, vr--PPN, vr--#thread per process) in the file lv/conf_lv_smpls.csv.
+- lvi: each line includes (#iterations in the phase from liquid to solid, #iterations in the solid phase, lmp--#process, lmp--PPN, lmp--#thread per process, lmp--#iterations per output, vr--#process, vr--PPN, vr--#thread per process) in the file lv/conf_lvi_smpls.csv.
+
+- ht: each line includes (#process in X, #process in Y, PPN, #outputs, buffer size) in the file hs/conf_ht_smpls.csv.
+- sw: each line includes (#process, PPN) in the file hs/conf_sw_smpls.csv.
+- hs: each line includes (ht--#process in X, ht--#process in Y, ht--PPN, ht--#outputs, ht--buffer size, sw--#process, sw--PPN) in the file hs/conf_hs_smpls.csv.
+- hsi: each line includes (X dimension size, Y dimension size, #iterations, ht--#process in X, ht--#process in Y, ht--PPN, ht--#outputs, ht--buffer size, sw--#process, sw--PPN) in the file hs/conf_hsi_smpls.csv.
+
+- gs: each line includes (edge length of a cube, #simulation steps, #process, PPN) in the file bp4/smpl_gs.csv.
+- pdf: each line includes (edge length of a cube, #simulation steps, #process, PPN) in the file bp4/smpl_pdf.csv.
+- pplot/gplot: each line includes (edge length of a cube, #simulation steps) in the file bp4/smpl_plot.csv.
+- gp/gpv/wf: each line includes (edge length of a cube, #simulation steps, gs--#process, gs--PPN, pdf--#process, pdf--PPN) in the file sst/smpl_gp.csv.
+- gv: each line includes (edge length of a cube, #simulation steps, gs--#process, gs--PPN) in the file sst/smpl_gv.csv.
+
+### 3. Launch the collector
+```
+./workflow [App/Workflow_Name] [No_of_Nodes] [Experiment_ID]
+```
+- [App/Workflow_Name] is listed above;
+- [No_of_Nodes] is the number of computing nodes requested;
+- [Experiment_ID] should be a unique ID for each experiment.
+
+### 4. Collect the measured configuration-performance samples
 ```
 ./collect.sh [Experiment_ID] [No_of_Components]
 ```
