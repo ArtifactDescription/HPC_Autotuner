@@ -50,6 +50,18 @@ then
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/lv/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../conf_lv_smpls.csv conf_lv_smpls.csv
+	cp -f ../../../autotuner/swift/experiment/in.quench in.quench
+	cp -f ../../../autotuner/swift/experiment/restart.liquid restart.liquid
+	cp -f ../../../autotuner/swift/experiment/CuZr.fs CuZr.fs
+	cd -
+fi
+
+if [[ $1 = "lvi" ]]
+then
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/lv/$EXPID
+	mkdir -pv $TURBINE_OUTPUT
+	cd $TURBINE_OUTPUT
 	cp -f ../conf_lvi_smpls.csv conf_lvi_smpls.csv
 	cp -f ../../../autotuner/swift/experiment/in.quench in.quench
 	cp -f ../../../autotuner/swift/experiment/restart.liquid restart.liquid
@@ -83,6 +95,16 @@ then
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/hs/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../conf_hs_smpls.csv conf_hs_smpls.csv
+	cp -f ../../../autotuner/swift/experiment/heat_transfer.xml heat_transfer.xml
+	cd -
+fi
+
+if [[ $1 = "hsi" ]]
+then
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/hs/$EXPID
+	mkdir -pv $TURBINE_OUTPUT
+	cd $TURBINE_OUTPUT
 	cp -f ../conf_hsi_smpls.csv conf_hsi_smpls.csv
 	cp -f ../../../autotuner/swift/experiment/heat_transfer.xml heat_transfer.xml
 	cd -
@@ -97,7 +119,6 @@ then
 	cp -f ../settings-files.json settings-files.json
 	cp -f ../adios2.xml adios2.xml
 	cd -
-	export PROCS=32
 fi
 
 if [[ $1 = "pdf" ]]	# PDF Calculator
@@ -108,7 +129,6 @@ then
 	cp -f ../smpl_pdf.csv smpl_pdf.csv
 	cp -f ../adios2.xml adios2.xml
 	cd -
-	export PROCS=32
 fi
 
 if [[ $1 = "pplot" ]] || [[ $1 = "gplot" ]]	# PDF Plot or Gray Plot
@@ -119,7 +139,6 @@ then
 	cp -f ../smpl_plot.csv smpl_plot.csv
 	cp -f ../adios2.xml adios2.xml
 	cd -
-	export PROCS=3
 fi
 
 if [[ $1 = "gp" ]]	# Gray-Scott and PDF Calculator coupled
@@ -132,7 +151,6 @@ then
 	cp -f ../settings-staging.json settings-staging.json
 	cp -f ../adios2-gp.xml adios2.xml
 	cd -
-	export PROCS=32
 fi
 
 if [[ $1 = "gv" ]]	# Gray-Scott and Gray Plot coupled
@@ -145,7 +163,6 @@ then
 	cp -f ../settings-staging.json settings-staging.json
 	cp -f ../adios2-gp.xml adios2.xml
 	cd -
-	export PROCS=32
 fi
 
 if [[ $1 = "gpv" ]]	# Gray-Scott, PDF Calculator, and PDF Plot coupled
@@ -158,7 +175,6 @@ then
 	cp -f ../settings-staging.json settings-staging.json
 	cp -f ../adios2-gpv.xml adios2.xml
 	cd -
-	export PROCS=33
 fi
 
 if [[ $1 = "wf" ]]	# Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot coupled
@@ -171,7 +187,6 @@ then
 	cp -f ../settings-staging.json settings-staging.json
 	cp -f ../adios2.xml adios2.xml
 	cd -
-	export PROCS=8
 fi
 
 if (( ${#TURBINE_OUTPUT} == 0  ))
@@ -184,12 +199,12 @@ cp -f $WORKFLOW_ROOT/get_maxtime.sh $TURBINE_OUTPUT/get_maxtime.sh
 
 # Total number of processes available to Swift/T
 # Of these, 2 are reserved for the system
-export PROCS=$2		# The number of nodes
-export PPN=1		# fixed as 1
+export PROCS=$(($2 + 2))	# The number of nodes
+export PPN=1			# fixed as 1
 export WALLTIME=01:00:00
 export PROJECT=PACC
 export QUEUE=bdw
-
+echo $PROCS
 MACHINE="-m slurm" # -m (machine) option that accepts pbs, cobalt, cray, lsf, theta, or slurm. The empty string means the local machine.
 
 ENVS="" # "-e <key>=<value>" Set an environment variable in the job environment.

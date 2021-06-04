@@ -15,23 +15,21 @@ import sys;
 """
 ];
 
-// Problem Size of HeatTransfer
-int ht_x = 2048;
-int ht_y = 2048;
-int ht_iter = 1024;
-
 (float exectime) launch_wrapper(string run_id, int params[], int count = 0) 
 {
 	int time_limit = 2;
 	if (count < time_limit)
 	{
-		int ht_proc_x = params[0];	// HeatTransfer: total number of processes in X dimension
-		int ht_proc_y = params[1];	// HeatTransfer: total number of processes in Y dimension
-		int ht_ppw = params[2];		// HeatTransfer: number of processes per worker
-		int ht_step = params[3];	// HeatTransfer: the total number of steps to output
-		int ht_buff = params[4];	// HeatTransfer: the maximum size of I/O buffer
-		int sw_proc = params[5];	// StageWrite: total number of processes
-		int sw_ppw = params[6];		// StageWrite: number of processes per worker
+		int ht_x = params[0];		// HeatTransfer: total array size in X dimension
+		int ht_y = params[1];		// HeatTransfer: total array size in Y dimension
+		int ht_iter = params[2];	// HeatTransfer: total number of iterations
+		int ht_proc_x = params[3];	// HeatTransfer: total number of processes in X dimension
+		int ht_proc_y = params[4];	// HeatTransfer: total number of processes in Y dimension
+		int ht_ppw = params[5];		// HeatTransfer: number of processes per worker
+		int ht_step = params[6];	// HeatTransfer: the total number of steps to output
+		int ht_buff = params[7];	// HeatTransfer: the maximum size of I/O buffer
+		int sw_proc = params[8];	// StageWrite: total number of processes
+		int sw_ppw = params[9];		// StageWrite: number of processes per worker
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
 		string turbine_output = getenv("TURBINE_OUTPUT");
@@ -44,9 +42,10 @@ int ht_iter = 1024;
 
 		if (exit_code0 != 0)
 		{
-			printf("swift: %s failed with exit code %d for the parameters (%d, %d, %d, %d, %d, %d, %d).", 
+			printf("swift: %s failed with exit code %d for the parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d).", 
 					cmd0[0]+" "+cmd0[1]+" "+cmd0[2]+" "+cmd0[3], exit_code0, 
-					params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
+					params[0], params[1], params[2], params[3], params[4], 
+					params[5], params[6], params[7], params[8], params[9]);
 			sleep(1) =>
 				exectime = launch_wrapper(run_id, params, count + 1);
 		}
@@ -116,8 +115,8 @@ int ht_iter = 1024;
 				{
 					exectime = -1.0;
 					failure(run_id, params);
-					printf("swift: The multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d) did not succeed with exit code: %d.", 
-							params[0], params[1], params[2], params[3], params[4], params[5], params[6], exit_code);
+					printf("swift: The multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d) did not succeed with exit code: %d.", 
+							params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9], exit_code);
 				}
 				else
 				{
@@ -130,8 +129,9 @@ int ht_iter = 1024;
 	{
 		exectime = -1.0;
 		failure(run_id, params);
-		printf("swift: The launched application with parameters (%d, %d, %d, %d, %d, %d, %d) did not succeed %d times.",
-				params[0], params[1], params[2], params[3], params[4], params[5], params[6], time_limit);
+		printf("swift: The launched application with parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d) did not succeed %d times.",
+				params[0], params[1], params[2], params[3], params[4], params[5], 
+				params[6], params[7], params[8], params[9], time_limit);
 	}
 }
 
@@ -139,8 +139,9 @@ int ht_iter = 1024;
 {
 	string turbine_output = getenv("TURBINE_OUTPUT");
 	string dir = "%s/run/%s" % (turbine_output, run_id);
-	string output = "%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%s"
-		% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], "inf");
+	string output = "%0.4i\t%0.4i\t%0.4i\t%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%s"
+		% (params[0], params[1], params[2], params[3], params[4], 
+		params[5], params[6], params[7], params[8], params[9], "inf");
 	file out <dir/"time.txt"> = write(output);
 	v = propagate();
 }
@@ -167,24 +168,26 @@ int ht_iter = 1024;
 			exectime = string2float(time_output);
 			if (exectime >= 0.0)
 			{
-				printf("exectime(%i, %i, %i, %i, %i, %i, %i): %f",
-						params[0], params[1], params[2], params[3], params[4], params[5], params[6], exectime);
-				string output = "%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%f"
-					% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], exectime);
+				printf("exectime(%i, %i, %i, %i, %i, %i, %i, %i, %i, %i): %f",
+						params[0], params[1], params[2], params[3], params[4], params[5], 
+						params[6], params[7], params[8], params[9], exectime);
+				string output = "%0.4i\t%0.4i\t%0.4i\t%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%f"
+					% (params[0], params[1], params[2], params[3], params[4], 
+					params[5], params[6], params[7], params[8], params[9], exectime);
 				file out <dir/"time.txt"> = write(output);
 			}
 			else
 			{
-				printf("swift: The execution time (%f seconds) of the multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d) is negative.",
-						exectime, params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
+				printf("swift: The execution time (%f seconds) of the multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d) is negative.",
+						exectime, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9]);
 			}
 		}
 	}
 	else
 	{
 		exectime = -1.0;
-		printf("swift: Failed to get the execution time of the multi-launched application of parameters (%d, %d, %d, %d, %d, %d, %d) %d times.\n%s",
-				params[0], params[1], params[2], params[3], params[4], params[5], params[6], time_limit);
+		printf("swift: Failed to get the execution time of the multi-launched application of parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d) %d times.\n%s",
+				params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9], time_limit);
 	}
 }
 
@@ -200,15 +203,18 @@ main()
 		workers = 32;
 	}
 
-	// 0) HeatTransfer: total number of processes in X dimension
-	// 1) HeatTransfer: total number of processes in Y dimension
-	// 2) HeatTransfer: number of processes per worker
-	// 3) HeatTransfer: the total number of steps to output
-	// 4) HeatTransfer: the maximum size of I/O buffer
-	// 5) StageWrite: total number of processes
-	// 6) StageWrite: number of processes per worker
-	int sample_num = 8;
-	conf_samples = file_lines(input("conf_hs_smpls.csv"));
+	// 0) HeatTransfer: total array size in X dimension
+	// 1) HeatTransfer: total array size in Y dimension
+	// 2) HeatTransfer: total number of iterations
+	// 3) HeatTransfer: total number of processes in X dimension
+	// 4) HeatTransfer: total number of processes in Y dimension
+	// 5) HeatTransfer: number of processes per worker
+	// 6) HeatTransfer: the total number of steps to output
+	// 7) HeatTransfer: the maximum size of I/O buffer
+	// 8) StageWrite: total number of processes
+	// 9) StageWrite: number of processes per worker
+	int sample_num = 500;
+	conf_samples = file_lines(input("conf_hsi_smpls.csv"));
 
 	float exectime[];
 	int codes[];
@@ -216,27 +222,28 @@ main()
 	{
 		params_str = split(conf_samples[i], "\t");
 		int params[];
-		foreach j in [0 : 6 : 1]
+		foreach j in [0 : 9 : 1]
 		{
 			params[j] = string2int(params_str[j]);
 		}
 
-		if ((params[2] <= ppw) && (params[6] <= ppw) && (params[0] * params[1] >= params[2]) && (params[5] >= params[6]))
+		if ((params[5] <= ppw) && (params[9] <= ppw) && (params[3] * params[4] >= params[5]) && (params[8] >= params[9]))
 		{
 			int nwork;
-			if (params[0] * params[1] %% params[2] == 0 && params[5] %% params[6] == 0) {
-				nwork = params[0] * params[1] %/ params[2] + params[5] %/ params[6];
+			if (params[3] * params[4] %% params[5] == 0 && params[8] %% params[9] == 0) {
+				nwork = params[3] * params[4] %/ params[5] + params[8] %/ params[9];
 			} else {
-				if (params[0] * params[1] %% params[2] == 0 || params[5] %% params[6] == 0) {
-					nwork = params[0] * params[1] %/ params[2] + params[5] %/ params[6] + 1;
+				if (params[3] * params[4] %% params[5] == 0 || params[8] %% params[9] == 0) {
+					nwork = params[3] * params[4] %/ params[5] + params[8] %/ params[9] + 1;
 				} else {
-					nwork = params[0] * params[1] %/ params[2] + params[5] %/ params[6] + 2;
+					nwork = params[3] * params[4] %/ params[5] + params[8] %/ params[9] + 2;
 				}
 			}
 			if (nwork <= workers)
 			{
-				exectime[i] = launch_wrapper("%0.2i_%0.2i_%0.2i_%0.2i_%0.2i_%0.4i_%0.2i"
-						% (params[0], params[1], params[2], params[3], params[4], params[5], params[6]),
+				exectime[i] = launch_wrapper("%0.4i_%0.4i_%0.4i_%0.2i_%0.2i_%0.2i_%0.2i_%0.2i_%0.4i_%0.2i"
+						% (params[0], params[1], params[2], params[3], params[4], 
+						params[5], params[6], params[7], params[8], params[9]),
 						params);
 
 				if (exectime[i] >= 0.0) {
