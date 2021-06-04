@@ -1,9 +1,9 @@
 # HPC Autotuner
-### 1. Experimental environment for ADIOS1-coupled Applications
+### 1. Experimental Environment for ADIOS1-coupled Applications
 ```
 cd adios1-coupled
 ```
-### 2. Experimental environment for ADIOS2-coupled Applications
+### 2. Experimental Environment for ADIOS2-coupled Applications
 ```
 cd adios2-coupled
 ```
