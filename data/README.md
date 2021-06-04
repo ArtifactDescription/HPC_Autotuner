@@ -1,6 +1,6 @@
 # Test Dataset: Measured Configuration-performance Samples
 
-In each .csv files, the test samples consisting of configuration and execution time are collected by the collector and are used as a sample pool/a test dataset by modeler.
+In each .csv file, the test samples consisting of configuration and execution time are collected by the collector and are used as a sample pool/a test dataset by modeler.
 
 ### Workflow 1: LV -- LAMMPS and Voro++ coupled by ADIOS 1.
 In-situ workflow: lmp-vr/wf-LV.csv
