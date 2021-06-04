@@ -32,7 +32,7 @@ source env.sh
 - wf: Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot coupled.
 
 ### 2. Inputs
-In the files including configurations to be measured, each line is one configuration and each column is one parameter value separated by '\t'.
+In each input file including configurations to be measured, each line is one configuration and each column is one parameter value separated by '\t'.
 
 The input file for each application/workflow:
 - lmp: each line includes (#process, PPN, #thread per process, #iterations per output) in the file lv/conf_lmp_smpls.csv. 
