@@ -28,8 +28,7 @@ then
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../conf_lmp_smpls.csv conf_lmp_smpls.csv
-	cp -f ../conf_l_smpls.csv conf_l_smpls.csv
+	cp -f ../smpl_lmp.csv smpl_lmp.csv
 	cp -f ../../../autotuner/swift/experiment/in.quench in.quench
 	cp -f ../../../autotuner/swift/experiment/restart.liquid restart.liquid
 	cp -f ../../../autotuner/swift/experiment/CuZr.fs CuZr.fs
@@ -42,8 +41,7 @@ then
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../conf_vr_smpls.csv conf_vr_smpls.csv
-	cp -f ../conf_v_smpls.csv conf_v_smpls.csv
+	cp -f ../smpl_vr.csv smpl_vr.csv
 	cd -
 fi
 
@@ -53,7 +51,7 @@ then
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../conf_lv_smpls.csv conf_lv_smpls.csv
+	cp -f ../smpl_lv.csv smpl_lv.csv
 	cp -f ../../../autotuner/swift/experiment/in.quench in.quench
 	cp -f ../../../autotuner/swift/experiment/restart.liquid restart.liquid
 	cp -f ../../../autotuner/swift/experiment/CuZr.fs CuZr.fs
@@ -66,7 +64,7 @@ then
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../conf_lvi_smpls.csv conf_lvi_smpls.csv
+	cp -f ../smpl_lvi.csv smpl_lvi.csv
 	cp -f ../../../autotuner/swift/experiment/in.quench in.quench
 	cp -f ../../../autotuner/swift/experiment/restart.liquid restart.liquid
 	cp -f ../../../autotuner/swift/experiment/CuZr.fs CuZr.fs
@@ -79,8 +77,7 @@ then
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../conf_ht_smpls.csv conf_ht_smpls.csv
-	cp -f ../conf_h_smpls.csv conf_h_smpls.csv
+	cp -f ../smpl_ht.csv smpl_ht.csv
 	cp -f ../../../autotuner/swift/experiment/heat_transfer.xml heat_transfer.xml
 	cd -
 fi
@@ -91,8 +88,7 @@ then
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../conf_sw_smpls.csv conf_sw_smpls.csv
-	cp -f ../conf_s_smpls.csv conf_s_smpls.csv
+	cp -f ../smpl_sw.csv smpl_sw.csv
 	cd -
 fi
 
@@ -102,7 +98,7 @@ then
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../conf_hs_smpls.csv conf_hs_smpls.csv
+	cp -f ../smpl_hs.csv smpl_hs.csv
 	cp -f ../../../autotuner/swift/experiment/heat_transfer.xml heat_transfer.xml
 	cd -
 fi
@@ -113,7 +109,7 @@ then
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../conf_hsi_smpls.csv conf_hsi_smpls.csv
+	cp -f ../smpl_hsi.csv smpl_hsi.csv
 	cp -f ../../../autotuner/swift/experiment/heat_transfer.xml heat_transfer.xml
 	cd -
 fi
