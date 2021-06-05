@@ -3,8 +3,8 @@ Environment setting in the cluster Bebop at LCRC in ANL is as follows. Either of
 
 ## 1.  Quick Start
 ```
-./build-all.sh
-source env_all.sh
+./build.sh
+source env.sh
 ```
 
 ## 2.  Manually Setup Environments
