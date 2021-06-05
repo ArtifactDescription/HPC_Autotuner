@@ -159,14 +159,22 @@ cd ../swift-all
 ./build-16k.sh
 ```
 
-#### (7) Download and install Conda
+#### (7) Download and install Conda 2 and Python 2
 ```
-wget https://repo.anaconda.com/archive/Anaconda2-5.3.1-Linux-x86_64.sh
-chmod +x Anaconda2-5.3.1-Linux-x86_64.sh
-./Anaconda2-5.3.1-Linux-x86_64.sh -p $ROOT/anaconda2
-export PATH=$ROOT/anaconda2/bin:$PATH
-conda create -n codar python=2.7
-export PATH=$ROOT/anaconda2/envs/codar/bin:$PATH
+$ wget https://repo.anaconda.com/archive/Anaconda2-5.3.1-Linux-x86_64.sh
+$ chmod +x Anaconda2-5.3.1-Linux-x86_64.sh
+$ ./Anaconda2-5.3.1-Linux-x86_64.sh -p $ROOT/anaconda2
+...
+Do you wish the installer to initialize Anaconda2
+in your /home/ac.tshu/.bashrc ? [yes|no]
+[no] >>> 
+You may wish to edit your /home/ac.tshu/.bashrc to setup Anaconda2:
+source /lcrc/project/Workflow/SC21/HPC_Autotuner/adios1-coupled/install/anaconda2/etc/profile.d/conda.sh
+Do you wish to proceed with the installation of Microsoft VSCode? [yes|no]
+>>> no
+$ export PATH=$ROOT/anaconda2/bin:$PATH
+$ conda create -n codar python=2.7
+$ export PATH=$ROOT/anaconda2/envs/codar/bin:$PATH
 ```
 
 #### (8) Reconfigure Swift/T with Python and Rebuild/reinstall Swift/T
