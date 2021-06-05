@@ -187,8 +187,8 @@ main()
 	// 1) Lammps: num of processes per worker
 	// 2) Lammps: num of threads per process
 	// 3) Lammps: IO interval in steps
-	int sample_num = 139;
-	conf_samples = file_lines(input("conf_lmp_smpls.csv"));
+	int sample_num = string2int(read(input("num_smpl.txt")));
+	conf_samples = file_lines(input("smpl_lmp.csv"));
 
 	float exectime[];
 	int codes[];

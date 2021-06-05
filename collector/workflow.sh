@@ -24,9 +24,10 @@ cd $WORKFLOW_ROOT
 
 if [[ $1 = "lmp" ]]
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/lv/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_lv/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../conf_lmp_smpls.csv conf_lmp_smpls.csv
 	cp -f ../conf_l_smpls.csv conf_l_smpls.csv
 	cp -f ../../../autotuner/swift/experiment/in.quench in.quench
@@ -37,9 +38,10 @@ fi
 
 if [[ $1 = "vr" ]]
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/lv/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_lv/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../conf_vr_smpls.csv conf_vr_smpls.csv
 	cp -f ../conf_v_smpls.csv conf_v_smpls.csv
 	cd -
@@ -47,9 +49,10 @@ fi
 
 if [[ $1 = "lv" ]]
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/lv/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_lv/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../conf_lv_smpls.csv conf_lv_smpls.csv
 	cp -f ../../../autotuner/swift/experiment/in.quench in.quench
 	cp -f ../../../autotuner/swift/experiment/restart.liquid restart.liquid
@@ -59,9 +62,10 @@ fi
 
 if [[ $1 = "lvi" ]]
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/lv/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_lv/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../conf_lvi_smpls.csv conf_lvi_smpls.csv
 	cp -f ../../../autotuner/swift/experiment/in.quench in.quench
 	cp -f ../../../autotuner/swift/experiment/restart.liquid restart.liquid
@@ -71,9 +75,10 @@ fi
 
 if [[ $1 = "ht" ]]
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/hs/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_hs/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../conf_ht_smpls.csv conf_ht_smpls.csv
 	cp -f ../conf_h_smpls.csv conf_h_smpls.csv
 	cp -f ../../../autotuner/swift/experiment/heat_transfer.xml heat_transfer.xml
@@ -82,9 +87,10 @@ fi
 
 if [[ $1 = "sw" ]]
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/hs/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_hs/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../conf_sw_smpls.csv conf_sw_smpls.csv
 	cp -f ../conf_s_smpls.csv conf_s_smpls.csv
 	cd -
@@ -92,9 +98,10 @@ fi
 
 if [[ $1 = "hs" ]]
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/hs/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp hs/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../conf_hs_smpls.csv conf_hs_smpls.csv
 	cp -f ../../../autotuner/swift/experiment/heat_transfer.xml heat_transfer.xml
 	cd -
@@ -102,9 +109,10 @@ fi
 
 if [[ $1 = "hsi" ]]
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/hs/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_hs/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../conf_hsi_smpls.csv conf_hsi_smpls.csv
 	cp -f ../../../autotuner/swift/experiment/heat_transfer.xml heat_transfer.xml
 	cd -
@@ -112,9 +120,10 @@ fi
 
 if [[ $1 = "gs" ]]	# Gray-Scott
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/bp4/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_bp4/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_gs.csv smpl_gs.csv
 	cp -f ../settings-files.json settings-files.json
 	cp -f ../adios2.xml adios2.xml
@@ -123,9 +132,10 @@ fi
 
 if [[ $1 = "pdf" ]]	# PDF Calculator
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/bp4/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_bp4/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_pdf.csv smpl_pdf.csv
 	cp -f ../adios2.xml adios2.xml
 	cd -
@@ -133,9 +143,10 @@ fi
 
 if [[ $1 = "pplot" ]] || [[ $1 = "gplot" ]]	# PDF Plot or Gray Plot
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/bp4/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_bp4/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_plot.csv smpl_plot.csv
 	cp -f ../adios2.xml adios2.xml
 	cd -
@@ -144,9 +155,10 @@ fi
 if [[ $1 = "gp" ]]	# Gray-Scott and PDF Calculator coupled
 then
 	# Set the output directory
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/sst/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_sst/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_gp.csv smpl_gp.csv
 	cp -f ../settings-staging.json settings-staging.json
 	cp -f ../adios2-gp.xml adios2.xml
@@ -156,9 +168,10 @@ fi
 if [[ $1 = "gv" ]]	# Gray-Scott and Gray Plot coupled
 then
 	# Set the output directory
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/sst/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_sst/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_gv.csv smpl_gs.csv
 	cp -f ../settings-staging.json settings-staging.json
 	cp -f ../adios2-gp.xml adios2.xml
@@ -168,9 +181,10 @@ fi
 if [[ $1 = "gpv" ]]	# Gray-Scott, PDF Calculator, and PDF Plot coupled
 then
 	# Set the output directory
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/sst/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_sst/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_gp.csv smpl_gp.csv
 	cp -f ../settings-staging.json settings-staging.json
 	cp -f ../adios2-gpv.xml adios2.xml
@@ -180,9 +194,10 @@ fi
 if [[ $1 = "wf" ]]	# Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot coupled
 then
 	# Set the output directory
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/sst/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_sst/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
+	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_gp.csv smpl_gp.csv
 	cp -f ../settings-staging.json settings-staging.json
 	cp -f ../adios2.xml adios2.xml

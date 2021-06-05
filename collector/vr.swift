@@ -145,8 +145,8 @@ main()
 	// 1) Voro: num of processes per worker
 	// 2) Voro: num of threads per process
 	// 3) Lammps: IO interval in steps, which decides the input size of Voro
-	int sample_num = 96;
-	conf_samples = file_lines(input("conf_vr_smpls.csv"));
+	int sample_num = string2int(read(input("num_smpl.txt")));
+	conf_samples = file_lines(input("smpl_vr.csv"));
 
 	float exectime[];
 	int codes[];

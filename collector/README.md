@@ -34,17 +34,21 @@ source env.sh
 ### 2. Inputs
 In each input file including configurations to be measured, each line is one configuration and each column is one parameter value separated by '\t'.
 
-The input file for each application/workflow:
-- lmp: each line includes (#process, PPN, #thread per process, #iterations per output) in the file lv/conf_lmp_smpls.csv. 
-- vr: each line includes (#process, PPN, #thread per process) in the file lv/conf_vr_smpls.csv.
-- lv: each line includes (lmp--#process, lmp--PPN, lmp--#thread per process, lmp--#iterations per output, vr--#process, vr--PPN, vr--#thread per process) in the file lv/conf_lv_smpls.csv.
-- lvi: each line includes (#iterations in the phase from liquid to solid, #iterations in the solid phase, lmp--#process, lmp--PPN, lmp--#thread per process, lmp--#iterations per output, vr--#process, vr--PPN, vr--#thread per process) in the file lv/conf_lvi_smpls.csv.
+The input file for each application/workflow: 
+The number of samples of lmp/vr/lv/lvi to be measured is set in the file exp_lv/num_smpl.txt .
+- lmp: each line includes (#process, PPN, #thread per process, #iterations per output) in the file exp_lv/smpl_lmp.csv. 
+- vr: each line includes (#process, PPN, #thread per process) in the file exp_lv/smpl_vr.csv.
+- lv: each line includes (lmp--#process, lmp--PPN, lmp--#thread per process, lmp--#iterations per output, vr--#process, vr--PPN, vr--#thread per process) in the file exp_lv/smpl_lv.csv.
+- lvi: each line includes (#iterations in the phase from liquid to solid, #iterations in the solid phase, lmp--#process, lmp--PPN, lmp--#thread per process, lmp--#iterations per output, vr--#process, vr--PPN, vr--#thread per process) in the file lv/smpl_lvi.csv.
 
-- ht: each line includes (#process in X, #process in Y, PPN, #outputs, buffer size) in the file hs/conf_ht_smpls.csv.
-- sw: each line includes (#process, PPN) in the file hs/conf_sw_smpls.csv.
-- hs: each line includes (ht--#process in X, ht--#process in Y, ht--PPN, ht--#outputs, ht--buffer size, sw--#process, sw--PPN) in the file hs/conf_hs_smpls.csv.
-- hsi: each line includes (X dimension size, Y dimension size, #iterations, ht--#process in X, ht--#process in Y, ht--PPN, ht--#outputs, ht--buffer size, sw--#process, sw--PPN) in the file hs/conf_hsi_smpls.csv.
+The number of samples of ht/sw/hs/hsi to be measured is set in the file exp_hs/num_smpl.txt .
+- ht: each line includes (#process in X, #process in Y, PPN, #outputs, buffer size) in the file hs/smpl_ht.csv.
+- sw: each line includes (#process, PPN) in the file hs/smpl_sw.csv.
+- hs: each line includes (ht--#process in X, ht--#process in Y, ht--PPN, ht--#outputs, ht--buffer size, sw--#process, sw--PPN) in the file hs/smpl_hs.csv.
+- hsi: each line includes (X dimension size, Y dimension size, #iterations, ht--#process in X, ht--#process in Y, ht--PPN, ht--#outputs, ht--buffer size, sw--#process, sw--PPN) in the file hs/smpl_hsi.csv.
 
+The number of samples of gs/pdf/pplot/gplot to be measured is set in the file exp_bp4/num_smpl.txt .
+The number of samples of gp/gpv/gv/wf to be measured is set in the file exp_bp4/num_smpl.txt .
 - gs: each line includes (edge length of a cube, #simulation steps, #process, PPN) in the file bp4/smpl_gs.csv.
 - pdf: each line includes (edge length of a cube, #simulation steps, #process, PPN) in the file bp4/smpl_pdf.csv.
 - pplot/gplot: each line includes (edge length of a cube, #simulation steps) in the file bp4/smpl_plot.csv.

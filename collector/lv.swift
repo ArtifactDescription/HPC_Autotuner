@@ -214,8 +214,8 @@ main()
 	// 4) Voro: total num of processes
 	// 5) Voro: num of processes per worker
 	// 6) Voro: num of threads per process
-	int sample_num = 10;
-	conf_samples = file_lines(input("conf_lv_smpls.csv"));
+	int sample_num = string2int(read(input("num_smpl.txt")));
+	conf_samples = file_lines(input("smpl_lv.csv"));
 
 	float exectime[];
 	int codes[];

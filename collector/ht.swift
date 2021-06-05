@@ -180,8 +180,8 @@ main()
 	// 2) HeatTransfer: number of processes per worker
 	// 3) HeatTransfer: the total number of steps to output
 	// 4) HeatTransfer: the maximum size of I/O buffer
-	int sample_num = 500;
-	conf_samples = file_lines(input("conf_ht_smpls.csv"));
+	int sample_num = string2int(read(input("num_smpl.txt")));
+	conf_samples = file_lines(input("smpl_ht.csv"));
 
 	float exectime[];
 	int codes[];

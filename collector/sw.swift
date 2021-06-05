@@ -152,8 +152,8 @@ main()
 	// 0) StageWrite: total number of processes
 	// 1) StageWrite: number of processes per worker
 	// 2) HeatTransfer: the total number of steps to output
-	int sample_num = 500;
-	conf_samples = file_lines(input("conf_sw_smpls.csv"));
+	int sample_num = string2int(read(input("num_smpl.txt")));
+	conf_samples = file_lines(input("smpl_sw.csv"));
 
 	float exectime[];
 	int codes[];

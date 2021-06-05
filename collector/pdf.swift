@@ -158,7 +158,7 @@ main()
 	// 1) gray-scott: the total number of steps to simulate
 	// 2) pdf_calc: the total number of processes
 	// 3) pdf_calc: the number of processes per worker
-	int sample_num = 500;
+	int sample_num = string2int(read(input("num_smpl.txt")));
 	conf_samples = file_lines(input("smpl_pdf.csv"));
 
 	float exectime[];
