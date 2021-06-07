@@ -26,7 +26,7 @@ import sys;
 		int gs_step = params[1];	// gray-scott: the total number of steps to simulate
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
-		string srcDir = "%s/bp4/gs-%0.4i-%0.3i" % (workflow_root, gs_cs, gs_step);
+		string srcDir = "%s/exp_bp4/gs-%0.4i-%0.3i" % (workflow_root, gs_cs, gs_step);
 		string turbine_output = getenv("TURBINE_OUTPUT");
 		string parDir = "%s/run" % turbine_output;
 		string dir = "%s/%s" % (parDir, run_id);

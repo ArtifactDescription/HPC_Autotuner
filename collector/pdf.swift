@@ -35,7 +35,7 @@ import sys;
 		int pdf_ppw = params[3];	// pdf_calc: the number of processes per worker
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
-		string srcDir = "%s/bp4/gs-%0.4i-%0.3i" % (workflow_root, gs_cs, gs_step);
+		string srcDir = "%s/exp_bp4/gs-%0.4i-%0.3i" % (workflow_root, gs_cs, gs_step);
 		string turbine_output = getenv("TURBINE_OUTPUT");
 		string parDir = "%s/run" % turbine_output;
 		string dir = "%s/%s" % (parDir, run_id);
