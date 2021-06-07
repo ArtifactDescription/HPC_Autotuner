@@ -80,8 +80,8 @@ import sys;
 
 			// Commands
 			string cmds[];
-			cmds[0] = "../../../../../../Example-LAMMPS/swift-all/lmp_mpi";
-			cmds[1] = "../../../../../../Example-LAMMPS/swift-all/voro_adios_omp_staging";
+			cmds[0] = "../../../../../adios1-coupled/Example-LAMMPS/swift-all/lmp_mpi";
+			cmds[1] = "../../../../../adios1-coupled/Example-LAMMPS/swift-all/voro_adios_omp_staging";
 
 			// Command line arguments
 			string args[][];

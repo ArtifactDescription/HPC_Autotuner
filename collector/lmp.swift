@@ -73,7 +73,7 @@ import sys;
 				}
 			}
 
-			string cmd1 = "../../../../../../Example-LAMMPS/swift-all/lmp_mpi"; 
+			string cmd1 = "../../../../../adios1-coupled/Example-LAMMPS/swift-all/lmp_mpi"; 
 
 			string args1[] = split("-i in.quench", " ");	// mpiexec -n 8 ./lmp_mpi -i in.quench
 

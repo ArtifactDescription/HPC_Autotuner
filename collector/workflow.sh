@@ -29,9 +29,9 @@ then
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_lmp.csv smpl_lmp.csv
-	cp -f ../../../autotuner/swift/experiment/in.quench in.quench
-	cp -f ../../../autotuner/swift/experiment/restart.liquid restart.liquid
-	cp -f ../../../autotuner/swift/experiment/CuZr.fs CuZr.fs
+	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/in.quench in.quench
+	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/restart.liquid restart.liquid
+	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/CuZr.fs CuZr.fs
 	cd -
 fi
 
@@ -52,9 +52,9 @@ then
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_lv.csv smpl_lv.csv
-	cp -f ../../../autotuner/swift/experiment/in.quench in.quench
-	cp -f ../../../autotuner/swift/experiment/restart.liquid restart.liquid
-	cp -f ../../../autotuner/swift/experiment/CuZr.fs CuZr.fs
+	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/in.quench in.quench
+	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/restart.liquid restart.liquid
+	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/CuZr.fs CuZr.fs
 	cd -
 fi
 
@@ -65,9 +65,9 @@ then
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_lvi.csv smpl_lvi.csv
-	cp -f ../../../autotuner/swift/experiment/in.quench in.quench
-	cp -f ../../../autotuner/swift/experiment/restart.liquid restart.liquid
-	cp -f ../../../autotuner/swift/experiment/CuZr.fs CuZr.fs
+	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/in.quench in.quench
+	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/restart.liquid restart.liquid
+	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/CuZr.fs CuZr.fs
 	cd -
 fi
 
@@ -78,7 +78,7 @@ then
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_ht.csv smpl_ht.csv
-	cp -f ../../../autotuner/swift/experiment/heat_transfer.xml heat_transfer.xml
+	cp -f ../../../adios1-coupled/Example-Heat_Transfer/heat_transfer.xml heat_transfer.xml
 	cd -
 fi
 
@@ -94,12 +94,12 @@ fi
 
 if [[ $1 = "hs" ]]
 then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp hs/$EXPID
+	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_hs/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_hs.csv smpl_hs.csv
-	cp -f ../../../autotuner/swift/experiment/heat_transfer.xml heat_transfer.xml
+	cp -f ../../../adios1-coupled/Example-Heat_Transfer/heat_transfer.xml heat_transfer.xml
 	cd -
 fi
 
@@ -110,7 +110,7 @@ then
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
 	cp -f ../smpl_hsi.csv smpl_hsi.csv
-	cp -f ../../../autotuner/swift/experiment/heat_transfer.xml heat_transfer.xml
+	cp -f ../../../adios1-coupled/Example-Heat_Transfer/heat_transfer.xml heat_transfer.xml
 	cd -
 fi
 
@@ -215,7 +215,6 @@ export PPN=1			# fixed as 1
 export WALLTIME=01:00:00
 export PROJECT=PACC
 export QUEUE=bdw
-echo $PROCS
 MACHINE="-m slurm" # -m (machine) option that accepts pbs, cobalt, cray, lsf, theta, or slurm. The empty string means the local machine.
 
 ENVS="" # "-e <key>=<value>" Set an environment variable in the job environment.

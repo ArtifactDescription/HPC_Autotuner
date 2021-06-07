@@ -59,7 +59,7 @@ int ht_iter = 1024;
 			}
 			int timeout = 300 * float2int(2 ** count);
 
-			string cmd1 = "../../../../../../Example-Heat_Transfer/heat_transfer_adios2";
+			string cmd1 = "../../../../../adios1-coupled/Example-Heat_Transfer/heat_transfer_adios2";
 
 			int ht_las_x = ht_x %/ ht_proc_x;
 			int ht_las_y = ht_y %/ ht_proc_y;

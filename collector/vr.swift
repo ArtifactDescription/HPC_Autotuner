@@ -39,7 +39,7 @@ import sys;
 		}
 		int timeout = 300 * float2int(2 ** count);
 
-		string cmd1 = "../../../../../../Example-LAMMPS/swift-all/voro_adios_omp_staging";
+		string cmd1 = "../../../../../adios1-coupled/Example-LAMMPS/swift-all/voro_adios_omp_staging";
 
 		// mpiexec -n 4 ./voro_adios_omp_staging dump.bp adios_atom_voro.bp BP
 		string args1[] = split("dump.bp adios_atom_voro.bp BP", " ");

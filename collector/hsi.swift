@@ -68,8 +68,8 @@ import sys;
 
 			// Commands
 			string cmds[];
-			cmds[0] = "../../../../../../Example-Heat_Transfer/heat_transfer_adios2";
-			cmds[1] = "../../../../../../Example-Heat_Transfer/stage_write/stage_write";
+			cmds[0] = "../../../../../adios1-coupled/Example-Heat_Transfer/heat_transfer_adios2";
+			cmds[1] = "../../../../../adios1-coupled/Example-Heat_Transfer/stage_write/stage_write";
 
 			// Command line arguments
 			string args[][];
