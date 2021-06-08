@@ -83,7 +83,7 @@ cd Example-Heat_Transfer/stage_write
 make
 cd Example-Heat_Transfer
 ```
-Test in two terminal windows:
+Test Heat-transfer and Stage-write in separate terminal windows:
 ```
 mpiexec -n 12 ./heat_transfer_adios2 heat 4 3 40 50 6 5
 ```
@@ -157,6 +157,16 @@ Compile swift-all:
 ```
 cd ../swift-all
 ./build-16k.sh
+cd ..
+export PATH=$PWD/lammps/src:$PWD/adios_integration:$PATH
+cd swift-all
+```
+Test LAMMPS and Voro++ in separate terminal windows:
+```
+mpiexec -n 8 ./lmp_mpi -i in.quench.short
+```
+```
+mpiexec -n 4 ./voro_adios_omp_staging dump.bp adios_atom_voro.bp FLEXPATH
 ```
 
 #### (7) Download and install Conda 2 and Python 2

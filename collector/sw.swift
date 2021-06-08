@@ -25,7 +25,7 @@ import sys;
 		int ht_step = params[2];	// HeatTransfer: the total number of steps to output
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
-		string srcDir = "%s/exp_hs/wf-ht-bp%0.2i" % (workflow_root, ht_step);
+		string srcDir = "%s/exp_hs/ht-%0.2i" % (workflow_root, ht_step);
 		string turbine_output = getenv("TURBINE_OUTPUT");
 		string parDir = "%s/run" % turbine_output;
 		string dir = "%s/%s" % (parDir, run_id);

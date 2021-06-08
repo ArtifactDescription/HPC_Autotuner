@@ -26,7 +26,7 @@ import sys;
 		int lmp_frqIO = params[3];	// Lammps: IO interval in steps, which decides the input size of Voro
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
-		string srcDir = "%s/exp_lv/wf-lmp-bp%0.4i" % (workflow_root, lmp_frqIO);
+		string srcDir = "%s/exp_lv/lmp-%0.4i" % (workflow_root, lmp_frqIO);
 		string turbine_output = getenv("TURBINE_OUTPUT");
 		string parDir = "%s/run" % turbine_output;
 		string dir = "%s/%s" % (parDir, run_id);
