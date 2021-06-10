@@ -13,8 +13,14 @@ modified      /home/tongshu/.bashrc
 If you'd prefer that conda's base environment not be activated on startup,
    set the auto_activate_base parameter to false:
 conda config --set auto_activate_base false
+```
+### 2. Randomly generate configurations for in-situ workflows LV, HS, GP and their component applications.
+```
+./gen_smpl.sh
+```
+Random configurations for in-situ workflows LV, HS, GP and their component applications are in the directory lv, hs, and gp.
+### 3. Open modeler.ipynb and run it.
+```
 $ cd modeler
 $ jupyter notebook
 ```
-### 2. Open AutoTune.ipynb and run it.
-
