@@ -20,16 +20,16 @@ import sys;
 	int time_limit = 2;
 	if (count < time_limit)
 	{
-		int ht_x = params[0];		// HeatTransfer: total array size in X dimension
-		int ht_y = params[1];		// HeatTransfer: total array size in Y dimension
-		int ht_iter = params[2];	// HeatTransfer: total number of iterations
-		int ht_proc_x = params[3];	// HeatTransfer: total number of processes in X dimension
-		int ht_proc_y = params[4];	// HeatTransfer: total number of processes in Y dimension
-		int ht_ppw = params[5];		// HeatTransfer: number of processes per worker
+		int ht_proc_x = params[0];	// HeatTransfer: total number of processes in X dimension
+		int ht_proc_y = params[1];	// HeatTransfer: total number of processes in Y dimension
+		int ht_ppw = params[2];		// HeatTransfer: number of processes per worker
+		int ht_buff = params[3];	// HeatTransfer: the maximum size of I/O buffer
+		int sw_proc = params[4];	// StageWrite: total number of processes
+		int sw_ppw = params[5];		// StageWrite: number of processes per worker
 		int ht_step = params[6];	// HeatTransfer: the total number of steps to output
-		int ht_buff = params[7];	// HeatTransfer: the maximum size of I/O buffer
-		int sw_proc = params[8];	// StageWrite: total number of processes
-		int sw_ppw = params[9];		// StageWrite: number of processes per worker
+		int ht_x = params[7];		// HeatTransfer: total array size in X dimension
+		int ht_y = params[8];		// HeatTransfer: total array size in Y dimension
+		int ht_iter = params[9];	// HeatTransfer: total number of iterations
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
 		string turbine_output = getenv("TURBINE_OUTPUT");
@@ -139,7 +139,7 @@ import sys;
 {
 	string turbine_output = getenv("TURBINE_OUTPUT");
 	string dir = "%s/run/%s" % (turbine_output, run_id);
-	string output = "%0.4i\t%0.4i\t%0.4i\t%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%s"
+	string output = "%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%0.2i\t%0.4i\t%0.4i\t%0.4i\t%s"
 		% (params[0], params[1], params[2], params[3], params[4], 
 		params[5], params[6], params[7], params[8], params[9], "inf");
 	file out <dir/"time.txt"> = write(output);
@@ -171,7 +171,7 @@ import sys;
 				printf("exectime(%i, %i, %i, %i, %i, %i, %i, %i, %i, %i): %f",
 						params[0], params[1], params[2], params[3], params[4], params[5], 
 						params[6], params[7], params[8], params[9], exectime);
-				string output = "%0.4i\t%0.4i\t%0.4i\t%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%f"
+				string output = "%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%0.2i\t%0.4i\t%0.4i\t%0.4i\t%f"
 					% (params[0], params[1], params[2], params[3], params[4], 
 					params[5], params[6], params[7], params[8], params[9], exectime);
 				file out <dir/"time.txt"> = write(output);
@@ -203,18 +203,18 @@ main()
 		workers = 32;
 	}
 
-	// 0) HeatTransfer: total array size in X dimension
-	// 1) HeatTransfer: total array size in Y dimension
-	// 2) HeatTransfer: total number of iterations
-	// 3) HeatTransfer: total number of processes in X dimension
-	// 4) HeatTransfer: total number of processes in Y dimension
-	// 5) HeatTransfer: number of processes per worker
+	// 0) HeatTransfer: total number of processes in X dimension
+	// 1) HeatTransfer: total number of processes in Y dimension
+	// 2) HeatTransfer: number of processes per worker
+	// 3) HeatTransfer: the maximum size of I/O buffer
+	// 4) StageWrite: total number of processes
+	// 5) StageWrite: number of processes per worker
 	// 6) HeatTransfer: the total number of steps to output
-	// 7) HeatTransfer: the maximum size of I/O buffer
-	// 8) StageWrite: total number of processes
-	// 9) StageWrite: number of processes per worker
+	// 7) HeatTransfer: total array size in X dimension
+	// 8) HeatTransfer: total array size in Y dimension
+	// 9) HeatTransfer: total number of iterations
 	int sample_num = string2int(read(input("num_smpl.txt")));
-	conf_samples = file_lines(input("smpl_hsi.csv"));
+	conf_samples = file_lines(input("smpl_hs.csv"));
 
 	float exectime[];
 	int codes[];
@@ -227,21 +227,21 @@ main()
 			params[j] = string2int(params_str[j]);
 		}
 
-		if ((params[5] <= ppw) && (params[9] <= ppw) && (params[3] * params[4] >= params[5]) && (params[8] >= params[9]))
+		if ((params[2] <= ppw) && (params[5] <= ppw) && (params[0] * params[1] >= params[2]) && (params[4] >= params[5]))
 		{
 			int nwork;
-			if (params[3] * params[4] %% params[5] == 0 && params[8] %% params[9] == 0) {
-				nwork = params[3] * params[4] %/ params[5] + params[8] %/ params[9];
+			if (params[0] * params[1] %% params[2] == 0 && params[4] %% params[5] == 0) {
+				nwork = params[0] * params[1] %/ params[2] + params[4] %/ params[5];
 			} else {
-				if (params[3] * params[4] %% params[5] == 0 || params[8] %% params[9] == 0) {
-					nwork = params[3] * params[4] %/ params[5] + params[8] %/ params[9] + 1;
+				if (params[0] * params[1] %% params[2] == 0 || params[4] %% params[5] == 0) {
+					nwork = params[0] * params[1] %/ params[2] + params[4] %/ params[5] + 1;
 				} else {
-					nwork = params[3] * params[4] %/ params[5] + params[8] %/ params[9] + 2;
+					nwork = params[0] * params[1] %/ params[2] + params[4] %/ params[5] + 2;
 				}
 			}
 			if (nwork <= workers)
 			{
-				exectime[i] = launch_wrapper("%0.4i_%0.4i_%0.4i_%0.2i_%0.2i_%0.2i_%0.2i_%0.2i_%0.4i_%0.2i"
+				exectime[i] = launch_wrapper("%0.2i_%0.2i_%0.2i_%0.2i_%0.4i_%0.2i_%0.2i_%0.4i_%0.4i_%0.4i"
 						% (params[0], params[1], params[2], params[3], params[4], 
 						params[5], params[6], params[7], params[8], params[9]),
 						params);

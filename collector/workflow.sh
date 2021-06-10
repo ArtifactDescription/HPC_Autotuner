@@ -64,7 +64,7 @@ then
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../smpl_lvi.csv smpl_lvi.csv
+	cp -f ../smpl_lv.csv smpl_lv.csv
 	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/in.quench in.quench
 	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/restart.liquid restart.liquid
 	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/CuZr.fs CuZr.fs
@@ -109,7 +109,7 @@ then
 	mkdir -pv $TURBINE_OUTPUT
 	cd $TURBINE_OUTPUT
 	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../smpl_hsi.csv smpl_hsi.csv
+	cp -f ../smpl_hs.csv smpl_hs.csv
 	cp -f ../../../adios1-coupled/Example-Heat_Transfer/heat_transfer.xml heat_transfer.xml
 	cd -
 fi

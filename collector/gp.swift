@@ -28,12 +28,12 @@ import sys;
 	int time_limit = 2;
 	if (count < time_limit)
 	{
-		int gs_cs = params[0];		// gray-scott: the cube size of global array (L x L x L)
-		int gs_step = params[1];	// gray-scott: the total number of steps to simulate
-		int gs_proc = params[2];	// gray-scott: the total number of processes
-		int gs_ppw = params[3];		// gray-scott: the number of processes per worker
-		int pdf_proc = params[4];	// pdf_calc: the total number of processes
-		int pdf_ppw = params[5];	// pdf_calc: the number of processes per worker
+		int gs_proc = params[0];	// gray-scott: the total number of processes
+		int gs_ppw = params[1];		// gray-scott: the number of processes per worker
+		int pdf_proc = params[2];	// pdf_calc: the total number of processes
+		int pdf_ppw = params[3];	// pdf_calc: the number of processes per worker
+		int gs_cs = params[4];		// gray-scott: the cube size of global array (L x L x L)
+		int gs_step = params[5];	// gray-scott: the total number of steps to simulate
 
 		string turbine_output = getenv("TURBINE_OUTPUT");
 		string dir = "%s/run/%s" % (turbine_output, run_id);
@@ -143,7 +143,7 @@ import sys;
 {
 	string turbine_output = getenv("TURBINE_OUTPUT");
 	string dir = "%s/run/%s" % (turbine_output, run_id);
-	string output = "%0.4i\t%0.3i\t%0.4i\t%0.2i\t%0.4i\t%0.2i\t%s"
+	string output = "%0.4i\t%0.2i\t%0.4i\t%0.2i\t%0.4i\t%0.3i\t%s"
 		% (params[0], params[1], params[2], params[3], params[4], params[5], "inf");
 	file out <dir/"time.txt"> = write(output);
 	v = propagate();
@@ -172,7 +172,7 @@ import sys;
 			if (exectime >= 0.0) {
 				printf("exectime(%i, %i, %i, %i, %i, %i): %f",
 						params[0], params[1], params[2], params[3], params[4], params[5], exectime);
-				string output = "%0.4i\t%0.3i\t%0.4i\t%0.2i\t%0.4i\t%0.2i\t%f"
+				string output = "%0.4i\t%0.2i\t%0.4i\t%0.2i\t%0.4i\t%0.3i\t%f"
 					% (params[0], params[1], params[2], params[3], params[4], params[5], exectime);
 				file out <dir/"time.txt"> = write(output);
 			}
@@ -203,12 +203,12 @@ main()
 		workers = 32;
 	}
 
-	// 0) gray-scott: the cube size of global array (L x L x L)
-	// 1) gray-scott: the total number of steps to simulate
-	// 2) gray-scott: the total number of processes
-	// 3) gray-scott: the number of processes per worker
-	// 4) pdf_calc: the total number of processes
-	// 5) pdf_calc: the number of processes per worker
+	// 0) gray-scott: the total number of processes
+	// 1) gray-scott: the number of processes per worker
+	// 2) pdf_calc: the total number of processes
+	// 3) pdf_calc: the number of processes per worker
+	// 4) gray-scott: the cube size of global array (L x L x L)
+	// 5) gray-scott: the total number of steps to simulate
 	int sample_num = string2int(read(input("num_smpl.txt")));
 	conf_samples = file_lines(input("smpl_gp.csv"));
 
@@ -222,21 +222,21 @@ main()
 		{
 			params[j] = string2int(params_str[j]);
 		}
-		if ((params[3] <= ppw) && (params[5] <= ppw))
+		if ((params[1] <= ppw) && (params[3] <= ppw))
 		{
 			int nwork;
-			if (params[2] %% params[3] == 0 && params[4] %% params[5] == 0) {
-				nwork = params[2] %/ params[3] + params[4] %/ params[5];
+			if (params[0] %% params[1] == 0 && params[2] %% params[3] == 0) {
+				nwork = params[0] %/ params[1] + params[2] %/ params[3];
 			} else {
-				if (params[2] %% params[3] == 0 || params[4] %% params[5] == 0) {
-					nwork = params[2] %/ params[3] + params[4] %/ params[5] + 1;
+				if (params[0] %% params[1] == 0 || params[2] %% params[3] == 0) {
+					nwork = params[0] %/ params[1] + params[2] %/ params[3] + 1;
 				} else {
-					nwork = params[2] %/ params[3] + params[4] %/ params[5] + 2;
+					nwork = params[0] %/ params[1] + params[2] %/ params[3] + 2;
 				}
 			}
 			if (nwork <= workers)
 			{
-				exectime[i] = launch_wrapper("%0.4i_%0.3i_%0.4i_%0.2i_%0.4i_%0.2i" 
+				exectime[i] = launch_wrapper("%0.4i_%0.2i_%0.4i_%0.2i_%0.4i_%0.3i" 
 						% (params[0], params[1], params[2], params[3], params[4], params[5]), 
 						params);
 

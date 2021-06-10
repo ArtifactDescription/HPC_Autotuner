@@ -25,10 +25,10 @@ import sys;
 		int lmp_proc = params[0];	// Lammps: total num of processes
 		int lmp_ppw = params[1];	// Lammps: num of processes per worker
 		int lmp_thrd = params[2];	// Lammps: num of threads per process
-		int lmp_frqIO = params[3];	// Lammps: IO interval in steps
-		int voro_proc = params[4];	// Voro: total num of processes
-		int voro_ppw = params[5];	// Voro: num of processes per worker
-		int voro_thrd = params[6];	// Voro: num of threads per process
+		int voro_proc = params[3];	// Voro: total num of processes
+		int voro_ppw = params[4];	// Voro: num of processes per worker
+		int voro_thrd = params[5];	// Voro: num of threads per process
+		int lmp_spo = params[6];	// Lammps: num of steps per output interval
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
 		string turbine_output = getenv("TURBINE_OUTPUT");
@@ -37,7 +37,7 @@ import sys;
 		string infile2 = "%s/restart.liquid" % turbine_output;
 		string infile3 = "%s/CuZr.fs" % turbine_output;
 
-		string cmd0[] = [ workflow_root/"lmp.sh", int2string(lmp_frqIO), "FLEXPATH", "16000", "20000", dir/"in.quench" ];
+		string cmd0[] = [ workflow_root/"lmp.sh", int2string(lmp_spo), "FLEXPATH", "16000", "20000", dir/"in.quench" ];
 		setup_run(dir, infile1, infile2, infile3) =>
 			(output0, exit_code0) = system(cmd0);
 
@@ -147,7 +147,7 @@ import sys;
 {
 	string turbine_output = getenv("TURBINE_OUTPUT");
 	string dir = "%s/run/%s" % (turbine_output, run_id);
-	string output = "%0.4i\t%0.2i\t%0.1i\t%0.3i\t%0.4i\t%0.2i\t%0.1i\t%s"
+	string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.2i\t%0.1i\t%0.3i\t%s"
 		% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], "inf");
 	file out <dir/"time.txt"> = write(output);
 	v = propagate();
@@ -176,7 +176,7 @@ import sys;
 			if (exectime >= 0.0) {
 				printf("exectime(%i, %i, %i, %i, %i, %i, %i): %f",
 						params[0], params[1], params[2], params[3], params[4], params[5], params[6], exectime);
-				string output = "%0.4i\t%0.2i\t%0.1i\t%0.3i\t%0.4i\t%0.2i\t%0.1i\t%f"
+				string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.2i\t%0.1i\t%0.3i\t%f"
 					% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], exectime);
 				file out <dir/"time.txt"> = write(output);
 			}
@@ -210,10 +210,10 @@ main()
 	// 0) Lammps: total num of processes
 	// 1) Lammps: num of processes per worker
 	// 2) Lammps: num of threads per process
-	// 3) Lammps: IO interval in steps
-	// 4) Voro: total num of processes
-	// 5) Voro: num of processes per worker
-	// 6) Voro: num of threads per process
+	// 3) Voro: total num of processes
+	// 4) Voro: num of processes per worker
+	// 5) Voro: num of threads per process
+	// 6) Lammps: num of steps per output interval
 	int sample_num = string2int(read(input("num_smpl.txt")));
 	conf_samples = file_lines(input("smpl_lv.csv"));
 
@@ -227,32 +227,29 @@ main()
 		{
 			params[j] = string2int(params_str[j]);
 		}
-		if ((params[1] <= ppw) && (params[5] <= ppw))
+		if ((params[1] <= ppw) && (params[4] <= ppw))
 		{
 			int nwork;
-			if (params[0] %% params[1] == 0 && params[4] %% params[5] == 0) {
-				nwork = params[0] %/ params[1] + params[4] %/ params[5];
+			if (params[0] %% params[1] == 0 && params[3] %% params[4] == 0) {
+				nwork = params[0] %/ params[1] + params[3] %/ params[4];
 			} else {
-				if (params[0] %% params[1] == 0 || params[4] %% params[5] == 0) {
-					nwork = params[0] %/ params[1] + params[4] %/ params[5] + 1;
+				if (params[0] %% params[1] == 0 || params[3] %% params[4] == 0) {
+					nwork = params[0] %/ params[1] + params[3] %/ params[4] + 1;
 				} else {
-					nwork = params[0] %/ params[1] + params[4] %/ params[5] + 2;
+					nwork = params[0] %/ params[1] + params[3] %/ params[4] + 2;
 				}
 			}
 			if (nwork <= workers)
 			{
-				// foreach k in [0 : 9 : 1]
-				// {
-					exectime[i] = launch_wrapper("%0.4i_%0.2i_%0.1i_%0.3i_%0.4i_%0.2i_%0.1i" 
-							% (params[0], params[1], params[2], params[3], params[4], params[5], params[6]), 
-							params);
+				exectime[i] = launch_wrapper("%0.4i_%0.2i_%0.1i_%0.4i_%0.2i_%0.1i_%0.3i" 
+						% (params[0], params[1], params[2], params[3], params[4], params[5], params[6]), 
+						params);
 
-					if (exectime[i] >= 0.0) {
-						codes[i] = 0;
-					} else {
-						codes[i] = 1;
-					}
-				// }
+				if (exectime[i] >= 0.0) {
+					codes[i] = 0;
+				} else {
+					codes[i] = 1;
+				}
 			}
 		}
 	}

@@ -22,15 +22,15 @@ import sys;
 	int time_limit = 2;
 	if (count < time_limit)
 	{
-		int lmp_l2s = params[0];	// Lammps: the num of runs for the phase from liquid to solid
-		int lmp_sld = params[1];	// Lammps: the num of runs for the solid phase
-		int lmp_proc = params[2];	// Lammps: total num of processes
-		int lmp_ppw = params[3];	// Lammps: num of processes per worker
-		int lmp_thrd = params[4];	// Lammps: num of threads per process
-		int lmp_frqIO = params[5];	// Lammps: IO interval in steps
-		int voro_proc = params[6];	// Voro: total num of processes
-		int voro_ppw = params[7];	// Voro: num of processes per worker
-		int voro_thrd = params[8];	// Voro: num of threads per process
+		int lmp_proc = params[0];	// Lammps: total num of processes
+		int lmp_ppw = params[1];	// Lammps: num of processes per worker
+		int lmp_thrd = params[2];	// Lammps: num of threads per process
+		int voro_proc = params[3];	// Voro: total num of processes
+		int voro_ppw = params[4];	// Voro: num of processes per worker
+		int voro_thrd = params[5];	// Voro: num of threads per process
+		int lmp_spo = params[6];	// Lammps: num of steps per output interval
+		int lmp_l2s = params[7];	// Lammps: the num of runs for the phase from liquid to solid
+		int lmp_sld = params[8];	// Lammps: the num of runs for the solid phase
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
 		string turbine_output = getenv("TURBINE_OUTPUT");
@@ -39,7 +39,7 @@ import sys;
 		string infile2 = "%s/restart.liquid" % turbine_output;
 		string infile3 = "%s/CuZr.fs" % turbine_output;
 
-		string cmd0[] = [ workflow_root/"lmp.sh", int2string(lmp_frqIO), "FLEXPATH", int2string(lmp_l2s), int2string(lmp_sld), dir/"in.quench" ];
+		string cmd0[] = [ workflow_root/"lmp.sh", int2string(lmp_spo), "FLEXPATH", int2string(lmp_l2s), int2string(lmp_sld), dir/"in.quench" ];
 		setup_run(dir, infile1, infile2, infile3) =>
 			(output0, exit_code0) = system(cmd0);
 
@@ -150,7 +150,7 @@ import sys;
 {
 	string turbine_output = getenv("TURBINE_OUTPUT");
 	string dir = "%s/run/%s" % (turbine_output, run_id);
-	string output = "%0.5i\t%0.5i\t%0.4i\t%0.2i\t%0.1i\t%0.3i\t%0.4i\t%0.2i\t%0.1i\t%s"
+	string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.2i\t%0.1i\t%0.3i\t%0.5i\t%0.5i\t%s"
 		% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], "inf");
 	file out <dir/"time.txt"> = write(output);
 	v = propagate();
@@ -179,7 +179,7 @@ import sys;
 			if (exectime >= 0.0) {
 				printf("exectime(%i, %i, %i, %i, %i, %i, %i, %i, %i): %f",
 						params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], exectime);
-				string output = "%0.5i\t%0.5i\t%0.4i\t%0.2i\t%0.1i\t%0.3i\t%0.4i\t%0.2i\t%0.1i\t%f"
+				string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.2i\t%0.1i\t%0.3i\t%0.5i\t%0.5i\t%f"
 					% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], exectime);
 				file out <dir/"time.txt"> = write(output);
 			}
@@ -210,17 +210,17 @@ main()
 		workers = 32;
 	}
 
-	// 0) Lammps: the num of runs for the phase from liquid to solid
-	// 1) Lammps: the num of runs for the solid phase
-	// 2) Lammps: total num of processes
-	// 3) Lammps: num of processes per worker
-	// 4) Lammps: num of threads per process
-	// 5) Lammps: IO interval in steps
-	// 6) Voro: total num of processes
-	// 7) Voro: num of processes per worker
-	// 8) Voro: num of threads per process
+	// 0) Lammps: total num of processes
+	// 1) Lammps: num of processes per worker
+	// 2) Lammps: num of threads per process
+	// 3) Voro: total num of processes
+	// 4) Voro: num of processes per worker
+	// 5) Voro: num of threads per process
+	// 6) Lammps: num of steps per output interval
+	// 7) Lammps: the num of runs for the phase from liquid to solid
+	// 8) Lammps: the num of runs for the solid phase
 	int sample_num = string2int(read(input("num_smpl.txt")));
-	conf_samples = file_lines(input("smpl_lvi.csv"));
+	conf_samples = file_lines(input("smpl_lv.csv"));
 
 	float exectime[];
 	int codes[];
@@ -232,21 +232,21 @@ main()
 		{
 			params[j] = string2int(params_str[j]);
 		}
-		if ((params[3] <= ppw) && (params[7] <= ppw))
+		if ((params[1] <= ppw) && (params[4] <= ppw))
 		{
 			int nwork;
-			if (params[2] %% params[3] == 0 && params[6] %% params[7] == 0) {
-				nwork = params[2] %/ params[3] + params[6] %/ params[7];
+			if (params[0] %% params[1] == 0 && params[3] %% params[4] == 0) {
+				nwork = params[0] %/ params[1] + params[3] %/ params[4];
 			} else {
-				if (params[2] %% params[3] == 0 || params[6] %% params[7] == 0) {
-					nwork = params[2] %/ params[3] + params[6] %/ params[7] + 1;
+				if (params[0] %% params[1] == 0 || params[3] %% params[4] == 0) {
+					nwork = params[0] %/ params[1] + params[3] %/ params[4] + 1;
 				} else {
-					nwork = params[2] %/ params[3] + params[6] %/ params[7] + 2;
+					nwork = params[0] %/ params[1] + params[3] %/ params[4] + 2;
 				}
 			}
 			if (nwork <= workers)
 			{
-				exectime[i] = launch_wrapper("%0.5i_%0.5i_%0.4i_%0.2i_%0.1i_%0.3i_%0.4i_%0.2i_%0.1i" 
+				exectime[i] = launch_wrapper("%0.4i_%0.2i_%0.1i_%0.4i_%0.2i_%0.1i_%0.3i_%0.5i_%0.5i" 
 						% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8]), 
 						params);
 

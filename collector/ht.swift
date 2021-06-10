@@ -28,8 +28,8 @@ int ht_iter = 1024;
 		int ht_proc_x = params[0];	// HeatTransfer: total number of processes in X dimension
 		int ht_proc_y = params[1];	// HeatTransfer: total number of processes in Y dimension
 		int ht_ppw = params[2];		// HeatTransfer: number of processes per worker
-		int ht_step = params[3];	// HeatTransfer: the total number of steps to output
-		int ht_buff = params[4];	// HeatTransfer: the maximum size of I/O buffer
+		int ht_buff = params[3];	// HeatTransfer: the maximum size of I/O buffer
+		int ht_step = params[4];	// HeatTransfer: the total number of steps to output
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
 		string turbine_output = getenv("TURBINE_OUTPUT"); 
@@ -178,8 +178,8 @@ main()
 	// 0) HeatTransfer: total number of processes in X dimension
 	// 1) HeatTransfer: total number of processes in Y dimension
 	// 2) HeatTransfer: number of processes per worker
-	// 3) HeatTransfer: the total number of steps to output
-	// 4) HeatTransfer: the maximum size of I/O buffer
+	// 3) HeatTransfer: the maximum size of I/O buffer
+	// 4) HeatTransfer: the total number of steps to output
 	int sample_num = string2int(read(input("num_smpl.txt")));
 	conf_samples = file_lines(input("smpl_ht.csv"));
 
