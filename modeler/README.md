@@ -27,9 +27,9 @@ Random configurations for in-situ workflows LV, HS, GP and their component appli
 - sample.py: Take the files in the directory data as inputs and read measured samples as a test dataset.
 - modeler.py: Implement various auto-tuning algorithms.
 
-### 4. Run hyperparams.sh to see hyperparameter sensitivities of auto-tuning algorithms.
+### 4. Show hyperparameter sensitivities of auto-tuning algorithms.
 ```
-modeler/hyperparams.sh workflow_name performance_metric number_of_sample number_of_runs algorithm
+./hyperparams.sh workflow_name performance_metric number_of_sample number_of_runs algorithm
 ```
 - python_filename: num_iter, pct_rand, pct_repl
 - workflow_name: lv, hs, gvpv
@@ -38,9 +38,9 @@ modeler/hyperparams.sh workflow_name performance_metric number_of_sample number_
 - number of runs: 100
 - algorithm: al, geist, alic, alich, alph
 
-### 5. Run evaluate.sh to compare the performance of auto-tuning algorithms.
+### 5. Compare the performance of auto-tuning algorithms.
 ```
-modeler/evaluate.sh workflow_name performance_metric number_of_sample number_of_runs"
+./evaluate.sh workflow_name performance_metric number_of_sample number_of_runs"
 ```
 - workflow_name: lv, hs, gvpv
 - performance_metric: exec_time, comp_time
