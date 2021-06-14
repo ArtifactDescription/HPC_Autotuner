@@ -29,7 +29,7 @@ Random configurations for in-situ workflows LV, HS, GP and their component appli
 
 ### 4. Show hyperparameter sensitivities of auto-tuning algorithms.
 ```
-./hyperparams.sh workflow_name performance_metric number_of_sample number_of_runs algorithm
+./hyperparams.sh python_filename workflow_name performance_metric number_of_sample number_of_runs algorithm
 ```
 - python_filename: num_iter, pct_rand, pct_repl
 - workflow_name: lv, hs, gvpv
