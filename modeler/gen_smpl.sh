@@ -14,5 +14,6 @@ if [ ! -d gp ]
 then
 	mkdir gp
 fi
+
 python gen_smpl.py
 

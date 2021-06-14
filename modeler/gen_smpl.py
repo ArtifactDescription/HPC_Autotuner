@@ -63,8 +63,6 @@ def gen_smpl_lv(num_smpl_lv, filename_lv, filename_lmp, filename_vr, in_para=Tru
     smpls_lv = set([])
     smpls_lmp = set([])
     smpls_vr = set([])
-    lmp_l2s = 16000
-    lmp_sld = 20000
     while (len(smpls_lv) < num_smpl_lv):
         lmp_nproc = random.randint(2, (num_core - 1) * num_node_lv)
         lmp_ppn = random.randint(1, num_core - 1)
@@ -74,8 +72,8 @@ def gen_smpl_lv(num_smpl_lv, filename_lv, filename_lmp, filename_vr, in_para=Tru
         vr_tpn = random.randint(1, 2 * (num_core - 1))
         if (in_para):
             lmp_nstep_out = random.randint(1, 8) * 50
-            lmp_l2s = 16000 / (2 ** random.randint(0, 5))
-            lmp_sld = 20000 / (2 ** random.randint(0, 5))
+            lmp_l2s = int(16000 / (2 ** random.randint(0, 5)))
+            lmp_sld = int(20000 / (2 ** random.randint(0, 5)))
         else:
             lmp_nstep_out = 200
             lmp_l2s = 16000
@@ -112,7 +110,7 @@ def gen_smpl_lv(num_smpl_lv, filename_lv, filename_lmp, filename_vr, in_para=Tru
                         lmp_nstep_out, lmp_l2s, lmp_sld))
 
     df_smpl_lv = pd.DataFrame(data = list(smpls_lv), columns=lv_coln)
-    df_smpl_lv = df_smpl_lv.drop_duplicates().reset_index(drop=True)
+    df_smpl_lv = df_smpl_lv.drop_duplicates().reset_index(drop=True).astype(int)
     print("The number of coupled LAMMPS and Voro++ samples =", df_smpl_lv.shape[0])
     print(df_smpl_lv.head(10))
     df2csv(df_smpl_lv, filename_lv + ".csv")
@@ -122,7 +120,7 @@ def gen_smpl_lv(num_smpl_lv, filename_lv, filename_lmp, filename_vr, in_para=Tru
     df_smpl_lmp = df_smpl_lmp.drop_duplicates().reset_index(drop=True)
     df_smpl_lmp2 = pd.DataFrame(data = list(smpls_lmp), columns=lmp_coln)
     df_smpl_lmp = df_smpl_lmp.append(df_smpl_lmp2)
-    df_smpl_lmp = df_smpl_lmp.drop_duplicates().reset_index(drop=True)
+    df_smpl_lmp = df_smpl_lmp.drop_duplicates().reset_index(drop=True).astype(int)
     print("The number of LAMMPS samples =", df_smpl_lmp.shape[0])
     print(df_smpl_lmp.head(3))
     df2csv(df_smpl_lmp, filename_lmp + ".csv")
@@ -131,7 +129,7 @@ def gen_smpl_lv(num_smpl_lv, filename_lv, filename_lmp, filename_vr, in_para=Tru
     df_smpl_vr = df_smpl_vr.drop_duplicates().reset_index(drop=True)
     df_smpl_vr2 = pd.DataFrame(data = list(smpls_vr), columns=vr_coln)
     df_smpl_vr = df_smpl_vr.append(df_smpl_vr2)
-    df_smpl_vr = df_smpl_vr.drop_duplicates().reset_index(drop=True)
+    df_smpl_vr = df_smpl_vr.drop_duplicates().reset_index(drop=True).astype(int)
     print("The number of Voro++ samples =", df_smpl_vr.shape[0])
     print(df_smpl_vr.head(3))
     df2csv(df_smpl_vr, filename_vr + ".csv")
@@ -172,11 +170,11 @@ def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, in_para=True
         sw_ppn = random.randint(1, num_core - 1)
         if (in_para):
             ht_nout = random.randint(1, 8) * 4
-            ht_x = 2048 / (2 ** random.randint(0, 5))
-            ht_y = 2048 / (2 ** random.randint(0, 5))
-            ht_iter = 1024 / (2 ** random.randint(0, 5))
+            ht_x = int(2048 / (2 ** random.randint(0, 5)))
+            ht_y = int(2048 / (2 ** random.randint(0, 5)))
+            ht_iter = int(1024 / (2 ** random.randint(0, 5)))
         else:
-            ht_nout = 16
+            ht_nout = 8
             ht_x = 2048
             ht_y = 2048
             ht_iter = 1024
@@ -206,7 +204,7 @@ def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, in_para=True
                         ht_nout, ht_x, ht_y, ht_iter))
 
     df_smpl_hs = pd.DataFrame(data = list(smpls_hs), columns=hs_coln)
-    df_smpl_hs = df_smpl_hs.drop_duplicates().reset_index(drop=True)
+    df_smpl_hs = df_smpl_hs.drop_duplicates().reset_index(drop=True).astype(int)
     print("The number of coupled Heat-transfer and Stage-write samples = ", df_smpl_hs.shape[0])
     print(df_smpl_hs.head(10))
     df2csv(df_smpl_hs, filename_hs + ".csv")
@@ -216,7 +214,7 @@ def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, in_para=True
     df_smpl_ht = df_smpl_ht.drop_duplicates().reset_index(drop=True)
     df_smpl_ht2 = pd.DataFrame(data = list(smpls_ht), columns=ht_coln)
     df_smpl_ht = df_smpl_ht.append(df_smpl_ht2)
-    df_smpl_ht = df_smpl_ht.drop_duplicates().reset_index(drop=True)
+    df_smpl_ht = df_smpl_ht.drop_duplicates().reset_index(drop=True).astype(int)
     print("The number of Heat-transfer samples = ", df_smpl_ht.shape[0])
     print(df_smpl_ht.head(3))
     df2csv(df_smpl_ht, filename_ht + ".csv")
@@ -225,7 +223,7 @@ def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, in_para=True
     df_smpl_sw = df_smpl_sw.drop_duplicates().reset_index(drop=True)
     df_smpl_sw2 = pd.DataFrame(data = list(smpls_sw), columns=sw_coln)
     df_smpl_sw = df_smpl_sw.append(df_smpl_sw2)
-    df_smpl_sw = df_smpl_sw.drop_duplicates().reset_index(drop=True)
+    df_smpl_sw = df_smpl_sw.drop_duplicates().reset_index(drop=True).astype(int)
     print("The number of Stage-write samples = ", df_smpl_sw.shape[0])
     print(df_smpl_sw.head(3))
     df2csv(df_smpl_sw, filename_sw + ".csv")
@@ -269,8 +267,8 @@ def gen_smpl_gp(num_smpl_gp, filename_gp, filename_gs, filename_pdf, in_para=Tru
         pdf_nproc = random.randint(2, (num_core - 1) * (num_node_gp - 2))
         pdf_ppn = random.randint(1, num_core - 1)
         if (in_para):
-            gs_cs = 512 / (2 ** random.randint(0, 5))
-            gs_step = 800 / (2 ** random.randint(0, 5))
+            gs_cs = int(512 / (2 ** random.randint(0, 5)))
+            gs_step = int(800 / (2 ** random.randint(0, 5)))
         else:
             gs_cs = 512
             gs_step = 800
@@ -297,7 +295,7 @@ def gen_smpl_gp(num_smpl_gp, filename_gp, filename_gs, filename_pdf, in_para=Tru
                 smpls_gp.add((gs_cs, gs_step, gs_nproc, gs_ppn, pdf_nproc, pdf_ppn))
 
     df_smpl_gp = pd.DataFrame(data = list(smpls_gp), columns=gp_coln)
-    df_smpl_gp = df_smpl_gp.drop_duplicates().reset_index(drop=True)
+    df_smpl_gp = df_smpl_gp.drop_duplicates().reset_index(drop=True).astype(int)
     print("The number of GP samples =", df_smpl_gp.shape[0])
     print(df_smpl_gp.head(10))
     df2csv(df_smpl_gp, filename_gp + ".csv")
@@ -307,7 +305,7 @@ def gen_smpl_gp(num_smpl_gp, filename_gp, filename_gs, filename_pdf, in_para=Tru
     df_smpl_gs = df_smpl_gs.drop_duplicates().reset_index(drop=True)
     df_smpl_gs2 = pd.DataFrame(data = list(smpls_gs), columns=gs_coln)
     df_smpl_gs = df_smpl_gs.append(df_smpl_gs2)
-    df_smpl_gs = df_smpl_gs.drop_duplicates().reset_index(drop=True)
+    df_smpl_gs = df_smpl_gs.drop_duplicates().reset_index(drop=True).astype(int)
     print("The number of Gray-scott samples =", df_smpl_gs.shape[0])
     print(df_smpl_gs.head(3))
     df2csv(df_smpl_gs, filename_gs + ".csv")
@@ -316,7 +314,7 @@ def gen_smpl_gp(num_smpl_gp, filename_gp, filename_gs, filename_pdf, in_para=Tru
     df_smpl_pdf = df_smpl_pdf.drop_duplicates().reset_index(drop=True)
     df_smpl_pdf2 = pd.DataFrame(data = list(smpls_pdf), columns=pdf_coln)
     df_smpl_pdf = df_smpl_pdf.append(df_smpl_pdf2)
-    df_smpl_pdf = df_smpl_pdf.drop_duplicates().reset_index(drop=True)
+    df_smpl_pdf = df_smpl_pdf.drop_duplicates().reset_index(drop=True).astype(int)
     print("The number of PDF calculator samples =", df_smpl_pdf.shape[0])
     print(df_smpl_pdf.head(3))
     df2csv(df_smpl_pdf, filename_pdf + ".csv")
