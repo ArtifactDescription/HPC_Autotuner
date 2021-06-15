@@ -93,3 +93,7 @@ For example,
 ./collect.sh hs1 2
 ./collect.sh gvpv1 4
 ```
+Run the following script to skip blank lines.
+```
+./filter.sh [Path_to_Experiment_ID]/time_list.csv
+```
