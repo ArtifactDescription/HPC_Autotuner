@@ -22,7 +22,7 @@ export TURBINE_LOG=0 TURBINE_DEBUG=0 ADLB_DEBUG=0
 export WORKFLOW_ROOT=$( cd $( dirname $0 ) ; /bin/pwd )
 cd $WORKFLOW_ROOT
 
-if [[ $1 = "lmp" ]]
+if [[ $1 == "lmp" ]]
 then
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_lv/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
@@ -35,7 +35,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "vr" ]]
+if [[ $1 == "vr" ]]
 then
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_lv/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
@@ -45,7 +45,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "lv" ]]
+if [[ $1 == "lv" ]] || [[ $1 == "lvc" ]]
 then
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_lv/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
@@ -58,20 +58,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "lvi" ]]
-then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_lv/$EXPID
-	mkdir -pv $TURBINE_OUTPUT
-	cd $TURBINE_OUTPUT
-	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../smpl_lv.csv smpl_lv.csv
-	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/in.quench in.quench
-	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/restart.liquid restart.liquid
-	cp -f ../../../adios1-coupled/Example-LAMMPS/swift-all/CuZr.fs CuZr.fs
-	cd -
-fi
-
-if [[ $1 = "ht" ]]
+if [[ $1 == "ht" ]]
 then
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_hs/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
@@ -82,7 +69,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "sw" ]]
+if [[ $1 == "sw" ]]
 then
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_hs/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
@@ -92,7 +79,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "hs" ]]
+if [[ $1 == "hs" ]] || [[ $1 == "hsc" ]]
 then
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_hs/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
@@ -103,18 +90,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "hsi" ]]
-then
-	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_hs/$EXPID
-	mkdir -pv $TURBINE_OUTPUT
-	cd $TURBINE_OUTPUT
-	cp -f ../num_smpl.txt num_smpl.txt
-	cp -f ../smpl_hs.csv smpl_hs.csv
-	cp -f ../../../adios1-coupled/Example-Heat_Transfer/heat_transfer.xml heat_transfer.xml
-	cd -
-fi
-
-if [[ $1 = "gs" ]]	# Gray-Scott
+if [[ $1 == "gs" ]]	# Gray-Scott
 then
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_bp4/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
@@ -126,7 +102,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "pdf" ]]	# PDF Calculator
+if [[ $1 == "pdf" ]]	# PDF Calculator
 then
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_bp4/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
@@ -137,7 +113,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "pplot" ]] || [[ $1 = "gplot" ]]	# PDF Plot or Gray Plot
+if [[ $1 == "pplot" ]] || [[ $1 == "gplot" ]]	# PDF Plot or Gray Plot
 then
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_bp4/$EXPID
 	mkdir -pv $TURBINE_OUTPUT
@@ -148,7 +124,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "gp" ]]	# Gray-Scott and PDF Calculator coupled
+if [[ $1 == "gp" ]]	# Gray-Scott and PDF Calculator coupled
 then
 	# Set the output directory
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_sst/$EXPID
@@ -161,7 +137,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "gv" ]]	# Gray-Scott and Gray Plot coupled
+if [[ $1 == "gv" ]]	# Gray-Scott and Gray Plot coupled
 then
 	# Set the output directory
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_sst/$EXPID
@@ -174,7 +150,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "gpv" ]]	# Gray-Scott, PDF Calculator, and PDF Plot coupled
+if [[ $1 == "gpv" ]]	# Gray-Scott, PDF Calculator, and PDF Plot coupled
 then
 	# Set the output directory
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_sst/$EXPID
@@ -187,7 +163,7 @@ then
 	cd -
 fi
 
-if [[ $1 = "wf" ]]	# Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot coupled
+if [[ $1 == "gvpv" ]]	# Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot coupled
 then
 	# Set the output directory
 	export TURBINE_OUTPUT=$WORKFLOW_ROOT/exp_sst/$EXPID
@@ -212,7 +188,7 @@ cp -f $WORKFLOW_ROOT/get_maxtime.sh $TURBINE_OUTPUT/get_maxtime.sh
 # Of these, 2 are reserved for the system
 export PROCS=$(($2 + 2))	# The number of nodes
 export PPN=1			# fixed as 1
-export WALLTIME=01:00:00
+export WALLTIME=24:00:00
 export PROJECT=PACC
 export QUEUE=bdw
 MACHINE="-m slurm" # -m (machine) option that accepts pbs, cobalt, cray, lsf, theta, or slurm. The empty string means the local machine.

@@ -25,7 +25,9 @@ import sys;
 		int lmp_proc = params[0];	// Lammps: total num of processes
 		int lmp_ppw = params[1];	// Lammps: num of processes per worker
 		int lmp_thrd = params[2];	// Lammps: num of threads per process
-		int lmp_frqIO = params[3];	// Lammps: IO interval in steps
+		int lmp_spo = params[3];	// Lammps: num of steps per output interval
+		int lmp_l2s = params[4];	// Lammps: num of runs for the phase from liquid to solid
+		int lmp_sld = params[5];	// Lammps: num of runs for the solid phase
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
 		string turbine_output = getenv("TURBINE_OUTPUT");
@@ -34,15 +36,15 @@ import sys;
 		string infile2 = "%s/restart.liquid" % turbine_output;
 		string infile3 = "%s/CuZr.fs" % turbine_output;
 
-		string cmd0[] = [ workflow_root/"lmp.sh", int2string(lmp_frqIO), "POSIX", "16000", "20000", dir/"in.quench" ];
+		string cmd0[] = [ workflow_root/"lmp.sh", int2string(lmp_spo), "POSIX", int2string(lmp_l2s), int2string(lmp_sld), dir/"in.quench" ];
 		setup_run(dir, infile1, infile2, infile3) =>
 			(output0, exit_code0) = system(cmd0);
 
 		if (exit_code0 != 0)
 		{
-			printf("swift: %s failed with exit code %d for the parameters (%d, %d, %d, %d).", 
-					cmd0[0]+" "+cmd0[1]+" "+cmd0[2]+" "+cmd0[3], exit_code0, 
-					params[0], params[1], params[2], params[3]);
+			printf("swift: %s failed with exit code %d for the parameters (%d, %d, %d, %d, %d, %d).", 
+					cmd0[0]+" "+cmd0[1]+" "+cmd0[2]+" "+cmd0[3]+" "+cmd0[4]+" "+cmd0[5], exit_code0, 
+					params[0], params[1], params[2], params[3], params[4], params[5]);
 			sleep(1) =>
 				exectime = launch_wrapper(run_id, params, count + 1);
 		}
@@ -100,8 +102,8 @@ import sys;
 				{
 					exectime = -1.0;
 					failure(run_id, params);
-					printf("swift: The launched application %s with parameters (%d, %d, %d, %d) did not succeed with exit code: %d.", 
-							cmd1, params[0], params[1], params[2], params[3], exit_code1);
+					printf("swift: The launched application %s with parameters (%d, %d, %d, %d, %d, %d) did not succeed with exit code: %d.", 
+							cmd1, params[0], params[1], params[2], params[3], params[4], params[5], exit_code1);
 				}
 				else
 				{
@@ -114,8 +116,8 @@ import sys;
 	{
 		exectime = -1.0;
 		failure(run_id, params);
-		printf("swift: The launched application with parameters (%d, %d, %d, %d) did not succeed %d times.",
-				params[0], params[1], params[2], params[3], time_limit);
+		printf("swift: The launched application with parameters (%d, %d, %d, %d, %d, %d) did not succeed %d times.",
+				params[0], params[1], params[2], params[3], params[4], params[5], time_limit);
 	}
 }
 
@@ -123,8 +125,8 @@ import sys;
 {
 	string turbine_output = getenv("TURBINE_OUTPUT");
 	string dir = "%s/run/%s" % (turbine_output, run_id);
-	string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%s"
-		% (params[0], params[1], params[2], params[3], "inf");
+	string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.5i\t%0.5i\t%s"
+		% (params[0], params[1], params[2], params[3], params[4], params[5], "inf");
 	file out <dir/"time.txt"> = write(output);
 	v = propagate();
 }
@@ -151,23 +153,23 @@ import sys;
 			exectime = string2float(time_output);
 			if (exectime >= 0.0)
 			{
-				printf("exectime(%i, %i, %i, %i): %f", params[0], params[1], params[2], params[3], exectime);
-				string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%f" 
-					% (params[0], params[1], params[2], params[3], exectime);
+				printf("exectime(%i, %i, %i, %i, %i, %i): %f", params[0], params[1], params[2], params[3], params[4], params[5], exectime);
+				string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.5i\t%0.5i\t%f" 
+					% (params[0], params[1], params[2], params[3], params[4], params[5], exectime);
 				file out <dir/"time.txt"> = write(output);
 			}
 			else
 			{
-				printf("swift: The execution time (%f seconds) of the launched application with parameters (%d, %d, %d, %d) is negative.", 
-						exectime, params[0], params[1], params[2], params[3]);                    
+				printf("swift: The execution time (%f seconds) of the launched application with parameters (%d, %d, %d, %d, %d, %d) is negative.", 
+						exectime, params[0], params[1], params[2], params[3], params[4], params[5]);
 			}
 		}
 	}
 	else
 	{
 		exectime = -1.0;
-		printf("swift: Failed to get the execution time of the launched application of parameters (%d, %d, %d, %d) %d times.\n%s",
-				params[0], params[1], params[2], params[3], time_limit);
+		printf("swift: Failed to get the execution time of the launched application of parameters (%d, %d, %d, %d, %d, %d) %d times.\n%s",
+				params[0], params[1], params[2], params[3], params[4], params[5], time_limit);
 	}
 }
 
@@ -186,7 +188,9 @@ main()
 	// 0) Lammps: total num of processes
 	// 1) Lammps: num of processes per worker
 	// 2) Lammps: num of threads per process
-	// 3) Lammps: IO interval in steps
+	// 3) Lammps: num of steps per output interval
+	// 4) Lammps: num of runs for the phase from liquid to solid
+	// 5) Lammps: num of runs for the solid phase
 	int sample_num = string2int(read(input("num_smpl.txt")));
 	conf_samples = file_lines(input("smpl_lmp.csv"));
 
@@ -196,7 +200,7 @@ main()
 	{
 		params_str = split(conf_samples[i], "\t");
 		int params[];
-		foreach j in [0 : 3 : 1]
+		foreach j in [0 : 5 : 1]
 		{
 			params[j] = string2int(params_str[j]);
 		}
@@ -210,8 +214,8 @@ main()
 			}
 			if (nwork <= workers)
 			{
-				exectime[i] = launch_wrapper("%0.4i_%0.2i_%0.1i_%0.4i" 
-						% (params[0], params[1], params[2], params[3]),
+				exectime[i] = launch_wrapper("%0.4i_%0.2i_%0.1i_%0.4i_%0.5i_%0.5i" 
+						% (params[0], params[1], params[2], params[3], params[4], params[5]),
 						params);
 
 				if (exectime[i] >= 0.0) {

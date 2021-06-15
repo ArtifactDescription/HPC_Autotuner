@@ -23,10 +23,12 @@ import sys;
 		int voro_proc = params[0];	// Voro: total num of processes
 		int voro_ppw = params[1];	// Voro: num of processes per worker
 		int voro_thrd = params[2];	// Voro: num of threads per process
-		int lmp_frqIO = params[3];	// Lammps: IO interval in steps, which decides the input size of Voro
+		int lmp_spo = params[3];	// Lammps: num of steps per output interval, which decides the input size of Voro
+		int lmp_l2s = params[4];	// Lammps: num of runs for the phase from liquid to solid
+		int lmp_sld = params[5];	// Lammps: num of runs for the solid phase
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
-		string srcDir = "%s/exp_lv/lmp-%0.4i" % (workflow_root, lmp_frqIO);
+		string srcDir = "%s/exp_lv/lmp-%0.4i-%0.5i-%0.5i" % (workflow_root, lmp_spo, lmp_l2s, lmp_sld);
 		string turbine_output = getenv("TURBINE_OUTPUT");
 		string parDir = "%s/run" % turbine_output;
 		string dir = "%s/%s" % (parDir, run_id);
@@ -68,8 +70,8 @@ import sys;
 			{
 				exectime = -1.0;
 				failure(run_id, params);
-				printf("swift: The launched application %s with parameters (%d, %d, %d, %d) did not succeed with exit code: %d.", 
-						cmd1, params[0], params[1], params[2], params[3], exit_code1);
+				printf("swift: The launched application %s with parameters (%d, %d, %d, %d, %d, %d) did not succeed with exit code: %d.", 
+						cmd1, params[0], params[1], params[2], params[3], params[4], params[5], exit_code1);
 			}
 			else
 			{
@@ -81,8 +83,8 @@ import sys;
 	{
 		exectime = -1.0;
 		failure(run_id, params);
-		printf("swift: The launched application with parameters (%d, %d, %d, %d) did not succeed %d times.",
-				params[0], params[1], params[2], params[3], time_limit);
+		printf("swift: The launched application with parameters (%d, %d, %d, %d, %d, %d) did not succeed %d times.",
+				params[0], params[1], params[2], params[3], params[4], params[5], time_limit);
 	}
 }
 
@@ -90,8 +92,8 @@ import sys;
 {
 	string turbine_output = getenv("TURBINE_OUTPUT");
 	string dir = "%s/run/%s" % (turbine_output, run_id);
-	string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%s"
-		% (params[0], params[1], params[2], params[3], "inf");
+	string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.5i\t%0.5i\t%s"
+		% (params[0], params[1], params[2], params[3], params[4], params[5], "inf");
 	file out <dir/"time.txt"> = write(output);
 	v = propagate();
 }
@@ -108,23 +110,23 @@ import sys;
 	if (time_exit_code != 0)
 	{
 		exectime = -1.0;
-		printf("swift: Failed to get the execution time of the launched application of parameters (%d, %d, %d, %d) with exit code: %d.\n%s",
-				params[0], params[1], params[2], params[3], time_exit_code, time_output);
+		printf("swift: Failed to get the execution time of the launched application of parameters (%d, %d, %d, %d, %d, %d) with exit code: %d.\n%s",
+				params[0], params[1], params[2], params[3], params[4], params[5], time_exit_code, time_output);
 	}
 	else
 	{
 		exectime = string2float(time_output);
 		if (exectime >= 0.0)
 		{
-			printf("exectime(%i, %i, %i, %i): %f", params[0], params[1], params[2], params[3], exectime);
-			string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%f"
-				% (params[0], params[1], params[2], params[3], exectime);
+			printf("exectime(%i, %i, %i, %i, %i, %i): %f", params[0], params[1], params[2], params[3], params[4], params[5], exectime);
+			string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.5i\t%0.5i\t%f"
+				% (params[0], params[1], params[2], params[3], params[4], params[5], exectime);
 			file out <dir/"time.txt"> = write(output);
 		}
 		else
 		{
-			printf("swift: The execution time (%f seconds) of the launched application with parameters (%d, %d, %d, %d) is negative.",
-					exectime, params[0], params[1], params[2], params[3]);
+			printf("swift: The execution time (%f seconds) of the launched application with parameters (%d, %d, %d, %d, %d, %d) is negative.",
+					exectime, params[0], params[1], params[2], params[3], params[4], params[5]);
 		}
 	}
 }
@@ -144,7 +146,9 @@ main()
 	// 0) Voro: total num of processes
 	// 1) Voro: num of processes per worker
 	// 2) Voro: num of threads per process
-	// 3) Lammps: IO interval in steps, which decides the input size of Voro
+	// 3) Lammps: num of steps per output interval, which decides the input size of Voro
+	// 4) Lammps: num of runs for the phase from liquid to solid
+	// 5) Lammps: num of runs for the solid phase
 	int sample_num = string2int(read(input("num_smpl.txt")));
 	conf_samples = file_lines(input("smpl_vr.csv"));
 
@@ -154,7 +158,7 @@ main()
 	{
 		params_str = split(conf_samples[i], "\t");
 		int params[];
-		foreach j in [0 : 3 : 1]
+		foreach j in [0 : 5 : 1]
 		{
 			params[j] = string2int(params_str[j]);
 		}
@@ -168,8 +172,8 @@ main()
 			}
 			if (nwork <= workers)
 			{
-				exectime[i] = launch_wrapper("%0.4i_%0.2i_%0.1i_%0.4i"
-						% (params[0], params[1], params[2], params[3]),
+				exectime[i] = launch_wrapper("%0.4i_%0.2i_%0.1i_%0.4i_%0.5i_%0.5i"
+						% (params[0], params[1], params[2], params[3], params[4], params[5]),
 						params);
 
 				if (exectime[i] >= 0.0) {

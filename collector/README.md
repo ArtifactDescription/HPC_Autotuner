@@ -1,30 +1,31 @@
 # Collector: Measuring Performance over Configurations
 
 ### 1. Application/Workflow Name
-- lmp: LAMMPS;
-- vr: Voro++;
-- lv: LAMMPS and Voro++ coupled by ADIOS 1 (LV) with preset input parameters.
-- lvi: LAMMPS and Voro++ coupled by ADIOS 1 (LV) with configurable input parameters.
+- lmp: LAMMPS with adjustable configuration and input parameters;
+- vr: Voro++ with adjustable configuration and input parameters;
+- lv: LAMMPS and Voro++ coupled by ADIOS 1 (LV) with adjustable configuration and input parameters.
 
 - ht: Heat-transfer;
 - sw: Stage-write;
-- hs: Heat-transfer and Stage-write coupled by ADIOS 1 (HS) with preset input parameters.
-- hsi: Heat-transfer and Stage-write coupled by ADIOS 1 (HS) with configurable input parameters.
+- hs: Heat-transfer and Stage-write coupled by ADIOS 1 (HS) with adjustable configuration and input parameters.
 
 - gs: Gray-Scott;
 - pdf: PDF Calculator;
 - pplot: PDF Plot;
 - gplot: Gray Plot;
-- gp: Gray-Scott and PDF Calculator coupled by ADIOS 2;
-- gv: Gray-Scott and Gray Plot coupled by ADIOS 2;
-- gpv: Gray-Scott, PDF Calculator, and PDF Plot coupled by ADIOS 2;
-- wf: Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot coupled by ADIOS 2.
+- gp: Gray-Scott and PDF Calculator coupled by ADIOS 2 with adjustable configuration and input parameters;
+- gv: Gray-Scott and Gray Plot coupled by ADIOS 2 with adjustable configuration and input parameters;
+- gpv: Gray-Scott, PDF Calculator, and PDF Plot coupled by ADIOS 2 with adjustable configuration and input parameters;
+- gvpv: Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot coupled by ADIOS 2 with adjustable configuration and input parameters.
 
 ### 2. Select a scenario and setup the environment
 - If the scenario for ADIOS1-coupled applications is selected, follow README in the directory adios1-coupled to setup the environment.
+```
+cd adios1-coupled
+./build.sh
+source env.sh
+```
 - If the scenario for ADIOS2-coupled applications is selected, follow README in the directory adios2-coupled to setup the environment.
-
-For example, 
 ```
 cd adios2-coupled
 ./build.sh
@@ -38,27 +39,25 @@ The input file for each application/workflow:
 The number of samples of lmp/vr/lv/lvi to be measured is set in the file exp_lv/num_smpl.txt .
 - lmp: each line includes (#process, PPN, #thread per process, #iterations per output) in the file exp_lv/smpl_lmp.csv. 
 - vr: each line includes (#process, PPN, #thread per process) in the file exp_lv/smpl_vr.csv.
-- lv: each line includes (lmp--#process, lmp--PPN, lmp--#thread per process, lmp--#iterations per output, vr--#process, vr--PPN, vr--#thread per process) in the file exp_lv/smpl_lv.csv.
-- lvi: each line includes (#iterations in the phase from liquid to solid, #iterations in the solid phase, lmp--#process, lmp--PPN, lmp--#thread per process, lmp--#iterations per output, vr--#process, vr--PPN, vr--#thread per process) in the file lv/smpl_lvi.csv.
+- lv: each line includes (lmp--#process, lmp--PPN, lmp--#thread per process, vr--#process, vr--PPN, vr--#thread per process, lmp--#iterations per output, #iterations in the phase from liquid to solid, #iterations in the solid phase) in the file lv/smpl_lvi.csv.
 
 The number of samples of ht/sw/hs/hsi to be measured is set in the file exp_hs/num_smpl.txt .
 - ht: each line includes (#process in X, #process in Y, PPN, #outputs, buffer size) in the file hs/smpl_ht.csv.
 - sw: each line includes (#process, PPN) in the file hs/smpl_sw.csv.
-- hs: each line includes (ht--#process in X, ht--#process in Y, ht--PPN, ht--#outputs, ht--buffer size, sw--#process, sw--PPN) in the file hs/smpl_hs.csv.
-- hsi: each line includes (X dimension size, Y dimension size, #iterations, ht--#process in X, ht--#process in Y, ht--PPN, ht--#outputs, ht--buffer size, sw--#process, sw--PPN) in the file hs/smpl_hsi.csv.
+- hs: each line includes (ht--#process in X, ht--#process in Y, ht--PPN, ht--buffer size, sw--#process, sw--PPN, ht--#outputs, X dimension size, Y dimension size, #iterations) in the file hs/smpl_hsi.csv.
 
 The number of samples of gs/pdf/pplot/gplot to be measured is set in the file exp_bp4/num_smpl.txt .
-The number of samples of gp/gpv/gv/wf to be measured is set in the file exp_bp4/num_smpl.txt .
-- gs: each line includes (edge length of a cube, #simulation steps, #process, PPN) in the file bp4/smpl_gs.csv.
-- pdf: each line includes (edge length of a cube, #simulation steps, #process, PPN) in the file bp4/smpl_pdf.csv.
+The number of samples of gp/gpv/gv/gvpv to be measured is set in the file exp_bp4/num_smpl.txt .
+- gs: each line includes (#process, PPN, edge length of a cube, #simulation steps) in the file bp4/smpl_gs.csv.
+- pdf: each line includes (#process, PPN, edge length of a cube, #simulation steps) in the file bp4/smpl_pdf.csv.
 - pplot/gplot: each line includes (edge length of a cube, #simulation steps) in the file bp4/smpl_plot.csv.
-- gp/gpv/wf: each line includes (edge length of a cube, #simulation steps, gs--#process, gs--PPN, pdf--#process, pdf--PPN) in the file sst/smpl_gp.csv.
-- gv: each line includes (edge length of a cube, #simulation steps, gs--#process, gs--PPN) in the file sst/smpl_gv.csv.
+- gp/gpv/gvpv: each line includes (gs--#process, gs--PPN, pdf--#process, pdf--PPN, edge length of a cube, #simulation steps) in the file sst/smpl_gp.csv.
+- gv: each line includes (gs--#process, gs--PPN, edge length of a cube, #simulation steps) in the file sst/smpl_gv.csv.
 
 To run an analysis/visualization application separately, the data generated by the simulation is required to be placed in the directories exp_lv, exp_hs, exp_bp4 for LV, HS, and GP, respectively.
 the data generated by lmp, ht, gs, and pdf are the inputs of vr, sw, pdf/gplot, and pplot, respectively.
-- lmp-xxxx/dump.bp and lmp-bpxxxx/dump.bp.dir/dump.bp.[number] (xx is #iterations per output) are generated by LAMMPS.
-- ht-xx/heat.bp (xx is #outputs) are generated by Heat-transfer.
+- lmp-xxxx-yyyyy-zzzzz/dump.bp and lmp-xxxx-yyyyy-zzzzz/dump.bp.dir/dump.bp.[number] (xxxx is #iterations per output; yyyyy is #iterations in the phase from liquid to solid; and zzzzz is #iterations in the solid phase) are generated by LAMMPS.
+- ht-xx-yyyy-zzzz-aaaa/heat.bp (xx is #outputs; yyyy is X dimension size; zzzz is Y dimension size; aaaa is #iterations) are generated by Heat-transfer.
 - gs-xxxx-yyy/gs.bp/data.[number] (xxxx is edge length of a cube and yyy is #simulation steps) are generated by Gray-Scott.
 - pdf-xxxx-yyy/pdf.bp/data.[number] (xxxx is edge length of a cube and yyy is #simulation steps) are generated by PDF Calculator.
 
@@ -72,7 +71,9 @@ the data generated by lmp, ht, gs, and pdf are the inputs of vr, sw, pdf/gplot, 
 
 For example, 
 ```
-./workflow wf 6 wf1
+./workflow lv 7 lv1
+./workflow hs 5 hs1
+./workflow gvpv 4 gvpv1
 ```
 
 ### 4. Collect the measured configuration-performance samples
@@ -88,5 +89,7 @@ The collected data is in Experiment_ID/time_list.csv .
 
 For example,
 ```
-./collect.sh wf1 4
+./collect.sh lv1 2
+./collect.sh hs1 2
+./collect.sh gvpv1 4
 ```
