@@ -29,8 +29,6 @@ import sys;
 		int voro_ppw = params[4];	// Voro: num of processes per worker
 		int voro_thrd = params[5];	// Voro: num of threads per process
 		int lmp_spo = params[6];	// Lammps: num of steps per output interval
-		int lmp_l2s = params[7];	// Lammps: the num of runs for the phase from liquid to solid
-		int lmp_sld = params[8];	// Lammps: the num of runs for the solid phase
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
 		string turbine_output = getenv("TURBINE_OUTPUT");
@@ -39,16 +37,15 @@ import sys;
 		string infile2 = "%s/restart.liquid" % turbine_output;
 		string infile3 = "%s/CuZr.fs" % turbine_output;
 
-		string cmd0[] = [ workflow_root/"lmp.sh", int2string(lmp_spo), "FLEXPATH", int2string(lmp_l2s), int2string(lmp_sld), dir/"in.quench" ];
+		string cmd0[] = [ workflow_root/"lmp.sh", int2string(lmp_spo), "FLEXPATH", "16000", "20000", dir/"in.quench" ];
 		setup_run(dir, infile1, infile2, infile3) =>
 			(output0, exit_code0) = system(cmd0);
 
 		if (exit_code0 != 0)
 		{
-			printf("swift: %s failed with exit code %d for the parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d).", 
+			printf("swift: %s failed with exit code %d for the parameters (%d, %d, %d, %d, %d, %d, %d).", 
 					cmd0[0]+" "+cmd0[1]+" "+cmd0[2]+" "+cmd0[3], exit_code0, 
-					params[0], params[1], params[2], params[3], params[4], 
-					params[5], params[6], params[7], params[8]);
+					params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
 			sleep(1) =>
 				exectime = launch_wrapper(run_id, params, count + 1);
 		}
@@ -68,7 +65,7 @@ import sys;
 			}
 			int timeout;
 			if (lmp_proc <= 16) {
-				timeout = 1600 * float2int(2 ** count);
+				timeout = 1200 * float2int(2 ** count);
 			} else {
 				if (lmp_proc <= 32) {
 					timeout = 600 * float2int(2 ** count);
@@ -127,8 +124,8 @@ import sys;
 				{
 					exectime = -1.0;
 					failure(run_id, params);
-					printf("swift: The multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d) did not succeed with exit code: %d.", 
-							params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], exit_code);
+					printf("swift: The multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d) did not succeed with exit code: %d.", 
+							params[0], params[1], params[2], params[3], params[4], params[5], params[6], exit_code);
 				}
 				else
 				{
@@ -141,8 +138,8 @@ import sys;
 	{
 		exectime = -1.0;
 		failure(run_id, params);
-		printf("swift: The launched application with parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d) did not succeed %d times.",
-				params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], time_limit);
+		printf("swift: The launched application with parameters (%d, %d, %d, %d, %d, %d, %d) did not succeed %d times.",
+				params[0], params[1], params[2], params[3], params[4], params[5], params[6], time_limit);
 	}
 }
 
@@ -150,8 +147,8 @@ import sys;
 {
 	string turbine_output = getenv("TURBINE_OUTPUT");
 	string dir = "%s/run/%s" % (turbine_output, run_id);
-	string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.2i\t%0.1i\t%0.3i\t%0.5i\t%0.5i\t%s"
-		% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], "inf");
+	string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.2i\t%0.1i\t%0.3i\t%s"
+		% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], "inf");
 	file out <dir/"time.txt"> = write(output);
 	v = propagate();
 }
@@ -177,24 +174,24 @@ import sys;
 		{
 			exectime = string2float(time_output);
 			if (exectime >= 0.0) {
-				printf("exectime(%i, %i, %i, %i, %i, %i, %i, %i, %i): %f",
-						params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], exectime);
-				string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.2i\t%0.1i\t%0.3i\t%0.5i\t%0.5i\t%f"
-					% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], exectime);
+				printf("exectime(%i, %i, %i, %i, %i, %i, %i): %f",
+						params[0], params[1], params[2], params[3], params[4], params[5], params[6], exectime);
+				string output = "%0.4i\t%0.2i\t%0.1i\t%0.4i\t%0.2i\t%0.1i\t%0.3i\t%f"
+					% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], exectime);
 				file out <dir/"time.txt"> = write(output);
 			}
 			else
 			{
-				printf("swift: The execution time (%f seconds) of the multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d) is negative.",
-						exectime, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8]);
+				printf("swift: The execution time (%f seconds) of the multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d) is negative.",
+						exectime, params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
 			}
 		}
 	}
 	else
 	{
 		exectime = -1.0;
-		printf("swift: Failed to get the execution time of the multi-launched application of parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d) %d times.\n%s",
-				params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], time_limit);
+		printf("swift: Failed to get the execution time of the multi-launched application of parameters (%d, %d, %d, %d, %d, %d, %d) %d times.\n%s",
+				params[0], params[1], params[2], params[3], params[4], params[5], params[6], time_limit);
 	}
 }
 
@@ -217,8 +214,6 @@ main()
 	// 4) Voro: num of processes per worker
 	// 5) Voro: num of threads per process
 	// 6) Lammps: num of steps per output interval
-	// 7) Lammps: the num of runs for the phase from liquid to solid
-	// 8) Lammps: the num of runs for the solid phase
 	int sample_num = string2int(read(input("num_smpl.txt")));
 	conf_samples = file_lines(input("smpl_lv.csv"));
 
@@ -228,7 +223,7 @@ main()
 	{
 		params_str = split(conf_samples[i], "\t");
 		int params[];
-		foreach j in [0 : 8 : 1]
+		foreach j in [0 : 6 : 1]
 		{
 			params[j] = string2int(params_str[j]);
 		}
@@ -246,8 +241,8 @@ main()
 			}
 			if (nwork <= workers)
 			{
-				exectime[i] = launch_wrapper("%0.4i_%0.2i_%0.1i_%0.4i_%0.2i_%0.1i_%0.3i_%0.5i_%0.5i" 
-						% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8]), 
+				exectime[i] = launch_wrapper("%0.4i_%0.2i_%0.1i_%0.4i_%0.2i_%0.1i_%0.3i" 
+						% (params[0], params[1], params[2], params[3], params[4], params[5], params[6]), 
 						params);
 
 				if (exectime[i] >= 0.0) {

@@ -15,6 +15,11 @@ import sys;
 """
 ];
 
+// Problem Size of HeatTransfer
+int ht_x = 2048;
+int ht_y = 2048;
+int ht_iter = 1024;
+
 (float exectime) launch_wrapper(string run_id, int params[], int count = 0) 
 {
 	int time_limit = 2;
@@ -27,9 +32,6 @@ import sys;
 		int sw_proc = params[4];	// StageWrite: total number of processes
 		int sw_ppw = params[5];		// StageWrite: number of processes per worker
 		int ht_step = params[6];	// HeatTransfer: the total number of steps to output
-		int ht_x = params[7];		// HeatTransfer: total array size in X dimension
-		int ht_y = params[8];		// HeatTransfer: total array size in Y dimension
-		int ht_iter = params[9];	// HeatTransfer: total number of iterations
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
 		string turbine_output = getenv("TURBINE_OUTPUT");
@@ -42,10 +44,9 @@ import sys;
 
 		if (exit_code0 != 0)
 		{
-			printf("swift: %s failed with exit code %d for the parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d).", 
+			printf("swift: %s failed with exit code %d for the parameters (%d, %d, %d, %d, %d, %d, %d).", 
 					cmd0[0]+" "+cmd0[1]+" "+cmd0[2]+" "+cmd0[3], exit_code0, 
-					params[0], params[1], params[2], params[3], params[4], 
-					params[5], params[6], params[7], params[8], params[9]);
+					params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
 			sleep(1) =>
 				exectime = launch_wrapper(run_id, params, count + 1);
 		}
@@ -115,8 +116,8 @@ import sys;
 				{
 					exectime = -1.0;
 					failure(run_id, params);
-					printf("swift: The multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d) did not succeed with exit code: %d.", 
-							params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9], exit_code);
+					printf("swift: The multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d) did not succeed with exit code: %d.", 
+							params[0], params[1], params[2], params[3], params[4], params[5], params[6], exit_code);
 				}
 				else
 				{
@@ -129,9 +130,8 @@ import sys;
 	{
 		exectime = -1.0;
 		failure(run_id, params);
-		printf("swift: The launched application with parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d) did not succeed %d times.",
-				params[0], params[1], params[2], params[3], params[4], params[5], 
-				params[6], params[7], params[8], params[9], time_limit);
+		printf("swift: The launched application with parameters (%d, %d, %d, %d, %d, %d, %d) did not succeed %d times.",
+				params[0], params[1], params[2], params[3], params[4], params[5], params[6], time_limit);
 	}
 }
 
@@ -139,9 +139,8 @@ import sys;
 {
 	string turbine_output = getenv("TURBINE_OUTPUT");
 	string dir = "%s/run/%s" % (turbine_output, run_id);
-	string output = "%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%0.2i\t%0.4i\t%0.4i\t%0.4i\t%s"
-		% (params[0], params[1], params[2], params[3], params[4], 
-		params[5], params[6], params[7], params[8], params[9], "inf");
+	string output = "%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%0.2i\t%s"
+		% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], "inf");
 	file out <dir/"time.txt"> = write(output);
 	v = propagate();
 }
@@ -168,26 +167,24 @@ import sys;
 			exectime = string2float(time_output);
 			if (exectime >= 0.0)
 			{
-				printf("exectime(%i, %i, %i, %i, %i, %i, %i, %i, %i, %i): %f",
-						params[0], params[1], params[2], params[3], params[4], params[5], 
-						params[6], params[7], params[8], params[9], exectime);
-				string output = "%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%0.2i\t%0.4i\t%0.4i\t%0.4i\t%f"
-					% (params[0], params[1], params[2], params[3], params[4], 
-					params[5], params[6], params[7], params[8], params[9], exectime);
+				printf("exectime(%i, %i, %i, %i, %i, %i, %i): %f",
+						params[0], params[1], params[2], params[3], params[4], params[5], params[6], exectime);
+				string output = "%0.2i\t%0.2i\t%0.2i\t%0.2i\t%0.4i\t%0.2i\t%0.2i\t%f"
+					% (params[0], params[1], params[2], params[3], params[4], params[5], params[6], exectime);
 				file out <dir/"time.txt"> = write(output);
 			}
 			else
 			{
-				printf("swift: The execution time (%f seconds) of the multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d) is negative.",
-						exectime, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9]);
+				printf("swift: The execution time (%f seconds) of the multi-launched application with parameters (%d, %d, %d, %d, %d, %d, %d) is negative.",
+						exectime, params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
 			}
 		}
 	}
 	else
 	{
 		exectime = -1.0;
-		printf("swift: Failed to get the execution time of the multi-launched application of parameters (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d) %d times.\n%s",
-				params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9], time_limit);
+		printf("swift: Failed to get the execution time of the multi-launched application of parameters (%d, %d, %d, %d, %d, %d, %d) %d times.\n%s",
+				params[0], params[1], params[2], params[3], params[4], params[5], params[6], time_limit);
 	}
 }
 
@@ -210,9 +207,6 @@ main()
 	// 4) StageWrite: total number of processes
 	// 5) StageWrite: number of processes per worker
 	// 6) HeatTransfer: the total number of steps to output
-	// 7) HeatTransfer: total array size in X dimension
-	// 8) HeatTransfer: total array size in Y dimension
-	// 9) HeatTransfer: total number of iterations
 	int sample_num = string2int(read(input("num_smpl.txt")));
 	conf_samples = file_lines(input("smpl_hs.csv"));
 
@@ -222,7 +216,7 @@ main()
 	{
 		params_str = split(conf_samples[i], "\t");
 		int params[];
-		foreach j in [0 : 9 : 1]
+		foreach j in [0 : 6 : 1]
 		{
 			params[j] = string2int(params_str[j]);
 		}
@@ -241,9 +235,8 @@ main()
 			}
 			if (nwork <= workers)
 			{
-				exectime[i] = launch_wrapper("%0.2i_%0.2i_%0.2i_%0.2i_%0.4i_%0.2i_%0.2i_%0.4i_%0.4i_%0.4i"
-						% (params[0], params[1], params[2], params[3], params[4], 
-						params[5], params[6], params[7], params[8], params[9]),
+				exectime[i] = launch_wrapper("%0.2i_%0.2i_%0.2i_%0.2i_%0.4i_%0.2i_%0.2i"
+						% (params[0], params[1], params[2], params[3], params[4], params[5], params[6]),
 						params);
 
 				if (exectime[i] >= 0.0) {
