@@ -13,6 +13,7 @@ module load intel-mpi/2017.3-dfphq6k
 module load cmake/3.12.2-4zllpyo
 module load jdk/8u141-b15-mopj6qr
 module load tcl/8.6.6-x4wnbsg
+module load anaconda3/5.2.0
 
 echo
 echo Modules OK
