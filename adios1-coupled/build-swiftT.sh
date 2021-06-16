@@ -22,6 +22,7 @@ fi
 # module load intel/17.0.4-74uvhji
 # module load jdk/8u141-b15-mopj6qr
 # module load tcl/8.6.6-x4wnbsg
+# module load anaconda3/5.2.0
 # echo "Modules are loaded!"
 
 set -eu
@@ -75,6 +76,10 @@ git checkout de99add30a64622a65f603e304f22f57ed3e20d4
 # Setup swift-t
 dev/build/init-settings.sh
 sed -i 's/^export SWIFT_T_PREFIX=.*$/export SWIFT_T_PREFIX='"${ROOT//\//\\/}"'\/swift-t-install/' dev/build/swift-t-settings.sh
+
+PYTHON_EXE=$( which python )
+sed -i 's/^ENABLE_PYTHON=0/ENABLE_PYTHON=1/' dev/build/swift-t-settings.sh
+sed -i 's@^PYTHON_EXE=.*$@PYTHON_EXE='"$PYTHON_EXE"'@' dev/build/swift-t-settings.sh
 
 echo
 echo "Build Swift/T ..."
