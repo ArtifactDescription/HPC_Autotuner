@@ -23,7 +23,7 @@ $ pip3 install xgboost
 Random configurations for in-situ workflows LV, HS, GP and their component applications are in the directory lv, hs, and gp.
 
 
-### 3. Auto-tuning algorithms -- RS, GEIST, AL, ALIC/CEAL, ALpH
+### 3. Auto-tuning algorithms -- RS, GEIST, AL, ALIC, CEAL, ALpH
 - sample.py: Take the files in the directory data as inputs and read measured samples as a test dataset.
 - modeler.py: Implement various auto-tuning algorithms.
 
@@ -35,8 +35,8 @@ Random configurations for in-situ workflows LV, HS, GP and their component appli
 - workflow_name: lv, hs, gvpv
 - performance_metric: exec_time, comp_time
 - number of samples: 25, 50, 100
-- number of runs: 100
-- algorithm: al, geist, alic, alich, alph
+- number of runs: 2, 100
+- algorithm: al, geist, alic, ceal, alph, alich, cealh
 
 ### 5. Compare the performance of auto-tuning algorithms.
 ```

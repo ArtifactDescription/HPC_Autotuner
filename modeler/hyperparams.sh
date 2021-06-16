@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ ${#} != 6 ] && ([ ${#} != 5 ] || [ $1 != "pct_repl" ])
+if [ ${#} != 6 ]
 then
 	echo "Usage: ./hyperparams.sh py_filename workflow performance #sample #runs algorithm"
         echo "    py_filename: num_iter, pct_rand, pct_repl"
@@ -8,7 +8,7 @@ then
         echo "    performance: exec_time, comp_time"
         echo "    number of samples: 25, 50, 100"
         echo "    #runs: 10, 100"
-        echo "    algorithm: al, geist, alic, alph, alich"
+        echo "    algorithm: al, geist, alic, ceal, alph, alich, cealh"
 	exit 1
 fi
 
