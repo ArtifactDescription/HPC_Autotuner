@@ -1,14 +1,8 @@
 import numpy as np
 import pandas as pd
-
-def df_sub(df1, df2, cols):
-    intsct_df = df_intersection(df1, df2, cols)
-    diff_df = pd.concat([df1, intsct_df]).drop_duplicates(keep=False).reset_index(drop=True)
-    return diff_df
-
-def df_union(df1, df2):
-    union_df = pd.concat([df1, df2]).drop_duplicates().reset_index(drop=True)
-    return union_df
+import glob
+import modeler as mdlr
+import sample as sp
 
 def df_filter(df, colns, vals):
     num = len(colns)
@@ -24,4 +18,14 @@ def df_ext(df, colns, vals):
     cols = np.asarray([np.asarray(vals) for i in range(df.shape[0])])
     new_df = pd.DataFrame(np.c_[cols, df.values], columns=colns + df.columns.tolist())
     return new_df
+
+def gen_unmeas_smpl(filens_smpl, filens_meas, filen_unmeas, paramns):
+    df_smpl = sp.csv2df(glob.glob(filens_smpl), paramns)
+    df_meas_perf = sp.csv2df(glob.glob(filens_meas), paramns)
+    df_meas = mdlr.df_intersection(df_smpl, df_meas_perf, paramns)
+    df_unmeas = pd.concat([df_smpl, df_meas]).drop_duplicates(keep=False).astype(int)
+    sp.df2csv(df_unmeas, filen_unmeas)
+
+hs_paramns = ['ht_x_nproc', 'ht_y_nproc', 'ht_ppn', 'ht_bufsize', 'sw_nproc', 'sw_ppn', 'ht_nout']
+gen_unmeas_smpl('smpl_hs.csv', '../data/hs/hs2.csv', 'smpl_hs_unmeas.csv', hs_paramns)
 

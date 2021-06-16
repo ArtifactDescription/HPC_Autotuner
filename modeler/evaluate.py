@@ -34,10 +34,15 @@ if (wf == 'lv'):
             alic_num_iter = 6
             alic_pct_rand = 0.05
             alic_pct_repl = 0.45
+            ceal_num_iter = 6
+            ceal_pct_rand = 0.05
+            ceal_pct_repl = 0.45
             alph_num_iter = 7
             alph_pct_rand = 0.15
             alich_num_iter = 1
             alich_pct_rand = 0.15
+            cealh_num_iter = 1
+            cealh_pct_rand = 0.15
         else:    # 100 samples
             geist_num_iter = 6
             geist_pct_rand = 0.4
@@ -46,10 +51,15 @@ if (wf == 'lv'):
             alic_num_iter = 7
             alic_pct_rand = 0.05
             alic_pct_repl = 0.8
+            ceal_num_iter = 7
+            ceal_pct_rand = 0.05
+            ceal_pct_repl = 0.8
             alph_num_iter = 4
             alph_pct_rand = 0.25
             alich_num_iter = 2
             alich_pct_rand = 0.45
+            cealh_num_iter = 2
+            cealh_pct_rand = 0.45
     elif (perfn == 'comp_time'):
         if (num_smpl == 50):
             geist_num_iter = 9
@@ -59,10 +69,15 @@ if (wf == 'lv'):
             alic_num_iter = 6
             alic_pct_rand = 0.05
             alic_pct_repl = 0.5
+            ceal_num_iter = 6
+            ceal_pct_rand = 0.05
+            ceal_pct_repl = 0.5
             alph_num_iter = 8
             alph_pct_rand = 0.5
             alich_num_iter = 9
             alich_pct_rand = 0.3
+            cealh_num_iter = 9
+            cealh_pct_rand = 0.3
         else:    # 25 samples
             geist_num_iter = 2
             geist_pct_rand = 0.05
@@ -71,10 +86,15 @@ if (wf == 'lv'):
             alic_num_iter = 7
             alic_pct_rand = 0.1
             alic_pct_repl = 0.5
+            ceal_num_iter = 7
+            ceal_pct_rand = 0.1
+            ceal_pct_repl = 0.5
             alph_num_iter = 9
             alph_pct_rand = 0.1
             alich_num_iter = 8
             alich_pct_rand = 0.15
+            cealh_num_iter = 8
+            cealh_pct_rand = 0.15
     else:
         print("Error: unknown performance metrics!")
         exit()
@@ -93,10 +113,15 @@ elif (wf == 'hs'):
             alic_num_iter = 8
             alic_pct_rand = 0.15
             alic_pct_repl = 0.7
+            ceal_num_iter = 8
+            ceal_pct_rand = 0.15
+            ceal_pct_repl = 0.7
             alph_num_iter = 8
             alph_pct_rand = 0.25
             alich_num_iter = 2
             alich_pct_rand = 0.3
+            cealh_num_iter = 2
+            cealh_pct_rand = 0.3
         else:    # 100 samples
             geist_num_iter = 5
             geist_pct_rand = 0.4
@@ -105,10 +130,15 @@ elif (wf == 'hs'):
             alic_num_iter = 10
             alic_pct_rand = 0.3
             alic_pct_repl = 0.25
+            ceal_num_iter = 10
+            ceal_pct_rand = 0.3
+            ceal_pct_repl = 0.25
             alph_num_iter = 8
             alph_pct_rand = 0.3
             alich_num_iter = 3
             alich_pct_rand = 0.15
+            cealh_num_iter = 3
+            cealh_pct_rand = 0.15
     elif (perfn == 'comp_time'):
         if (num_smpl == 50):
             geist_num_iter = 4
@@ -118,10 +148,15 @@ elif (wf == 'hs'):
             alic_num_iter = 10
             alic_pct_rand = 0.2
             alic_pct_repl = 0.55
+            ceal_num_iter = 10
+            ceal_pct_rand = 0.2
+            ceal_pct_repl = 0.55
             alph_num_iter = 9
             alph_pct_rand = 0.35
             alich_num_iter = 1
             alich_pct_rand = 0.05
+            cealh_num_iter = 1
+            cealh_pct_rand = 0.05
         else:    # 25 samples
             geist_num_iter = 6
             geist_pct_rand = 0.05
@@ -130,10 +165,15 @@ elif (wf == 'hs'):
             alic_num_iter = 5
             alic_pct_rand = 0.2
             alic_pct_repl = 0.35
+            ceal_num_iter = 5
+            ceal_pct_rand = 0.2
+            ceal_pct_repl = 0.35
             alph_num_iter = 5
             alph_pct_rand = 0.45
             alich_num_iter = 2
             alich_pct_rand = 0.05
+            cealh_num_iter = 2
+            cealh_pct_rand = 0.05
     else:
         print("Error: unknown performance metrics!")
         exit()
@@ -152,10 +192,15 @@ elif (wf == 'gvpv'):
             alic_num_iter = 7
             alic_pct_rand = 0.1
             alic_pct_repl = 0.1
+            ceal_num_iter = 7
+            ceal_pct_rand = 0.1
+            ceal_pct_repl = 0.1
             alph_num_iter = 8
             alph_pct_rand = 0.4
             alich_num_iter = 9
             alich_pct_rand = 0.15
+            cealh_num_iter = 9
+            cealh_pct_rand = 0.15
         else:    # 25 samples
             geist_num_iter = 3
             geist_pct_rand = 0.1
@@ -164,10 +209,15 @@ elif (wf == 'gvpv'):
             alic_num_iter = 7
             alic_pct_rand = 0.15
             alic_pct_repl = 0.6
+            ceal_num_iter = 7
+            ceal_pct_rand = 0.15
+            ceal_pct_repl = 0.6
             alph_num_iter = 7
             alph_pct_rand = 0.35
             alich_num_iter = 6
             alich_pct_rand = 0.1
+            cealh_num_iter = 6
+            cealh_pct_rand = 0.1
     else:
         print("Error: unknown performance metrics!")
         exit()
@@ -241,20 +291,20 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
         alic_mape = np.append(alic_mape, [df_mape.values], axis=0)
         alic_comp_time = np.append(alic_comp_time, [comp_time], axis=0)
 
-    # ALIC-H
-    rslt = mdlr.alic(cpnt_mdls, df_wf, cpnt_confns, confn, perfn, num_smpl, \
-            alich_pct_rand, alich_num_iter)
+    # CEAL
+    rslt = mdlr.ceal([None, None], df_wf, cpnt_confns, confn, perfn, num_smpl, \
+            ceal_pct_rand, ceal_num_iter, ceal_pct_repl, dfs_cpnt)
     top_perf, df_recall, df_mape, comp_time = rslt[0], rslt[1], rslt[2], rslt[3]
     if (rand_seed == rand_seed_start):
-        alich_top_perf = np.array([top_perf])
-        alich_recall = np.array([df_recall.values])
-        alich_mape = np.array([df_mape.values])
-        alich_comp_time = np.array([comp_time])
+        ceal_top_perf = np.array([top_perf])
+        ceal_recall = np.array([df_recall.values])
+        ceal_mape = np.array([df_mape.values])
+        ceal_comp_time = np.array([comp_time])
     else:
-        alich_top_perf = np.append(alich_top_perf, [top_perf], axis=0)
-        alich_recall = np.append(alich_recall, [df_recall.values], axis=0)
-        alich_mape = np.append(alich_mape, [df_mape.values], axis=0)
-        alich_comp_time = np.append(alich_comp_time, [comp_time], axis=0)
+        ceal_top_perf = np.append(ceal_top_perf, [top_perf], axis=0)
+        ceal_recall = np.append(ceal_recall, [df_recall.values], axis=0)
+        ceal_mape = np.append(ceal_mape, [df_mape.values], axis=0)
+        ceal_comp_time = np.append(ceal_comp_time, [comp_time], axis=0)
 
     # ALpH
     rslt = mdlr.alph(cpnt_mdls, df_wf, cpnt_confns, confn, perfn, num_smpl, \
@@ -270,7 +320,37 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
         alph_recall = np.append(alph_recall, [df_recall.values], axis=0)
         alph_mape = np.append(alph_mape, [df_mape.values], axis=0)
         alph_comp_time = np.append(alph_comp_time, [comp_time], axis=0)
+
+    # ALIC-H
+    rslt = mdlr.alic(cpnt_mdls, df_wf, cpnt_confns, confn, perfn, num_smpl, \
+            alich_pct_rand, alich_num_iter)
+    top_perf, df_recall, df_mape, comp_time = rslt[0], rslt[1], rslt[2], rslt[3]
+    if (rand_seed == rand_seed_start):
+        alich_top_perf = np.array([top_perf])
+        alich_recall = np.array([df_recall.values])
+        alich_mape = np.array([df_mape.values])
+        alich_comp_time = np.array([comp_time])
+    else:
+        alich_top_perf = np.append(alich_top_perf, [top_perf], axis=0)
+        alich_recall = np.append(alich_recall, [df_recall.values], axis=0)
+        alich_mape = np.append(alich_mape, [df_mape.values], axis=0)
+        alich_comp_time = np.append(alich_comp_time, [comp_time], axis=0)
    
+    # CEAL-H
+    rslt = mdlr.ceal(cpnt_mdls, df_wf, cpnt_confns, confn, perfn, num_smpl, \
+            cealh_pct_rand, cealh_num_iter)
+    top_perf, df_recall, df_mape, comp_time = rslt[0], rslt[1], rslt[2], rslt[3]
+    if (rand_seed == rand_seed_start):
+        cealh_top_perf = np.array([top_perf])
+        cealh_recall = np.array([df_recall.values])
+        cealh_mape = np.array([df_mape.values])
+        cealh_comp_time = np.array([comp_time])
+    else:
+        cealh_top_perf = np.append(cealh_top_perf, [top_perf], axis=0)
+        cealh_recall = np.append(cealh_recall, [df_recall.values], axis=0)
+        cealh_mape = np.append(cealh_mape, [df_mape.values], axis=0)
+        cealh_comp_time = np.append(cealh_comp_time, [comp_time], axis=0)
+
     '''
     # GEIST
     rslt = mdlr.geist(df_wf, confn, perfn, num_smpl, geist_pct_rand, geist_num_iter)
@@ -287,50 +367,44 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
         geist_comp_time = np.append(geist_comp_time, [comp_time], axis=0)
     '''
 
-colns = ['RS', 'AL', 'ALIC', 'ALICH', 'ALpH']#, 'GEIST']
+colns = ['RS', 'AL', 'ALIC', 'CEAL', 'ALpH', 'ALICH', 'CEALH']#, 'GEIST']
 print("Top performance ({perfn}):")
-top_perf = np.c_[np.sum(rs_top_perf, axis=0) / len(rs_top_perf), \
-                 np.sum(al_top_perf, axis=0) / len(al_top_perf), \
-                 np.sum(alic_top_perf, axis=0) / len(alic_top_perf), \
-                 np.sum(alich_top_perf, axis=0) / len(alich_top_perf), \
-                 np.sum(alph_top_perf, axis=0) / len(alph_top_perf) \
-#                 np.sum(geist_top_perf, axis=0) / len(geist_top_perf) \
+top_perf = np.c_[np.mean(rs_top_perf, axis=0), \
+                 np.mean(al_top_perf, axis=0), \
+                 np.mean(alic_top_perf, axis=0), \
+                 np.mean(ceal_top_perf, axis=0), \
+                 np.mean(alph_top_perf, axis=0), \
+                 np.mean(alich_top_perf, axis=0), \
+                 np.mean(cealh_top_perf, axis=0) \
+#                 np.mean(geist_top_perf, axis=0) \
                 ]
 df_top_perf = pd.DataFrame(top_perf, columns=colns).round(4)
 print(df_top_perf)
 sp.df2csv(df_top_perf, dirname + 'top_perf_' + str(num_smpl) + '.csv')
 
 print("MAPE (%):")
-rs_mape_avg = np.sum(rs_mape, axis=0) / len(rs_mape)
-al_mape_avg = np.sum(al_mape, axis=0) / len(al_mape)
-alic_mape_avg = np.sum(alic_mape, axis=0) / len(alic_mape)
-alich_mape_avg = np.sum(alich_mape, axis=0) / len(alich_mape)
-alph_mape_avg = np.sum(alph_mape, axis=0) / len(alph_mape)
-#geist_recall_avg = np.sum(geist_mape, axis=0) / len(geist_mape)
-mape_avg = np.c_[rs_mape_avg, \
-                 al_mape_avg[:, -1], \
-                 alic_mape_avg[:, -1], \
-                 alich_mape_avg[:, -1], \
-                 alph_mape_avg[:, -1] \
-#                 geist_recall_avg[:, -1] \
+mape_avg = np.c_[np.mean(rs_mape, axis=0), \
+                 np.mean(al_mape, axis=0)[:, -1], \
+                 np.mean(alic_mape, axis=0)[:, -1], \
+                 np.mean(ceal_mape, axis=0)[:, -1], \
+                 np.mean(alph_mape, axis=0)[:, -1], \
+                 np.mean(alich_mape, axis=0)[:, -1], \
+                 np.mean(cealh_mape, axis=0)[:, -1] \
+#                 np.mean(geist_mape, axis=0)[:, -1] \
                 ]
 df_mapes = pd.DataFrame(mape_avg, columns=['pct_top']+colns).round(4)
 print(df_mapes)
 sp.df2csv(df_mapes, dirname + 'mape_' + str(num_smpl) + '.csv')
 
 print("Recall Score (%):")
-rs_recall_avg = np.sum(rs_recall, axis=0) / len(rs_recall)
-al_recall_avg = np.sum(al_recall, axis=0) / len(al_recall)
-alic_recall_avg = np.sum(alic_recall, axis=0) / len(alic_recall)
-alich_recall_avg = np.sum(alich_recall, axis=0) / len(alich_recall)
-alph_recall_avg = np.sum(alph_recall, axis=0) / len(alph_recall)
-#geist_recall_avg = np.sum(geist_recall, axis=0) / len(geist_recall)
-recall_avg = np.c_[rs_recall_avg, \
-                   al_recall_avg[:, -1], \
-                   alic_recall_avg[:, -1], \
-                   alich_recall_avg[:, -1], \
-                   alph_recall_avg[:, -1] \
-#                   geist_recall_avg[:, -1] \
+recall_avg = np.c_[np.mean(rs_recall, axis=0), \
+                   np.mean(al_recall, axis=0)[:, -1], \
+                   np.mean(alic_recall, axis=0)[:, -1], \
+                   np.mean(ceal_recall, axis=0)[:, -1], \
+                   np.mean(alph_recall, axis=0)[:, -1], \
+                   np.mean(alich_recall, axis=0)[:, -1], \
+                   np.mean(cealh_recall, axis=0)[:, -1] \
+#                   np.mean(geist_recall, axis=0)[:, -1] \
                   ]
 df_recall = pd.DataFrame(recall_avg, columns=['pct_top', 'num_top']+colns).round(4)
 print(df_recall)
@@ -338,12 +412,14 @@ sp.df2csv(df_recall, dirname + 'recall_' + str(num_smpl) + '.csv')
 
 
 print("Cost [Computer Time (core-hours)]:")
-comp_time = np.c_[np.sum(rs_comp_time, axis=0) / len(rs_comp_time), \
-                  np.sum(al_comp_time, axis=0) / len(al_comp_time), \
-                  np.sum(alic_comp_time, axis=0) / len(alic_comp_time), \
-                  np.sum(alich_comp_time, axis=0) / len(alich_comp_time), \
-                  np.sum(alph_comp_time, axis=0) / len(alph_comp_time) \
-#                  np.sum(geist_comp_time, axis=0) / len(geist_comp_time) \
+comp_time = np.c_[np.mean(rs_comp_time, axis=0), \
+                  np.mean(al_comp_time, axis=0), \
+                  np.mean(alic_comp_time, axis=0), \
+                  np.mean(ceal_comp_time, axis=0), \
+                  np.mean(alph_comp_time, axis=0), \
+                  np.mean(alich_comp_time, axis=0), \
+                  np.mean(cealh_comp_time, axis=0) \
+#                  np.mean(geist_comp_time, axis=0) \
                  ]
 df_comp_time = pd.DataFrame(comp_time, columns=colns).round(4)
 print(df_comp_time)

@@ -4,19 +4,20 @@ import sample as sp
 import modeler as mdlr
 import sys
 
-# For ALIC only
-if (len(sys.argv) != 5):
-    print("pct_repl.py workflow performance #samples #runs")
+if (len(sys.argv) != 6):
+    print("pct_rand.py workflow performance #sample #runs algorithm")
     print("\tworkflow: lv, hs, gvpv")
     print("\tperformance: exec_time, comp_time")
     print("\tnumber of samples: 25, 50, 100")
     print("\t#runs: 10, 100")
+    print("\talgorithm: alic, ceal")
     exit()
 
 wf = sys.argv[1]
 perfn = sys.argv[2]
 num_smpl = int(sys.argv[3])
 num_run = int(sys.argv[4])
+algo = sys.argv[5]
 
 dir_name = 'plot/pct_repl/' + wf + '_' + perfn + '/'
 
@@ -28,18 +29,46 @@ if (wf == 'lv'):
     confn = sp.lv_confn
     if (perfn == 'exec_time'):
         if (num_smpl == 50):
-            pct_rand = 0.3
-            num_iter = 4
-        else:
-            pct_rand = 0.3
-            num_iter = 4
+            if (algo == 'alic'):
+                pct_rand = 0.05
+                num_iter = 6
+            elif (algo == 'ceal'):
+                pct_rand = 0.05
+                num_iter = 6
+            else:
+                print("Error: unknown algorithm!")
+                exit()
+        else:    # 100 samples
+            if (algo == 'alic'):
+                pct_rand = 0.05
+                num_iter = 7
+            elif (algo == 'ceal'):
+                pct_rand = 0.05
+                num_iter = 7
+            else:
+                print("Error: unknown algorithm!")
+                exit()
     elif (perfn == 'comp_time'):
         if (num_smpl == 50):
-            pct_rand = 0.3
-            num_iter = 4
-        else:
-            pct_rand = 0.3
-            num_iter = 4
+            if (algo == 'alic'):
+                pct_rand = 0.05
+                num_iter = 6
+            elif (algo == 'ceal'):
+                pct_rand = 0.05
+                num_iter = 6
+            else:
+                print("Error: unknown algorithm!")
+                exit()
+        else:    # 25 samples
+            if (algo == 'alic'):
+                pct_rand = 0.1
+                num_iter = 7
+            elif (algo == 'ceal'):
+                pct_rand = 0.1
+                num_iter = 7
+            else:
+                print("Error: unknown algorithm!")
+                exit()
     else:
         print("Error: unknown performance metrics!")
         exit()
@@ -51,18 +80,46 @@ elif (wf == 'hs'):
     confn = sp.hs_confn
     if (perfn == 'exec_time'):
         if (num_smpl == 50):
-            pct_rand = 0.3
-            num_iter = 4
-        else:
-            pct_rand = 0.3
-            num_iter = 4
+            if (algo == 'alic'):
+                pct_rand = 0.15
+                num_iter = 8
+            elif (algo == 'ceal'):
+                pct_rand = 0.15
+                num_iter = 8
+            else:
+                print("Error: unknown algorithm!")
+                exit()
+        else:    # 100 samples
+            if (algo == 'alic'):
+                pct_rand = 0.3
+                num_iter = 10
+            elif (algo == 'ceal'):
+                pct_rand = 0.3
+                num_iter = 10
+            else:
+                print("Error: unknown algorithm!")
+                exit()
     elif (perfn == 'comp_time'):
         if (num_smpl == 50):
-            pct_rand = 0.3
-            num_iter = 4
-        else:
-            pct_rand = 0.3
-            num_iter = 4
+            if (algo == 'alic'):
+                pct_rand = 0.2
+                num_iter = 10
+            elif (algo == 'ceal'):
+                pct_rand = 0.2
+                num_iter = 10
+            else:
+                print("Error: unknown algorithm!")
+                exit()
+        else:    # 25 samples
+            if (algo == 'alic'):
+                pct_rand = 0.2
+                num_iter = 5
+            elif (algo == 'ceal'):
+                pct_rand = 0.2
+                num_iter = 5
+            else:
+                print("Error: unknown algorithm!")
+                exit()
     else:
         print("Error: unknown performance metrics!")
         exit()
@@ -72,20 +129,27 @@ elif (wf == 'gvpv'):
     cpnt_mdls = [mdl_cnpt1, mdl_cnpt2]
     cpnt_confns = (sp.gs_confn, sp.pdf_confn)
     confn = sp.gvpv_confn
-    if (perfn == 'exec_time'):
+    if (perfn == 'comp_time'):
         if (num_smpl == 50):
-            pct_rand = 0.3
-            num_iter = 4
-        else:
-            pct_rand = 0.3
-            num_iter = 4
-    elif (perfn == 'comp_time'):
-        if (num_smpl == 50):
-            pct_rand = 0.3
-            num_iter = 4
-        else:
-            pct_rand = 0.3
-            num_iter = 4
+            if (algo == 'alic'):
+                pct_rand = 0.1
+                num_iter = 7
+            elif (algo == 'ceal'):
+                pct_rand = 0.1
+                num_iter = 7
+            else:
+                print("Error: unknown algorithm!")
+                exit()
+        else:    # 25 samples
+            if (algo == 'alic'):
+                pct_rand = 0.15
+                num_iter = 7
+            elif (algo == 'ceal'):
+                pct_rand = 0.15
+                num_iter = 7
+            else:
+                print("Error: unknown algorithm!")
+                exit()
     else:
         print("Error: unknown performance metrics!")
         exit()
@@ -121,8 +185,15 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
         exit()
 
     for pct_repl in np.arange(pct_repl_start, pct_repl_end, pct_repl_step):
-        rslt = mdlr.alic([None, None], df_wf, cpnt_confns, confn, perfn, num_smpl, \
-                pct_rand, num_iter, pct_repl, dfs_cpnt)
+        if (algo == 'alic'):
+            rslt = mdlr.alic([None, None], df_wf, cpnt_confns, confn, perfn, num_smpl, \
+                    pct_rand, num_iter, pct_repl, dfs_cpnt)
+        elif (algo == 'ceal'):
+            rslt = mdlr.ceal([None, None], df_wf, cpnt_confns, confn, perfn, num_smpl, \
+                    pct_rand, num_iter, pct_repl, dfs_cpnt)
+        else:
+            print("Error: unknown algorithms!")
+            exit()
         top_perf, df_recall, df_mape = rslt[0], rslt[1], rslt[2]
         if (pct_repl == pct_repl_start):
             top_perfs = np.array([top_perf])
@@ -147,25 +218,25 @@ print("For different percentages of replaced samples:")
 colns = list(map(str, np.arange(pct_repl_start, pct_repl_end, pct_repl_step).round(4)))
 
 print(f"Top performance ({perfn}):")
-top_perfs_avg = np.sum(top_perfs_all, axis=0) / len(top_perfs_all)
+top_perfs_avg = np.mean(top_perfs_all, axis=0)
 df_top_perf = pd.DataFrame([top_perfs_avg], columns=colns)
 df_top_perf = df_top_perf.round(4)
 print(df_top_perf)
-sp.df2csv(df_top_perf, dir_name + 'alic_top_perf_' + str(num_smpl) + '.csv')
+sp.df2csv(df_top_perf, dir_name + algo + '_top_perf_' + str(num_smpl) + '.csv')
 
 print("Recall score:")
-recalls_avg = np.sum(recalls_all, axis=0) / len(recalls_all)
+recalls_avg = np.mean(recalls_all, axis=0)
 df_recall = pd.DataFrame(np.c_[df_recall[['pct_top', 'num_top']].values, \
         np.transpose(recalls_avg)], columns=['pct_top', 'num_top']+colns)
 df_recall = df_recall.round(4)
 print(df_recall)
-sp.df2csv(df_recall, dir_name + 'alic_recall_' + str(num_smpl) + '.csv')
+sp.df2csv(df_recall, dir_name + algo + '_recall_' + str(num_smpl) + '.csv')
 
 print("MAPE:")
-mapes_avg = np.sum(mapes_all, axis=0) / len(mapes_all)
+mapes_avg = np.mean(mapes_all, axis=0)
 df_mape = pd.DataFrame(np.c_[df_mape['pct_top'].values, \
         np.transpose(mapes_avg)], columns=['pct_top']+colns)
 df_mape = df_mape.round(4)
 print(df_mape)
-sp.df2csv(df_mape, dir_name + 'alic_mape_' + str(num_smpl) + '.csv')
+sp.df2csv(df_mape, dir_name + algo + '_mape_' + str(num_smpl) + '.csv')
 

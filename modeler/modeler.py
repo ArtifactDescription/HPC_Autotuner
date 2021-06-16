@@ -4,8 +4,19 @@ import xgboost as xgb
 import sample as sp
 
 def df_intersection(df1, df2, cols):
-    intsct_df = df1.merge(df2[cols].drop_duplicates(), on=cols, suffixes=('', ''))
-    return intsct_df
+    df_intsct = df1.merge(df2[cols].drop_duplicates(), on=cols, suffixes=('', ''))
+    return df_intsct
+
+
+def df_sub(df1, df2, cols):
+    df_intsct = df_intersection(df1, df2, cols)
+    df_diff = pd.concat([df1, df_intsct]).drop_duplicates(keep=False).reset_index(drop=True)
+    return df_diff
+
+
+def df_union(df1, df2):
+    df_union = pd.concat([df1, df2]).drop_duplicates().reset_index(drop=True)
+    return df_union
 
 
 def get_top_idx(df_smpl, perfn, num_top=1):
@@ -126,13 +137,13 @@ def al(df_smpl, confn, perfn, num_smpl, pct_rand, num_iter):
 
         df_top_pred = df_top_pred.sort_values([perfn]).reset_index(drop=True)
         df_train_incr = df_intersection(df_smpl, df_top_pred.head(nspi), confn)
-        df_train = pd.concat([df_train, df_train_incr]).drop_duplicates().reset_index(drop=True)
+        df_train = df_union(df_train, df_train_incr)
 
         last_num = nspi
         while (df_train.shape[0] < curr_ns):
             last_num = last_num + 1
             df_train_incr = df_intersection(df_smpl, df_top_pred.head(last_num).tail(1), confn)
-            df_train = pd.concat([df_train, df_train_incr]).drop_duplicates().reset_index(drop=True)
+            df_train = df_union(df_train, df_train_incr)
 
         if (iter_idx < num_iter - 1):
             df_top_pred = pred_top(df_train, df_smpl, confn, perfn, num_smpl, False)
@@ -272,13 +283,13 @@ def alph(cpnt_mdls, df_smpl, cpnt_confns, confn, perfn, num_smpl, pct_rand, num_
 
         df_top_pred = df_top_pred.sort_values([perfn]).reset_index(drop=True)
         df_train_incr = df_intersection(df_smpl, df_top_pred.head(nspi), confn)
-        df_train = pd.concat([df_train, df_train_incr]).drop_duplicates().reset_index(drop=True)
+        df_train = df_union(df_train, df_train_incr)
 
         last_num = nspi
         while (df_train.shape[0] < curr_ns):
             last_num = last_num + 1
             df_train_incr = df_intersection(df_smpl, df_top_pred.head(last_num).tail(1), confn)
-            df_train = pd.concat([df_train, df_train_incr]).drop_duplicates().reset_index(drop=True)
+            df_train = df_union(df_train, df_train_incr)
 
         if (iter_idx < num_iter - 1):
             df_top_pred = pred_top_learn_cmbn(cpnt_mdls, cpnt_confns, df_train, df_smpl, 
@@ -350,16 +361,14 @@ def alic(cpnt_mdls, df_smpl, cpnt_confns, confn, perfn, num_smpl, pct_rand, \
         
         df_top_pred = df_top_pred.sort_values([perfn]).reset_index(drop=True)
         df_train_incr = df_intersection(df_smpl, df_top_pred.head(nspi), confn)
-        df_train = pd.concat([df_train, \
-                df_train_incr]).drop_duplicates().reset_index(drop=True)
+        df_train = df_union(df_train, df_train_incr)
         
         last_num = nspi
         while (df_train.shape[0] < curr_ns):
             last_num = last_num + 1
             df_train_incr = df_intersection(df_smpl, \
                     df_top_pred.head(last_num).tail(1), confn)
-            df_train = pd.concat([df_train, \
-                    df_train_incr]).drop_duplicates().reset_index(drop=True)
+            df_train = df_union(df_train, df_train_incr)
 
         if (iter_idx < num_iter - 1):
             df_top_pred = pred_top(df_train, df_smpl, confn, perfn, num_smpl, \
@@ -379,37 +388,80 @@ def alic(cpnt_mdls, df_smpl, cpnt_confns, confn, perfn, num_smpl, pct_rand, \
 
 def ceal(cpnt_mdls, df_smpl, cpnt_confns, confn, perfn, num_smpl, pct_rand, \
         num_iter, pct_repl=0.0, dfs_cpnt=None):
-    num_rand = int(num_smpl * pct_rand)
-    num_repl = min(int(num_smpl * pct_repl), num_smpl - num_rand)
+    num_rand_upper = int(num_smpl * pct_rand)
+    num_rand = int(max(1, num_smpl * pct_rand / 2))
+    df_train = df_smpl.head(num_rand)
+    df_top_pred_high = pred_top(df_train, df_smpl, confn, perfn, \
+            df_smpl.shape[0], False)
+    df_rmn = df_sub(df_smpl, df_train, confn) 
+
+    num_repl = min(int(num_smpl * pct_repl), num_smpl - num_rand_upper)
     if (num_repl >= 1):
         for i in range(len(dfs_cpnt)):
-            cpnt_mdls[i] = train_mdl(dfs_cpnt[i].head(num_repl), cpnt_confns[i], \
-                    perfn, cpnt_mdls[i])
+            cpnt_mdls[i] = train_mdl(dfs_cpnt[i].head(num_repl), \
+                    cpnt_confns[i], perfn, cpnt_mdls[i])
+    df_top_pred_low = pred_top_anal_cmbn(cpnt_mdls, df_rmn, cpnt_confns, \
+            confn, perfn, df_rmn.shape[0], False)
+    df_top_pred = df_top_pred_low
+    low = True
 
-    df_top_pred = pred_top_anal_cmbn(cpnt_mdls, df_smpl, cpnt_confns, confn, \
-            perfn, num_smpl, False)
-    df_train = df_smpl.head(num_rand)
-    nspi = int((num_smpl - num_rand - num_repl) / num_iter)
+    if (num_iter > num_smpl - num_rand_upper - num_repl):
+        num_iter = max(1, num_smpl - num_rand_upper - num_repl)
+    nspi = int((num_smpl - num_rand_upper - num_repl) / num_iter)
     for iter_idx in range(num_iter):
-        curr_ns = num_smpl - nspi * (num_iter - 1 - iter_idx)
+        curr_ns = num_smpl - (num_rand_upper - num_rand) \
+                - nspi * (num_iter - 1 - iter_idx)
         
         df_top_pred = df_top_pred.sort_values([perfn]).reset_index(drop=True)
-        df_train_incr = df_intersection(df_smpl, df_top_pred.head(nspi), confn)
-        df_train = pd.concat([df_train, \
-                df_train_incr]).drop_duplicates().reset_index(drop=True)
-        
+        df_test = df_intersection(df_rmn, df_top_pred.head(nspi), confn)
         last_num = nspi
-        while (df_train.shape[0] < curr_ns):
+        while (df_train.shape[0] + df_test.shape[0] < curr_ns):
             last_num = last_num + 1
-            df_train_incr = df_intersection(df_smpl, \
-                    df_top_pred.head(last_num).tail(1), confn)
-            df_train = pd.concat([df_train, \
-                    df_train_incr]).drop_duplicates().reset_index(drop=True)
+            df_test = df_intersection(df_rmn, df_top_pred.head(last_num), confn)
+        df_rmn = df_sub(df_rmn, df_test, confn)
 
+        if (df_test.shape[0] >= 2):
+            df_pred_high = df_intersection(df_top_pred_high, df_test, confn)
+            robust = df_intersection(df_pred_high.head(1), \
+                    gen_top_df(df_test, perfn, df_test.shape[0]/2), confn).shape[0]
+            if (robust < 1):
+                if (iter_idx < num_iter - 1):
+                    num_rand_incr = int((num_rand_upper - num_rand) / 2)
+                else:
+                    num_rand_incr = num_rand_upper - num_rand
+                df_train = df_union(df_train, df_rmn.head(num_rand_incr))
+                num_rand = num_rand + num_rand_incr
+                df_rmn = df_rmn.tail(df_rmn.shape[0] - num_rand_incr)
+
+        if (low):
+            df_pred_low = df_intersection(df_top_pred_low, df_test, confn)
+            df_recall_low = eval_recall(df_pred_low, df_test, confn, perfn, \
+                    nums_top=[n for n in range(1, min(4, df_test.shape[0] + 1))])
+            recall_low = df_recall_low['recall_score'].values.mean()
+
+            df_pred_high = pred_top(df_train, df_test, confn, perfn, \
+                    df_test.shape[0], False)
+            df_recall_high = eval_recall(df_pred_high, df_test, confn, perfn, \
+                    nums_top=[n for n in range(1, min(4, df_test.shape[0] + 1))])
+            recall_high = df_recall_high['recall_score'].values.mean()
+
+            if (recall_high >= recall_low):
+                low = False
+
+        df_train = df_union(df_train, df_test)
         if (iter_idx < num_iter - 1):
-            df_top_pred = pred_top(df_train, df_smpl, confn, perfn, num_smpl, \
-                    False)
+            df_top_pred_high = pred_top(df_train, df_rmn, confn, perfn, \
+                    df_rmn.shape[0], False)
+            if (low):
+                df_top_pred = df_intersection(df_top_pred_low, df_rmn, confn)
+            else:
+                df_top_pred = df_top_pred_high
         else:
+            if (num_rand_upper > num_rand):
+                df_top_pred = pred_top(df_train, df_rmn, confn, perfn, \
+                        num_rand_upper - num_rand, False)
+                df_test = df_intersection(df_rmn, df_top_pred, confn)
+                df_train = df_union(df_train, df_test)
             df_top_pred, df_recall, df_mape = pred_top(df_train, df_smpl, \
                     confn, perfn)
 
@@ -422,9 +474,9 @@ perfn = 'exec_time'
 lmp_mdl = train_mdl(sp.df_lmp, sp.lmp_confn, perfn)
 vr_mdl = train_mdl(sp.df_vr, sp.vr_confn, perfn)
 num_smpl = 100
-pct_rand = 0.2
-num_iter = 2
-pct_repl = 0.2
+pct_rand = 0.3
+num_iter = 3
+pct_repl = 0.3
 rs(sp.df_lv, sp.lv_confn, perfn, num_smpl)
 al(sp.df_lv, sp.lv_confn, perfn, num_smpl, pct_rand, num_iter)
 alph((lmp_mdl, vr_mdl), sp.df_lv, (sp.lmp_confn, sp.vr_confn), sp.lv_confn, \
@@ -432,5 +484,9 @@ alph((lmp_mdl, vr_mdl), sp.df_lv, (sp.lmp_confn, sp.vr_confn), sp.lv_confn, \
 alic([lmp_mdl, vr_mdl], sp.df_lv, (sp.lmp_confn, sp.vr_confn), sp.lv_confn, \
         perfn, num_smpl, pct_rand, num_iter)
 alic([None, None], sp.df_lv, (sp.lmp_confn, sp.vr_confn), sp.lv_confn, perfn, \
+        num_smpl, pct_rand, num_iter, pct_repl, (sp.df_lmp, sp.df_vr))
+ceal([lmp_mdl, vr_mdl], sp.df_lv, (sp.lmp_confn, sp.vr_confn), sp.lv_confn, \
+        perfn, num_smpl, pct_rand, num_iter)
+ceal([None, None], sp.df_lv, (sp.lmp_confn, sp.vr_confn), sp.lv_confn, perfn, \
         num_smpl, pct_rand, num_iter, pct_repl, (sp.df_lmp, sp.df_vr))
 """

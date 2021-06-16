@@ -10,7 +10,7 @@ if (len(sys.argv) != 6):
     print("\tperformance: exec_time, comp_time")
     print("\tnumber of samples: 25, 50, 100")
     print("\t#runs: 10, 100")
-    print("\talgorithm: al, geist, alic, alph, alich")
+    print("\talgorithm: al, geist, alic, ceal, alph, alich, cealh")
     exit()
 
 wf = sys.argv[1]
@@ -38,9 +38,14 @@ if (wf == 'lv'):
             elif (algo == 'alic'):
                 num_iter = 6
                 pct_repl = 0.45
+            elif (algo == 'ceal'):
+                num_iter = 6
+                pct_repl = 0.45
             elif (algo == 'alph'):
                 num_iter = 7
             elif (algo == 'alich'):
+                num_iter = 1
+            elif (algo == 'cealh'):
                 num_iter = 1
             else:
                 print("Error: unknown algorithm!")
@@ -53,9 +58,14 @@ if (wf == 'lv'):
             elif (algo == 'alic'):
                 num_iter = 7
                 pct_repl = 0.8
+            elif (algo == 'ceal'):
+                num_iter = 7
+                pct_repl = 0.8
             elif (algo == 'alph'):
                 num_iter = 4
             elif (algo == 'alich'):
+                num_iter = 2
+            elif (algo == 'cealh'):
                 num_iter = 2
             else:
                 print("Error: unknown algorithm!")
@@ -69,9 +79,14 @@ if (wf == 'lv'):
             elif (algo == 'alic'):
                 num_iter = 6
                 pct_repl = 0.5
+            elif (algo == 'ceal'):
+                num_iter = 6
+                pct_repl = 0.5
             elif (algo == 'alph'):
                 num_iter = 8
             elif (algo == 'alich'):
+                num_iter = 9
+            elif (algo == 'cealh'):
                 num_iter = 9
             else:
                 print("Error: unknown algorithm!")
@@ -84,9 +99,14 @@ if (wf == 'lv'):
             elif (algo == 'alic'):
                 num_iter = 7
                 pct_repl = 0.5
+            elif (algo == 'ceal'):
+                num_iter = 7
+                pct_repl = 0.5
             elif (algo == 'alph'):
                 num_iter = 9
             elif (algo == 'alich'):
+                num_iter = 8
+            elif (algo == 'cealh'):
                 num_iter = 8
             else:
                 print("Error: unknown algorithm!")
@@ -109,9 +129,14 @@ elif (wf == 'hs'):
             elif (algo == 'alic'):
                 num_iter = 8
                 pct_repl = 0.7
+            elif (algo == 'ceal'):
+                num_iter = 8
+                pct_repl = 0.7
             elif (algo == 'alph'):
                 num_iter = 8
             elif (algo == 'alich'):
+                num_iter = 2
+            elif (algo == 'cealh'):
                 num_iter = 2
             else:
                 print("Error: unknown algorithm!")
@@ -124,9 +149,14 @@ elif (wf == 'hs'):
             elif (algo == 'alic'):
                 num_iter = 10
                 pct_repl = 0.25
+            elif (algo == 'ceal'):
+                num_iter = 10
+                pct_repl = 0.25
             elif (algo == 'alph'):
                 num_iter = 8
             elif (algo == 'alich'):
+                num_iter = 3
+            elif (algo == 'cealh'):
                 num_iter = 3
             else:
                 print("Error: unknown algorithm!")
@@ -140,9 +170,14 @@ elif (wf == 'hs'):
             elif (algo == 'alic'):
                 num_iter = 10
                 pct_repl = 0.55
+            elif (algo == 'ceal'):
+                num_iter = 10
+                pct_repl = 0.55
             elif (algo == 'alph'):
                 num_iter = 9
             elif (algo == 'alich'):
+                num_iter = 1
+            elif (algo == 'cealh'):
                 num_iter = 1
             else:
                 print("Error: unknown algorithm!")
@@ -155,9 +190,14 @@ elif (wf == 'hs'):
             elif (algo == 'alic'):
                 num_iter = 5
                 pct_repl = 0.35
+            elif (algo == 'ceal'):
+                num_iter = 5
+                pct_repl = 0.35
             elif (algo == 'alph'):
                 num_iter = 5
             elif (algo == 'alich'):
+                num_iter = 2
+            elif (algo == 'cealh'):
                 num_iter = 2
             else:
                 print("Error: unknown algorithm!")
@@ -180,9 +220,14 @@ elif (wf == 'gvpv'):
             elif (algo == 'alic'):
                 num_iter = 7
                 pct_repl = 0.1
+            elif (algo == 'ceal'):
+                num_iter = 7
+                pct_repl = 0.1
             elif (algo == 'alph'):
                 num_iter = 8
             elif (algo == 'alich'):
+                num_iter = 9
+            elif (algo == 'cealh'):
                 num_iter = 9
             else:
                 print("Error: unknown algorithm!")
@@ -195,9 +240,14 @@ elif (wf == 'gvpv'):
             elif (algo == 'alic'):
                 num_iter = 7
                 pct_repl = 0.6
+            elif (algo == 'ceal'):
+                num_iter = 7
+                pct_repl = 0.6
             elif (algo == 'alph'):
                 num_iter = 7
             elif (algo == 'alich'):
+                num_iter = 6
+            elif (algo == 'cealh'):
                 num_iter = 6
             else:
                 print("Error: unknown algorithm!")
@@ -244,11 +294,17 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
         elif (algo == 'alic'):
             rslt = mdlr.alic([None, None], df_wf, cpnt_confns, confn, perfn, num_smpl, \
                     pct_rand, num_iter, pct_repl, dfs_cpnt)
+        elif (algo == 'ceal'):
+            rslt = mdlr.ceal([None, None], df_wf, cpnt_confns, confn, perfn, num_smpl, \
+                    pct_rand, num_iter, pct_repl, dfs_cpnt)
+        elif (algo == 'alph'):
+            rslt = mdlr.alph(cpnt_mdls, df_wf, cpnt_confns, confn, perfn, num_smpl, \
+                    pct_rand, num_iter)
         elif (algo == 'alich'):
             rslt = mdlr.alic(cpnt_mdls, df_wf, cpnt_confns, confn, perfn, num_smpl, \
                     pct_rand, num_iter)
-        elif (algo == 'alph'):
-            rslt = mdlr.alph(cpnt_mdls, df_wf, cpnt_confns, confn, perfn, num_smpl, \
+        elif (algo == 'cealh'):
+            rslt = mdlr.ceal(cpnt_mdls, df_wf, cpnt_confns, confn, perfn, num_smpl, \
                     pct_rand, num_iter)
         else:
             print("Error: unknown algorithms!")
@@ -278,14 +334,14 @@ print("For different percentages of random samples:")
 colns = list(map(str, np.arange(pct_rand_start, pct_rand_end, pct_rand_step).round(4)))
 
 print(f"Top performance ({perfn}):")
-top_perfs_avg = np.sum(top_perfs_all, axis=0) / len(top_perfs_all)
+top_perfs_avg = np.mean(top_perfs_all, axis=0)
 df_top_perf = pd.DataFrame([top_perfs_avg], columns=colns)
 df_top_perf = df_top_perf.round(4)
 print(df_top_perf)
 sp.df2csv(df_top_perf, dir_name + algo + '_top_perf_' + str(num_smpl) + '.csv')
 
 print("Recall score:")
-recalls_avg = np.sum(recalls_all, axis=0) / len(recalls_all)
+recalls_avg = np.mean(recalls_all, axis=0)
 df_recall = pd.DataFrame(np.c_[df_recall[['pct_top', 'num_top']].values, \
         np.transpose(recalls_avg)], columns=['pct_top', 'num_top']+colns)
 df_recall = df_recall.round(4)
@@ -293,7 +349,7 @@ print(df_recall)
 sp.df2csv(df_recall, dir_name + algo + '_recall_' + str(num_smpl) + '.csv')
 
 print("MAPE:")
-mapes_avg = np.sum(mapes_all, axis=0) / len(mapes_all)
+mapes_avg = np.mean(mapes_all, axis=0)
 df_mape = pd.DataFrame(np.c_[df_mape['pct_top'].values, \
         np.transpose(mapes_avg)], columns=['pct_top']+colns)
 df_mape = df_mape.round(4)
