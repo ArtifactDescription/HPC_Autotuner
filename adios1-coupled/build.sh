@@ -15,7 +15,6 @@ source build-adios.sh
 source build-ht_sw.sh
 source build-swiftT.sh
 source build-lammps.sh
-source build-conda2.sh
 source build-swiftT_Py.sh
 } 2>& 1 | tee $BUILD_LOG
 
