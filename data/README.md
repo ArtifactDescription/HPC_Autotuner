@@ -17,10 +17,10 @@ Separate components:
 - Stage-write (hs/sw.csv): (sw--#process, sw--PPN, ht--#outputs, ht--X dimension size, ht--Y dimension size, ht--#iterations, sw--execution time)
 
 ### Workflow 3: GP -- Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot coupled by ADIOS 2
-In-situ workflow coupled from Gray-Scott and PDF Calculator (gp/gp.csv): (gs--#process, gs--PPN, pdf--#process, pdf--PPN, gs--edge length of a cube, gs--#simulation steps, gp--execution time, gs-execution time, pdf--execution time)
-In-situ workflow coupled from Gray-Scott and Gray Plot (gp/gv.csv): (gs--#process, gs--PPN, gs--edge length of a cube, gs--#simulation steps, gv--execution time, gs--execution time, gplot--execution time)
-In-situ workflow coupled from Gray-Scott, PDF Calculator, and PDF Plot (gp/gpv.csv): (gs--#process, gs--PPN, pdf--#process, pdf--PPN, gs--edge length of a cube, gs--#simulation steps, gpv--execution time, gs-execution time, pdf--execution time, pplot--execution time)
-In-situ workflow coupled from Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot (gp/gvpv.csv): (gs--#process, gs--PPN, pdf--#process, pdf--PPN, gs--edge length of a cube, gs--#simulation steps, gvpv--execution time, gs-execution time, gplot--execution time, pdf--execution time, pplot--execution time)
+- In-situ workflow coupled from Gray-Scott and PDF Calculator (gp/gp.csv): (gs--#process, gs--PPN, pdf--#process, pdf--PPN, gs--edge length of a cube, gs--#simulation steps, gp--execution time, gs-execution time, pdf--execution time)
+- In-situ workflow coupled from Gray-Scott and Gray Plot (gp/gv.csv): (gs--#process, gs--PPN, gs--edge length of a cube, gs--#simulation steps, gv--execution time, gs--execution time, gplot--execution time)
+- In-situ workflow coupled from Gray-Scott, PDF Calculator, and PDF Plot (gp/gpv.csv): (gs--#process, gs--PPN, pdf--#process, pdf--PPN, gs--edge length of a cube, gs--#simulation steps, gpv--execution time, gs-execution time, pdf--execution time, pplot--execution time)
+- In-situ workflow coupled from Gray-Scott, PDF Calculator, PDF Plot, and Gray Plot (gp/gvpv.csv): (gs--#process, gs--PPN, pdf--#process, pdf--PPN, gs--edge length of a cube, gs--#simulation steps, gvpv--execution time, gs-execution time, gplot--execution time, pdf--execution time, pplot--execution time)
 
 Separate components:
 - Gray-Scott (gp/gs.csv): (gs--#process, gs--PPN, gs--edge length of a cube, gs--#simulation steps, gs--execution time)
