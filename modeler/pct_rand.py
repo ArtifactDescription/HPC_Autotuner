@@ -19,7 +19,7 @@ num_smpl = int(sys.argv[3])
 num_run = int(sys.argv[4])
 algo = sys.argv[5]
 
-dir_name = 'plot/pct_rand/' + wf + '_' + perfn + '/'
+dir_name = '../plot/pct_rand/' + wf + '_' + perfn + '/'
 
 pct_repl = 0.0
 

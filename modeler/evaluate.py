@@ -17,7 +17,7 @@ perfn = sys.argv[2]
 num_smpl = int(sys.argv[3])
 num_runs = int(sys.argv[4])
 
-dirname = 'plot/' + wf + '/' + perfn + '/'
+dirname = '../plot/' + wf + '/' + perfn + '/'
 
 if (wf == 'lv'):
     mdl_cnpt1 = mdlr.train_mdl(sp.df_lmp, sp.lmp_confn, perfn)
