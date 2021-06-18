@@ -35,20 +35,28 @@ def gen_top_df(df_smpl, perfn, num_top=1):
     return df_top
 
 
-def eval_recall(df_pred, df_test, confn, perfn, nums_top=[1,2,3,4,5,6,7,8,9,10]):
+def eval_recall(df_pred, df_test, confn, perfn, num_top=10):
     if (df_pred.shape[0] != df_test.shape[0]):
         print("Error: df_pred.shape[0] = %d, df_test.shape[0] = %d" % (df_pred.shape[0], df_test.shape[0]))
-    s_recall = set([])
-    for num_top in nums_top:
-        df_pred_top = gen_top_df(df_pred, perfn, num_top)
-        df_test_top = gen_top_df(df_test, perfn, num_top)
-        rs = float(df_intersection(df_pred_top, df_test_top, confn).shape[0]) / num_top * 100
-        pct_top = float(num_top) / df_test.shape[0]
-        s_recall.add((pct_top * 100, int(num_top), rs))
-    df_recall = pd.DataFrame(data=list(s_recall), columns=['pct_top', 'num_top', 'recall_score'])
-    df_recall = df_recall.sort_values(['num_top']).reset_index(drop=True)
+    recalls = []
+    for idx_top in range(1, num_top + 1, 1):
+        df_pred_top = gen_top_df(df_pred, perfn, idx_top)
+        df_test_top = gen_top_df(df_test, perfn, idx_top)
+        recall = float(df_intersection(df_pred_top, df_test_top, confn).shape[0]) / idx_top * 100
+        pct_top = float(idx_top) / df_test.shape[0]
+        recalls.append([pct_top * 100, idx_top, recall])
+    df_recall = pd.DataFrame(recalls, columns=['pct_top', 'num_top', 'recall_score'])
     return df_recall
 
+
+def eval_recall2(df_smpl, confn, perfn, num_top=25):
+    recalls = []
+    for idx_top in range(1, num_top + 1, 1):
+        df_rank = gen_top_df(df_smpl, perfn, idx_top)
+        recall = float(df_intersection(df_smpl.head(idx_top), df_rank, confn).shape[0]) / idx_top * 100
+        recalls.append([idx_top, recall])
+    df_recall = pd.DataFrame(recalls, columns=['num_top', 'recall_score'])
+    return df_recall
 
 def eval_mape(df_pred, df_test, perfn, pcts_top=[0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5]):
     y_pred = df_pred[perfn].values
@@ -436,13 +444,13 @@ def ceal(cpnt_mdls, df_smpl, cpnt_confns, confn, perfn, num_smpl, pct_rand, \
         if (low):
             df_pred_low = df_intersection(df_top_pred_low, df_test, confn)
             df_recall_low = eval_recall(df_pred_low, df_test, confn, perfn, \
-                    nums_top=[n for n in range(1, min(4, df_test.shape[0] + 1))])
+                    min(4, df_test.shape[0] + 1))
             recall_low = df_recall_low['recall_score'].values.mean()
 
             df_pred_high = pred_top(df_train, df_test, confn, perfn, \
                     df_test.shape[0], False)
             df_recall_high = eval_recall(df_pred_high, df_test, confn, perfn, \
-                    nums_top=[n for n in range(1, min(4, df_test.shape[0] + 1))])
+                    min(4, df_test.shape[0] + 1))
             recall_high = df_recall_high['recall_score'].values.mean()
 
             if (recall_high >= recall_low):

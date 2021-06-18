@@ -17,7 +17,7 @@ perfn = sys.argv[2]
 num_smpl = int(sys.argv[3])
 num_runs = int(sys.argv[4])
 
-dirname = '../plot/' + wf + '/' + perfn + '/'
+dir_name = '../plot/' + wf + '/' + perfn + '/'
 
 if (wf == 'lv'):
     mdl_cnpt1 = mdlr.train_mdl(sp.df_lmp, sp.lmp_confn, perfn)
@@ -225,10 +225,7 @@ else:
     print("Error: unknown workflow!")
     exit()
 
-rand_seed_start = 1
-rand_seed_end = num_runs + 1
-rand_seed_step = 1
-for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
+for rand_seed in range(1, num_runs + 1):
     if (wf == 'lv'):
         df_cnpt1 = sp.df_lmp.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
         df_cnpt2 = sp.df_vr.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
@@ -251,7 +248,7 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
     # Random sampling
     rslt = mdlr.rs(df_wf, confn, perfn, num_smpl)
     top_perf, df_recall, df_mape, comp_time = rslt[0], rslt[1], rslt[2], rslt[3]
-    if (rand_seed == rand_seed_start):
+    if (rand_seed == 1):
         rs_top_perf = np.array([top_perf])
         rs_recall = np.array([df_recall.values])
         rs_mape = np.array([df_mape.values])
@@ -265,7 +262,7 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
     # Active learning
     rslt = mdlr.al(df_wf, confn, perfn, num_smpl, al_pct_rand, al_num_iter)
     top_perf, df_recall, df_mape, comp_time = rslt[0], rslt[1], rslt[2], rslt[3]
-    if (rand_seed == rand_seed_start):
+    if (rand_seed == 1):
         al_top_perf = np.array([top_perf])
         al_recall = np.array([df_recall.values])
         al_mape = np.array([df_mape.values])
@@ -280,7 +277,7 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
     rslt = mdlr.alic([None, None], df_wf, cpnt_confns, confn, perfn, num_smpl, \
             alic_pct_rand, alic_num_iter, alic_pct_repl, dfs_cpnt)
     top_perf, df_recall, df_mape, comp_time = rslt[0], rslt[1], rslt[2], rslt[3]
-    if (rand_seed == rand_seed_start):
+    if (rand_seed == 1):
         alic_top_perf = np.array([top_perf])
         alic_recall = np.array([df_recall.values])
         alic_mape = np.array([df_mape.values])
@@ -295,7 +292,7 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
     rslt = mdlr.ceal([None, None], df_wf, cpnt_confns, confn, perfn, num_smpl, \
             ceal_pct_rand, ceal_num_iter, ceal_pct_repl, dfs_cpnt)
     top_perf, df_recall, df_mape, comp_time = rslt[0], rslt[1], rslt[2], rslt[3]
-    if (rand_seed == rand_seed_start):
+    if (rand_seed == 1):
         ceal_top_perf = np.array([top_perf])
         ceal_recall = np.array([df_recall.values])
         ceal_mape = np.array([df_mape.values])
@@ -310,7 +307,7 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
     rslt = mdlr.alph(cpnt_mdls, df_wf, cpnt_confns, confn, perfn, num_smpl, \
             alph_pct_rand, alph_num_iter)
     top_perf, df_recall, df_mape, comp_time = rslt[0], rslt[1], rslt[2], rslt[3]
-    if (rand_seed == rand_seed_start):
+    if (rand_seed == 1):
         alph_top_perf = np.array([top_perf])
         alph_recall = np.array([df_recall.values])
         alph_mape = np.array([df_mape.values])
@@ -325,7 +322,7 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
     rslt = mdlr.alic(cpnt_mdls, df_wf, cpnt_confns, confn, perfn, num_smpl, \
             alich_pct_rand, alich_num_iter)
     top_perf, df_recall, df_mape, comp_time = rslt[0], rslt[1], rslt[2], rslt[3]
-    if (rand_seed == rand_seed_start):
+    if (rand_seed == 1):
         alich_top_perf = np.array([top_perf])
         alich_recall = np.array([df_recall.values])
         alich_mape = np.array([df_mape.values])
@@ -340,7 +337,7 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
     rslt = mdlr.ceal(cpnt_mdls, df_wf, cpnt_confns, confn, perfn, num_smpl, \
             cealh_pct_rand, cealh_num_iter)
     top_perf, df_recall, df_mape, comp_time = rslt[0], rslt[1], rslt[2], rslt[3]
-    if (rand_seed == rand_seed_start):
+    if (rand_seed == 1):
         cealh_top_perf = np.array([top_perf])
         cealh_recall = np.array([df_recall.values])
         cealh_mape = np.array([df_mape.values])
@@ -355,7 +352,7 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
     # GEIST
     rslt = mdlr.geist(df_wf, confn, perfn, num_smpl, geist_pct_rand, geist_num_iter)
     top_perf, df_recall, df_mape, comp_time = rslt[0], rslt[1], rslt[2], rslt[3]
-    if (rand_seed == rand_seed_start):
+    if (rand_seed == 1):
         geist_top_perf = np.array([top_perf])
         geist_recall = np.array([df_recall.values])
         geist_mape = np.array([df_mape.values])
@@ -380,7 +377,7 @@ top_perf = np.c_[np.mean(rs_top_perf, axis=0), \
                 ]
 df_top_perf = pd.DataFrame(top_perf, columns=colns).round(4)
 print(df_top_perf)
-sp.df2csv(df_top_perf, dirname + 'top_perf_' + str(num_smpl) + '.csv')
+sp.df2csv(df_top_perf, dir_name + 'top_perf_' + str(num_smpl) + '.csv')
 
 print("MAPE (%):")
 mape_avg = np.c_[np.mean(rs_mape, axis=0), \
@@ -394,7 +391,7 @@ mape_avg = np.c_[np.mean(rs_mape, axis=0), \
                 ]
 df_mapes = pd.DataFrame(mape_avg, columns=['pct_top']+colns).round(4)
 print(df_mapes)
-sp.df2csv(df_mapes, dirname + 'mape_' + str(num_smpl) + '.csv')
+sp.df2csv(df_mapes, dir_name + 'mape_' + str(num_smpl) + '.csv')
 
 print("Recall Score (%):")
 recall_avg = np.c_[np.mean(rs_recall, axis=0), \
@@ -408,7 +405,7 @@ recall_avg = np.c_[np.mean(rs_recall, axis=0), \
                   ]
 df_recall = pd.DataFrame(recall_avg, columns=['pct_top', 'num_top']+colns).round(4)
 print(df_recall)
-sp.df2csv(df_recall, dirname + 'recall_' + str(num_smpl) + '.csv')
+sp.df2csv(df_recall, dir_name + 'recall_' + str(num_smpl) + '.csv')
 
 
 print("Cost [Computer Time (core-hours)]:")
@@ -423,5 +420,5 @@ comp_time = np.c_[np.mean(rs_comp_time, axis=0), \
                  ]
 df_comp_time = pd.DataFrame(comp_time, columns=colns).round(4)
 print(df_comp_time)
-sp.df2csv(df_comp_time, dirname + 'comp_time_' + str(num_smpl) + '.csv')
+sp.df2csv(df_comp_time, dir_name + 'comp_time_' + str(num_smpl) + '.csv')
 
