@@ -36,7 +36,7 @@ df_lv_exec = pd.DataFrame(np.c_[df_lv[sp.lv_confn].values, exec_time_max], \
 df_recall = mdlr.eval_recall(df_lv_exec, df_lv, sp.lv_confn, 'exec_time', 25)
 print("Recall score for max of execution times:")
 print(df_recall)
-df2csv(df_recall, dir_name + "recall_exec_max.csv")
+sp.df2csv(df_recall, dir_name + "recall_exec_max.csv")
 
 comp_time_sum = df_lv['comp_time_lmp'].values + df_lv['comp_time_vr'].values
 df_lv_comp = pd.DataFrame(np.c_[df_lv[sp.lv_confn].values, comp_time_sum], \
@@ -44,7 +44,7 @@ df_lv_comp = pd.DataFrame(np.c_[df_lv[sp.lv_confn].values, comp_time_sum], \
 df_recall = mdlr.eval_recall(df_lv_comp, df_lv, sp.lv_confn, 'comp_time', 25)
 print("Recall score for sum of computer times:")
 print(df_recall)
-df2csv(df_recall, dir_name + "recall_comp_sum.csv")
+sp.df2csv(df_recall, dir_name + "recall_comp_sum.csv")
 
 for perfn in ['exec', 'comp']:
     for rand_seed in range(1, 101):
@@ -55,13 +55,13 @@ for perfn in ['exec', 'comp']:
         
         df_recall = mdlr.eval_recall2(df_lv, sp.lv_confn, perfn+'_time')
         if (rand_seed == 1):
-            recall_rand = np.array([df_recall.values])
+            recall_rnd = np.array([df_recall.values])
         else:
-            recall_rand = np.append(recall_rand, [df_recall.values], axis=0)
+            recall_rnd = np.append(recall_rnd, [df_recall.values], axis=0)
 
-    top_rs_df = pd.DataFrame(np.c_[np.mean(recall_rand, axis=0)], \
+    top_rs_df = pd.DataFrame(np.c_[np.mean(recall_rnd, axis=0)], \
             columns=['num_top', 'recall_score'])
     print("Recall score of random sampling for " + perfn + " time:")
     print(df_recall)
-    df2csv(df_recall, dir_name + 'recall_' + perfn + '_rand.csv')
+    sp.df2csv(df_recall, dir_name + 'recall_' + perfn + '_rnd.csv')
 
