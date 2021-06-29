@@ -7,14 +7,14 @@ import sys;
 
 (void v) setup_run(string parDir, string srcDir, string dir, string confile) "turbine" "0.0"
 [
-"""
+	"""
 	file mkdir <<parDir>>
 	file delete -force -- <<dir>>
 	file copy -force -- <<srcDir>> <<dir>>
 	cd <<dir>>
 	file copy -force -- <<confile>> adios2.xml
 	file mkdir gsplot
-"""
+	"""
 ];
 
 (float exectime) launch_wrapper(string run_id, int params[], int count = 0)
@@ -131,12 +131,6 @@ main()
 	int ppn = 36;   // bebop
 	int wpn = string2int(getenv("PPN"));
 	int ppw = ppn %/ wpn - 1;
-	int workers;
-	if (string2int(getenv("PROCS")) - 2 < 31) {
-		workers = string2int(getenv("PROCS")) - 2;
-	} else {
-		workers = 31;
-	}
 
 	// 0) gray-scott: the cube size of global array (L x L x L)
 	// 1) gray-scott: the total number of steps to simulate
@@ -155,16 +149,13 @@ main()
 		{
 			params[j] = string2int(params_str[j]);
 		}
-		if (workers >= 1)
-		{
-			exectime[i] = launch_wrapper("%0.4i_%0.3i" % (params[0], params[1]), 
-					params);
+		exectime[i] = launch_wrapper("%0.4i_%0.3i" % (params[0], params[1]), 
+				params);
 
-			if (exectime[i] >= 0.0) {
-				codes[i] = 0;
-			} else {
-				codes[i] = 1;
-			}
+		if (exectime[i] >= 0.0) {
+			codes[i] = 0;
+		} else {
+			codes[i] = 1;
 		}
 	}
 	int failure_num = sum_integer(codes);

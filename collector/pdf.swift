@@ -148,10 +148,10 @@ main()
 	int wpn = string2int(getenv("PPN"));
 	int ppw = ppn %/ wpn - 1;
 	int workers;
-	if (string2int(getenv("PROCS")) - 2 < 31) {
+	if (string2int(getenv("PROCS")) - 2 < 32) {
 		workers = string2int(getenv("PROCS")) - 2;
 	} else {
-		workers = 31;
+		workers = 32;
 	}
 
 	// 0) pdf_calc: the total number of processes
