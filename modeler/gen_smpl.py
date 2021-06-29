@@ -47,7 +47,7 @@ def df_slct(df, paramn, op, val=0):
 
 def scal_input(df, in_paramn, r):
     for paramn in in_paramn:
-        df[paramn] = -((- df[paramn]) // r)
+        df[paramn] = np.ceil(np.divide(df[paramn], r))
     df = df.drop_duplicates().reset_index(drop=True).astype(int)
     return df
 
@@ -56,7 +56,7 @@ def scal_nproc(df, paramns, r):
         return x1 >= x2
 
     for paramn in paramns:
-        df[paramn] = -((- df[paramn]) // r)
+        df[paramn] = np.ceil(np.divide(df[paramn], r))
         df = df_slct(df, paramn, ge, 2)
     df = df.drop_duplicates().reset_index(drop=True).astype(int)
     return df
@@ -237,25 +237,53 @@ def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, smll_smpl=Tr
     print("The number of coupled Heat-transfer and Stage-write samples = ", df_smpl_hs.shape[0])
     print(df_smpl_hs.head(10))
     df2csv(df_smpl_hs, filename_hs + ".csv")
+    
+    df_smpl_hsc = pd.DataFrame(np.c_[df_smpl_hs.values[:, 0:6]], columns=hs_confn)
+    df_smpl_hsc = df_smpl_hsc.drop_duplicates().reset_index(drop=True).astype(int)
+    df_smpl_hsc['ht_nout'] = ht_nout_c
+    df_smpl_hsc['ht_x'] = ht_x_c
+    df_smpl_hsc['ht_y'] = ht_y_c
+    df_smpl_hsc['ht_iter'] = ht_iter_c
+    print("The number of coupled Heat-transfer and Stage-write samples =", df_smpl_hsc.shape[0])
+    print(df_smpl_hsc.head(3))
+    df2csv(df_smpl_hsc, filename_hs + "c.csv")
 
     df_smpl_ht = pd.DataFrame(np.c_[df_smpl_hs.values[:, 0:4], df_smpl_hs.values[:, 6:10]], \
             columns=ht_paramn)
-    df_smpl_ht = df_smpl_ht.drop_duplicates().reset_index(drop=True)
     df_smpl_ht2 = pd.DataFrame(data = list(smpls_ht), columns=ht_paramn)
     df_smpl_ht = df_smpl_ht.append(df_smpl_ht2)
     df_smpl_ht = df_smpl_ht.drop_duplicates().reset_index(drop=True).astype(int)
     print("The number of Heat-transfer samples = ", df_smpl_ht.shape[0])
     print(df_smpl_ht.head(3))
     df2csv(df_smpl_ht, filename_ht + ".csv")
+    
+    df_smpl_htc = pd.DataFrame(np.c_[df_smpl_ht.values[:, 0:4]], columns=ht_confn)
+    df_smpl_htc = df_smpl_htc.drop_duplicates().reset_index(drop=True).astype(int)
+    df_smpl_htc['ht_nout'] = ht_nout_c
+    df_smpl_htc['ht_x'] = ht_x_c
+    df_smpl_htc['ht_y'] = ht_y_c
+    df_smpl_htc['ht_iter'] = ht_iter_c
+    print("The number of Heat-transfer samples =", df_smpl_htc.shape[0])
+    print(df_smpl_htc.head(3))
+    df2csv(df_smpl_htc, filename_ht + "c.csv")
 
     df_smpl_sw = pd.DataFrame(np.c_[df_smpl_hs.values[:, 4:10]], columns=sw_paramn)
-    df_smpl_sw = df_smpl_sw.drop_duplicates().reset_index(drop=True)
     df_smpl_sw2 = pd.DataFrame(data = list(smpls_sw), columns=sw_paramn)
     df_smpl_sw = df_smpl_sw.append(df_smpl_sw2)
     df_smpl_sw = df_smpl_sw.drop_duplicates().reset_index(drop=True).astype(int)
     print("The number of Stage-write samples = ", df_smpl_sw.shape[0])
     print(df_smpl_sw.head(3))
     df2csv(df_smpl_sw, filename_sw + ".csv")
+    
+    df_smpl_swc = pd.DataFrame(np.c_[df_smpl_sw.values[:, 0:2]], columns=sw_confn)
+    df_smpl_swc = df_smpl_swc.drop_duplicates().reset_index(drop=True).astype(int)
+    df_smpl_swc['ht_nout'] = ht_nout_c
+    df_smpl_swc['ht_x'] = ht_x_c
+    df_smpl_swc['ht_y'] = ht_y_c
+    df_smpl_swc['ht_iter'] = ht_iter_c
+    print("The number of Stage-write samples =", df_smpl_swc.shape[0])
+    print(df_smpl_swc.head(3))
+    df2csv(df_smpl_swc, filename_sw + "c.csv")
 
     if (smll_smpl):
         df_smpl_hs_smll = df_smpl_hs.copy()
@@ -263,7 +291,7 @@ def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, smll_smpl=Tr
         df_smpl_sw_smll = df_smpl_sw.copy()
         ratio = 2
         for i in range(num_levl):
-            if (i % 2):
+            if (i % 2 == 0):
                 df_smpl_hs_smll = scal_input(df_smpl_hs_smll, ['ht_x'], ratio)
                 df_smpl_hs_smll = scal_nproc(df_smpl_hs_smll, ['ht_x_nproc', 'sw_nproc'], ratio)
                 df_smpl_ht_smll = scal_input(df_smpl_ht_smll, ['ht_x'], ratio)
