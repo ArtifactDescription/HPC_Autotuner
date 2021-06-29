@@ -19,16 +19,16 @@ num_smpl=$4
 num_run=$5
 algo=$6
 
-dir_name=plot/$param/$wf'_'$perfn
+dir_name=../plot/$param/$wf'_'$perfn
 
-if [ ! -d plot ]
+if [ ! -d ../plot ]
 then
-	mkdir plot
+	mkdir ../plot
 fi
 
-if [ ! -d plot/$param ]
+if [ ! -d ../plot/$param ]
 then
-	mkdir plot/$param
+	mkdir ../plot/$param
 fi
 
 if [ ! -d $dir_name ]

@@ -19,7 +19,7 @@ num_smpl = int(sys.argv[3])
 num_run = int(sys.argv[4])
 algo = sys.argv[5]
 
-dir_name = 'plot/pct_repl/' + wf + '_' + perfn + '/'
+dir_name = '../plot/pct_repl/' + wf + '_' + perfn + '/'
 
 if (wf == 'lv'):
     mdl_cnpt1 = mdlr.train_mdl(sp.df_lmp, sp.lmp_confn, perfn)
@@ -161,10 +161,7 @@ pct_repl_start = 0.05
 pct_repl_end = 0.95 - pct_rand
 pct_repl_step = 0.05
 
-rand_seed_start = 1
-rand_seed_end = num_run + 1
-rand_seed_step = 1
-for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
+for rand_seed in range(1, num_run + 1):
     if (wf == 'lv'):
         df_cnpt1 = sp.df_lmp.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
         df_cnpt2 = sp.df_vr.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
@@ -204,7 +201,7 @@ for rand_seed in range(rand_seed_start, rand_seed_end, rand_seed_step):
             recalls = np.append(recalls, [df_recall['recall_score'].values], axis=0)
             mapes = np.append(mapes, [df_mape['MAPE'].values], axis=0)
 
-    if (rand_seed == rand_seed_start):
+    if (rand_seed == 1):
         top_perfs_all = np.array([top_perfs])
         recalls_all = np.array([recalls])
         mapes_all = np.array([mapes])
