@@ -49,14 +49,15 @@ def eval_recall(df_pred, df_test, confn, perfn, num_top=10):
     return df_recall
 
 
-def eval_recall2(df_smpl, confn, perfn, num_top=25):
+def eval_recall_rand(df_rand, confn, perfn, num_top=25):
     recalls = []
     for idx_top in range(1, num_top + 1, 1):
-        df_rank = gen_top_df(df_smpl, perfn, idx_top)
-        recall = float(df_intersection(df_smpl.head(idx_top), df_rank, confn).shape[0]) / idx_top * 100
+        df_rank = gen_top_df(df_rand, perfn, idx_top)
+        recall = float(df_intersection(df_rand.head(idx_top), df_rank, confn).shape[0]) / idx_top * 100
         recalls.append([idx_top, recall])
     df_recall = pd.DataFrame(recalls, columns=['num_top', 'recall_score'])
     return df_recall
+
 
 def eval_mape(df_pred, df_test, perfn, pcts_top=[0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5]):
     y_pred = df_pred[perfn].values
@@ -253,15 +254,15 @@ def preproc_cpnt_pred(cpnt_mdls, cpnt_confns, cpnt_perfns, df_smpl, confn, perfn
         print("Error: len(cpnt_mdls) != len(cpnt_confns)")
 
     for i in range(num_cpnt):
-        X_cpnt = df_smpl[cpnt_confns[i]].values
-        y_cpnt_pred = cpnt_mdls[i].predict(X_cpnt)
-        if (i == 0):
-            y_cpnts_pred = np.array([y_cpnt_pred])
-        else:
-            y_cpnts_pred = np.append(y_cpnts_pred, [y_cpnt_pred], axis=0)
+        if isinstance(cpnt_mdls[i], xgb.sklearn.XGBRegressor):
+            X_cpnt = df_smpl[cpnt_confns[i]].values
+            y_cpnt_pred = cpnt_mdls[i].predict(X_cpnt)
+            if (i == 0):
+                y_cpnts_pred = np.array([y_cpnt_pred])
+            else:
+                y_cpnts_pred = np.append(y_cpnts_pred, [y_cpnt_pred], axis=0)
     df_cpnt_pred = pd.DataFrame(np.c_[df_smpl[confn].values, np.transpose(y_cpnts_pred), \
-                                    df_smpl[['runnable', perfn]].values], \
-                              columns=confn + cpnt_perfns + ['runnable', perfn])
+            df_smpl[perfn].values], columns=confn + cpnt_perfns + [perfn])
     return df_cpnt_pred
 
 
@@ -270,7 +271,8 @@ def pred_top_learn_cmbn(cpnt_mdls, cpnt_confns, df_train, df_test, confn, perfn,
     num_cpnt = len(cpnt_mdls)
     cpnt_perfns = []
     for i in range(num_cpnt):
-        cpnt_perfns = cpnt_perfns + [perfn + str(i)]
+        if isinstance(cpnt_mdls[i], xgb.sklearn.XGBRegressor):
+            cpnt_perfns = cpnt_perfns + [perfn + str(i)]
     df_train_cmbn = preproc_cpnt_pred(cpnt_mdls, cpnt_confns, cpnt_perfns, \
                                            df_train, confn, perfn)
     df_test_cmbn = preproc_cpnt_pred(cpnt_mdls, cpnt_confns, cpnt_perfns, \
@@ -334,7 +336,12 @@ def pred_top_anal_cmbn(cpnt_mdls, df_test, cpnt_confns, confn, perfn, num_top=1,
     y_cpnts_pred = ()
     for i in range(num_cpnt):
         X_cpnt_test = df_test[cpnt_confns[i]].values
-        y_cpnt_pred = cpnt_mdls[i].predict(X_cpnt_test)
+        if isinstance(cpnt_mdls[i], xgb.sklearn.XGBRegressor):
+            y_cpnt_pred = cpnt_mdls[i].predict(X_cpnt_test)
+        elif isinstance(cpnt_mdls[i], float):
+            y_cpnt_pred = cpnt_mdls[i] * np.ones(X_cpnt_test.shape[0])
+        else:
+            print(f"Unknown type of cpnt_mdls[{i}]")
         y_cpnt_pred = np.concatenate(([y_cpnt_pred], \
                 [np.zeros(np.size(y_cpnt_pred))]), axis=0).max(axis=0)
         y_cpnts_pred = y_cpnts_pred + ([y_cpnt_pred], )
@@ -357,8 +364,13 @@ def alic(cpnt_mdls, df_smpl, cpnt_confns, confn, perfn, num_smpl, pct_rand, \
     num_repl = min(int(num_smpl * pct_repl), num_smpl - num_rand)
     if (num_repl >= 1):
         for i in range(len(dfs_cpnt)):
-            cpnt_mdls[i] = train_mdl(dfs_cpnt[i].head(num_repl), cpnt_confns[i], \
-                    perfn, cpnt_mdls[i])
+            if isinstance(dfs_cpnt[i], pd.core.frame.DataFrame):
+                cpnt_mdls[i] = train_mdl(dfs_cpnt[i].head(num_repl), \
+                        cpnt_confns[i], perfn, cpnt_mdls[i])
+            elif isinstance(dfs_cpnt[i], float):
+                cpnt_mdls[i] = dfs_cpnt[i]
+            else:
+                print(f"Unknown type of dfs_cpnt[{i}]")
 
     df_top_pred = pred_top_anal_cmbn(cpnt_mdls, df_smpl, cpnt_confns, confn, \
             perfn, num_smpl, False)
@@ -406,15 +418,19 @@ def ceal(cpnt_mdls, df_smpl, cpnt_confns, confn, perfn, num_smpl, pct_rand, \
     num_repl = min(int(num_smpl * pct_repl), num_smpl - num_rand_upper)
     if (num_repl >= 1):
         for i in range(len(dfs_cpnt)):
-            cpnt_mdls[i] = train_mdl(dfs_cpnt[i].head(num_repl), \
-                    cpnt_confns[i], perfn, cpnt_mdls[i])
+            if isinstance(dfs_cpnt[i], pd.core.frame.DataFrame):
+                cpnt_mdls[i] = train_mdl(dfs_cpnt[i].head(num_repl), \
+                        cpnt_confns[i], perfn, cpnt_mdls[i])
+            elif isinstance(dfs_cpnt[i], float):
+                cpnt_mdls[i] = dfs_cpnt[i]
+            else:
+                print(f"Unknown type of dfs_cpnt[{i}]")
     df_top_pred_low = pred_top_anal_cmbn(cpnt_mdls, df_rmn, cpnt_confns, \
             confn, perfn, df_rmn.shape[0], False)
     df_top_pred = df_top_pred_low
     low = True
 
-    if (num_iter > num_smpl - num_rand_upper - num_repl):
-        num_iter = max(1, num_smpl - num_rand_upper - num_repl)
+    num_iter = min(num_iter, max(1, num_smpl - num_rand_upper - num_repl))
     nspi = int((num_smpl - num_rand_upper - num_repl) / num_iter)
     for iter_idx in range(num_iter):
         curr_ns = num_smpl - (num_rand_upper - num_rand) \
@@ -431,7 +447,7 @@ def ceal(cpnt_mdls, df_smpl, cpnt_confns, confn, perfn, num_smpl, pct_rand, \
         if (df_test.shape[0] >= 2):
             df_pred_high = df_intersection(df_top_pred_high, df_test, confn)
             robust = df_intersection(df_pred_high.head(1), \
-                    gen_top_df(df_test, perfn, df_test.shape[0]/2), confn).shape[0]
+                    gen_top_df(df_test, perfn, int(df_test.shape[0] / 2)), confn).shape[0]
             if (robust < 1):
                 if (iter_idx < num_iter - 1):
                     num_rand_incr = int((num_rand_upper - num_rand) / 2)
@@ -444,13 +460,13 @@ def ceal(cpnt_mdls, df_smpl, cpnt_confns, confn, perfn, num_smpl, pct_rand, \
         if (low):
             df_pred_low = df_intersection(df_top_pred_low, df_test, confn)
             df_recall_low = eval_recall(df_pred_low, df_test, confn, perfn, \
-                    min(4, df_test.shape[0] + 1))
+                    min(3, df_test.shape[0]))
             recall_low = df_recall_low['recall_score'].values.mean()
 
             df_pred_high = pred_top(df_train, df_test, confn, perfn, \
                     df_test.shape[0], False)
             df_recall_high = eval_recall(df_pred_high, df_test, confn, perfn, \
-                    min(4, df_test.shape[0] + 1))
+                    min(3, df_test.shape[0]))
             recall_high = df_recall_high['recall_score'].values.mean()
 
             if (recall_high >= recall_low):
@@ -477,24 +493,35 @@ def ceal(cpnt_mdls, df_smpl, cpnt_confns, confn, perfn, num_smpl, pct_rand, \
     comp_time = sum_comp_time(df_train)
     return top_perf, df_recall, df_mape, comp_time
 
-"""
-perfn = 'exec_time'
-lmp_mdl = train_mdl(sp.df_lmp, sp.lmp_confn, perfn)
-vr_mdl = train_mdl(sp.df_vr, sp.vr_confn, perfn)
+'''
+perfn = 'comp_time'
+gs_mdl = train_mdl(sp.df_gs, sp.gs_confn, perfn)
+pdf_mdl = train_mdl(sp.df_pdf, sp.pdf_confn, perfn)
+gplot_perf = sp.df_gplot[perfn].values[0]
+pplot_perf = sp.df_pplot[perfn].values[0]
 num_smpl = 100
 pct_rand = 0.3
 num_iter = 3
 pct_repl = 0.3
-rs(sp.df_lv, sp.lv_confn, perfn, num_smpl)
-al(sp.df_lv, sp.lv_confn, perfn, num_smpl, pct_rand, num_iter)
-alph((lmp_mdl, vr_mdl), sp.df_lv, (sp.lmp_confn, sp.vr_confn), sp.lv_confn, \
-        perfn, num_smpl, pct_rand, num_iter)
-alic([lmp_mdl, vr_mdl], sp.df_lv, (sp.lmp_confn, sp.vr_confn), sp.lv_confn, \
-        perfn, num_smpl, pct_rand, num_iter)
-alic([None, None], sp.df_lv, (sp.lmp_confn, sp.vr_confn), sp.lv_confn, perfn, \
-        num_smpl, pct_rand, num_iter, pct_repl, (sp.df_lmp, sp.df_vr))
-ceal([lmp_mdl, vr_mdl], sp.df_lv, (sp.lmp_confn, sp.vr_confn), sp.lv_confn, \
-        perfn, num_smpl, pct_rand, num_iter)
-ceal([None, None], sp.df_lv, (sp.lmp_confn, sp.vr_confn), sp.lv_confn, perfn, \
-        num_smpl, pct_rand, num_iter, pct_repl, (sp.df_lmp, sp.df_vr))
-"""
+rslt = rs(sp.df_gvpv, sp.gvpv_confn, perfn, num_smpl)
+rslt = al(sp.df_gvpv, sp.gvpv_confn, perfn, num_smpl, pct_rand, num_iter)
+rslt = geist(sp.df_gvpv, sp.gvpv_confn, perfn, num_smpl, pct_rand, num_iter)
+rslt = alph((gs_mdl, pdf_mdl), sp.df_gvpv, (sp.gs_confn, sp.pdf_confn), \
+        sp.gvpv_confn, perfn, num_smpl, pct_rand, num_iter)
+rslt = alic([gs_mdl, pdf_mdl, gplot_perf, pplot_perf], sp.df_gvpv, \
+        (sp.gs_confn, sp.pdf_confn, sp.gplot_confn, sp.pplot_confn), \
+        sp.gvpv_confn, perfn, num_smpl, pct_rand, num_iter)
+rslt = alic([None, None, None, None], sp.df_gvpv, \
+        (sp.gs_confn, sp.pdf_confn, sp.gplot_confn, sp.pplot_confn), \
+        sp.gvpv_confn, perfn, num_smpl, pct_rand, num_iter, pct_repl, \
+        (sp.df_gs, sp.df_pdf, gplot_perf, pplot_perf))
+rslt = ceal([gs_mdl, pdf_mdl, gplot_perf, pplot_perf], sp.df_gvpv, \
+        (sp.gs_confn, sp.pdf_confn, sp.gplot_confn, sp.pplot_confn), \
+        sp.gvpv_confn, perfn, num_smpl, pct_rand, num_iter)
+rslt = ceal([None, None, None, None], sp.df_gvpv, \
+        (sp.gs_confn, sp.pdf_confn, sp.gplot_confn, sp.pplot_confn), \
+        sp.gvpv_confn, perfn, num_smpl, pct_rand, num_iter, pct_repl, \
+        (sp.df_gs, sp.df_pdf, gplot_perf, pplot_perf))
+for i in range(len(rslt)):
+    print(rslt[i])
+'''

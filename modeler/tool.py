@@ -32,7 +32,7 @@ def gen_unmeas_smpl(filens_smpl, filens_meas, filen_unmeas, paramns):
 #vr_paramns = ['vr_nproc', 'vr_ppn', 'vr_tpp', 'lmp_nstep_out', 'lmp_l2s', 'lmp_sld']
 #gen_unmeas_smpl('smpl_vr.csv', 'rslt_vr.csv', 'smpl_vr_unmeas.csv', vr_paramns)
 
-hs_paramns = ['ht_x_nproc', 'ht_y_nproc', 'ht_ppn', 'ht_bufsize', 'sw_nproc', 'sw_ppn', 'ht_nout']
+hs_paramns = ['ht_x_nproc', 'ht_y_nproc', 'ht_ppn', 'ht_bufsize', 'sw_nproc', 'sw_ppn', 'ht_nout', 'ht_x', 'ht_y', 'ht_iter']
 gen_unmeas_smpl('smpl_hs.csv', 'rslt_hs.csv', 'smpl_hs_unmeas.csv', hs_paramns)
 
 #df_hs = sp.csv2df(glob.glob('../data/hs/hs.csv'), hs_paramns).drop_duplicates().reset_index(drop=True)
