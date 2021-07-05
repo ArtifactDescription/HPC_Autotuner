@@ -12,14 +12,14 @@ lmp_paramns = lmp_confn + lmp_inn
 vr_paramns = vr_confn + lmp_inn
 lv_paramns = lv_confn + lmp_inn
 
-ht_confn = ['ht_x_nproc', 'ht_y_nproc', 'ht_ppn', 'ht_bufsize', 'ht_nout']
-sw_confn = ['sw_nproc', 'sw_ppn', 'ht_nout']
-ht_inn = ['ht_x', 'ht_y', 'ht_iter']
-hs_confn = ['ht_x_nproc', 'ht_y_nproc', 'ht_ppn', 'ht_bufsize', 'sw_nproc', 'sw_ppn', 'ht_nout']
-#ht_confn = ['ht_x_nproc', 'ht_y_nproc', 'ht_ppn', 'ht_bufsize']
-#sw_confn = ['sw_nproc', 'sw_ppn']
-#ht_inn = ['ht_nout', 'ht_x', 'ht_y', 'ht_iter']
-#hs_confn = ht_confn + sw_confn
+#ht_confn = ['ht_x_nproc', 'ht_y_nproc', 'ht_ppn', 'ht_bufsize', 'ht_nout']
+#sw_confn = ['sw_nproc', 'sw_ppn', 'ht_nout']
+#ht_inn = ['ht_x', 'ht_y', 'ht_iter']
+#hs_confn = ['ht_x_nproc', 'ht_y_nproc', 'ht_ppn', 'ht_bufsize', 'sw_nproc', 'sw_ppn', 'ht_nout']
+ht_confn = ['ht_x_nproc', 'ht_y_nproc', 'ht_ppn', 'ht_bufsize']
+sw_confn = ['sw_nproc', 'sw_ppn']
+ht_inn = ['ht_nout', 'ht_x', 'ht_y', 'ht_iter']
+hs_confn = ht_confn + sw_confn
 ht_paramns = ht_confn + ht_inn
 sw_paramns = sw_confn + ht_inn
 hs_paramns = hs_confn + ht_inn
@@ -57,14 +57,14 @@ def csv2df(filenames, paramns, perfn='', cols=[], vals=[]):
     return pd.DataFrame(data, columns=colns+cols)
 
 
-def lbl_df_runnable(df_smpl, colns, perfn='exec_time'):
+def lbl_df_runnable(df_smpl, paramns, perfn='exec_time'):
     runnable = np.ones(df_smpl.shape[0]).astype(int)
     for i in range(df_smpl.shape[0]):
         if (df_smpl[perfn].values[i] == float('inf')):
             runnable[i] = 0
-    rem_colns = [coln for coln in df_smpl.columns.tolist() if coln not in colns]
-    df_lbl = pd.DataFrame(np.c_[df_smpl[colns].values, runnable, df_smpl[rem_colns].values], \
-                          columns=colns + ['runnable'] + rem_colns)
+    rem_colns = [coln for coln in df_smpl.columns.tolist() if coln not in paramns]
+    df_lbl = pd.DataFrame(np.c_[df_smpl[paramns].values, runnable, df_smpl[rem_colns].values], \
+                          columns=paramns + ['runnable'] + rem_colns)
     return df_lbl
 
 
@@ -162,67 +162,104 @@ def exec2comp_df(df_exec, exec_alias='exec_time', comp_alias='comp_time'):
 
 
 df_lmp = csv2df(glob.glob('../data/lv/lmp*.csv'), lmp_paramns, 'exec_time')
+df_lmp = df_lmp[df_lmp.lmp_nstep_out == 200]
+df_lmp = df_lmp[df_lmp.lmp_l2s == 16000]
+df_lmp = df_lmp[df_lmp.lmp_sld == 20000]
 df_lmp = get_vld_df(exec2comp_df(lbl_df_runnable(df_lmp, lmp_paramns)))
-df_lmp = df_lmp[lmp_paramns + ['exec_time', 'comp_time']]
-df_lmp = df_lmp.sort_values(lmp_inn + lmp_confn).reset_index(drop=True)
+df_lmp = df_lmp[lmp_confn + ['exec_time', 'comp_time']]
+df_lmp = df_lmp.sort_values(lmp_confn).reset_index(drop=True)
+#print(df_lmp)
 
 df_vr = csv2df(glob.glob('../data/lv/vr*.csv'), vr_paramns, 'exec_time')
+df_vr = df_vr[df_vr.lmp_nstep_out == 200]
+df_vr = df_vr[df_vr.lmp_l2s == 16000]
+df_vr = df_vr[df_vr.lmp_sld == 20000]
 df_vr = get_vld_df(exec2comp_df(lbl_df_runnable(df_vr, vr_paramns)))
-df_vr = df_vr[vr_paramns + ['exec_time', 'comp_time']]
-df_vr = df_vr.sort_values(lmp_inn + vr_confn).reset_index(drop=True)
+df_vr = df_vr[vr_confn + ['exec_time', 'comp_time']]
+df_vr = df_vr.sort_values(vr_confn).reset_index(drop=True)
+#print(df_vr)
 
 df_lv = csv2df(glob.glob('../data/lv/lv*.csv'), lv_paramns, 'exec_time')
+df_lv = df_lv[df_lv.lmp_nstep_out == 200]
+df_lv = df_lv[df_lv.lmp_l2s == 16000]
+df_lv = df_lv[df_lv.lmp_sld == 20000]
 df_lv = get_vld_df(exec2comp_df(lbl_df_runnable(df_lv, lv_paramns)))
-df_lv = df_lv[lv_paramns + ['exec_time', 'comp_time']]
-df_lv = df_lv.sort_values(lmp_inn + lv_confn).reset_index(drop=True)
+df_lv = df_lv[lv_confn + ['exec_time', 'comp_time']]
+df_lv = df_lv.sort_values(lv_confn).reset_index(drop=True)
+#print(df_lv)
 
 
 df_ht = csv2df(glob.glob('../data/hs/ht*.csv'), ht_paramns, 'exec_time')
+df_ht = df_ht[df_ht.ht_nout == 16]
+df_ht = df_ht[df_ht.ht_x == 2048]
+df_ht = df_ht[df_ht.ht_y == 2048]
+df_ht = df_ht[df_ht.ht_iter == 1024]
 df_ht = get_vld_df(exec2comp_df(lbl_df_runnable(df_ht, ht_paramns)))
-df_ht = df_ht[ht_paramns + ['exec_time', 'comp_time']]
-df_ht = df_ht.sort_values(ht_inn + ht_confn).reset_index(drop=True)
+df_ht = df_ht[ht_confn + ['exec_time', 'comp_time']]
+df_ht = df_ht.sort_values(ht_confn).reset_index(drop=True)
+#print(df_ht)
 
 df_sw = csv2df(glob.glob('../data/hs/sw*.csv'), sw_paramns, 'exec_time')
+df_sw = df_sw[df_sw.ht_nout == 16]
+df_sw = df_sw[df_sw.ht_x == 2048]
+df_sw = df_sw[df_sw.ht_y == 2048]
+df_sw = df_sw[df_sw.ht_iter == 1024]
 df_sw = get_vld_df(exec2comp_df(lbl_df_runnable(df_sw, sw_paramns)))
-df_sw = df_sw[sw_paramns + ['exec_time', 'comp_time']]
-df_sw = df_sw.sort_values(ht_inn + sw_confn).reset_index(drop=True)
+df_sw = df_sw[sw_confn + ['exec_time', 'comp_time']]
+df_sw = df_sw.sort_values(sw_confn).reset_index(drop=True)
+#print(df_sw)
 
 df_hs = csv2df(glob.glob('../data/hs/hs*.csv'), hs_paramns, 'exec_time')
+df_hs = df_hs[df_hs.ht_nout == 16]
+df_hs = df_hs[df_hs.ht_x == 2048]
+df_hs = df_hs[df_hs.ht_y == 2048]
+df_hs = df_hs[df_hs.ht_iter == 1024]
 df_hs = get_vld_df(exec2comp_df(lbl_df_runnable(df_hs, hs_paramns)))
-df_hs = df_hs[hs_paramns + ['exec_time', 'comp_time']]
-df_hs = df_hs.sort_values(ht_inn + hs_confn).reset_index(drop=True)
+df_hs = df_hs[hs_confn + ['exec_time', 'comp_time']]
+df_hs = df_hs.sort_values(hs_confn).reset_index(drop=True)
+#print(df_hs)
 
 
 df_gs = csv2df(glob.glob('../data/gp/gs*.csv'), gs_paramns, 'exec_time')
+df_gs = df_gs[df_gs.gs_cs == 512]
+df_gs = df_gs[df_gs.gs_step == 500]
 df_gs = get_vld_df(exec2comp_df(lbl_df_runnable(df_gs, gs_paramns)))
-df_gs = df_gs[gs_paramns + ['exec_time', 'comp_time']]
-df_gs = df_gs.sort_values(gs_inn + gs_confn).reset_index(drop=True)
+df_gs = df_gs[gs_confn + ['exec_time', 'comp_time']]
+df_gs = df_gs.sort_values(gs_confn).reset_index(drop=True)
+#print(df_gs)
 
 df_pdf = csv2df(glob.glob('../data/gp/pdf*.csv'), pdf_paramns, 'exec_time')
+df_pdf = df_pdf[df_pdf.gs_cs == 512]
+df_pdf = df_pdf[df_pdf.gs_step == 500]
 df_pdf = get_vld_df(exec2comp_df(lbl_df_runnable(df_pdf, pdf_paramns)))
-df_pdf = df_pdf[pdf_paramns + ['exec_time', 'comp_time']]
-df_pdf = df_pdf.sort_values(gs_inn + pdf_confn).reset_index(drop=True)
+df_pdf = df_pdf[pdf_confn + ['exec_time', 'comp_time']]
+df_pdf = df_pdf.sort_values(pdf_confn).reset_index(drop=True)
+#print(df_pdf)
 
 df_gplot = csv2df(glob.glob('../data/gp/gplot*.csv'), gs_inn, 'exec_time', \
         gplot_confn, [1])
+df_gplot = df_gplot[df_gplot.gs_cs == 512]
+df_gplot = df_gplot[df_gplot.gs_step == 500]
 df_gplot = get_vld_df(exec2comp_df(lbl_df_runnable(df_gplot, gplot_paramns)))
-df_gplot = df_gplot[gplot_paramns + ['exec_time', 'comp_time']]
-df_gplot = df_gplot.sort_values(gs_inn + gplot_confn).reset_index(drop=True)
+df_gplot = df_gplot[gplot_confn + ['exec_time', 'comp_time']]
+df_gplot = df_gplot.sort_values(gplot_confn).reset_index(drop=True)
+#print(df_gplot)
 
 df_pplot = csv2df(glob.glob('../data/gp/pplot*.csv'), gs_inn, 'exec_time', \
         pplot_confn, [1])
+df_pplot = df_pplot[df_pplot.gs_cs == 512]
+df_pplot = df_pplot[df_pplot.gs_step == 500]
 df_pplot = get_vld_df(exec2comp_df(lbl_df_runnable(df_pplot, pplot_paramns)))
-df_pplot = df_pplot[pplot_paramns + ['exec_time', 'comp_time']]
-df_pplot = df_pplot.sort_values(gs_inn + pplot_confn).reset_index(drop=True)
-
-df_gp = csv2df(glob.glob('../data/gp/gp*.csv'), gp_paramns, 'exec_time')
-df_gp = get_vld_df(exec2comp_df(lbl_df_runnable(df_gp, gp_paramns)))
-df_gp = df_gp[gp_paramns + ['exec_time', 'comp_time']]
-df_gp = df_gp.sort_values(gs_inn + gp_confn).reset_index(drop=True)
+df_pplot = df_pplot[pplot_confn + ['exec_time', 'comp_time']]
+df_pplot = df_pplot.sort_values(pplot_confn).reset_index(drop=True)
+#print(df_pplot)
 
 df_gvpv = csv2df(glob.glob('../data/gp/gvpv*.csv'), gp_paramns, 'exec_time', \
         ['pplot_nproc', 'gplot_nproc'], [1, 1])
+df_gvpv = df_gvpv[df_gvpv.gs_cs == 512]
+df_gvpv = df_gvpv[df_gvpv.gs_step == 500]
 df_gvpv = get_vld_df(exec2comp_df(lbl_df_runnable(df_gvpv, gvpv_paramns)))
-df_gvpv = df_gvpv[gvpv_paramns + ['exec_time', 'comp_time']]
-df_gvpv = df_gvpv.sort_values(gs_inn + gvpv_confn).reset_index(drop=True)
+df_gvpv = df_gvpv[gvpv_confn + ['exec_time', 'comp_time']]
+df_gvpv = df_gvpv.sort_values(gvpv_confn).reset_index(drop=True)
+#print(df_gvpv)
 

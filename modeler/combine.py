@@ -53,7 +53,7 @@ for perfn in ['exec', 'comp']:
         df_lv = df_lv.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
         df_lv = df_lv.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
         
-        df_recall = mdlr.eval_recall2(df_lv, sp.lv_confn, perfn+'_time')
+        df_recall = mdlr.eval_recall_rand(df_lv, sp.lv_confn, perfn+'_time')
         if (rand_seed == 1):
             recall_rnd = np.array([df_recall.values])
         else:

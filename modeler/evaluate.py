@@ -20,9 +20,9 @@ num_runs = int(sys.argv[4])
 dir_name = '../plot/' + wf + '/' + perfn + '/'
 
 if (wf == 'lv'):
-    mdl_cnpt1 = mdlr.train_mdl(sp.df_lmp, sp.lmp_confn, perfn)
-    mdl_cnpt2 = mdlr.train_mdl(sp.df_vr, sp.vr_confn, perfn)
-    cpnt_mdls = [mdl_cnpt1, mdl_cnpt2]
+    lmp_mdl = mdlr.train_mdl(sp.df_lmp, sp.lmp_confn, perfn)
+    vr_mdl = mdlr.train_mdl(sp.df_vr, sp.vr_confn, perfn)
+    cpnt_mdls = [lmp_mdl, vr_mdls]
     cpnt_confns = (sp.lmp_confn, sp.vr_confn)
     confn = sp.lv_confn
     if (perfn == 'exec_time'):
@@ -99,9 +99,9 @@ if (wf == 'lv'):
         print("Error: unknown performance metrics!")
         exit()
 elif (wf == 'hs'):
-    mdl_cnpt1 = mdlr.train_mdl(sp.df_ht, sp.ht_confn, perfn)
-    mdl_cnpt2 = mdlr.train_mdl(sp.df_sw, sp.sw_confn, perfn)
-    cpnt_mdls = [mdl_cnpt1, mdl_cnpt2]
+    ht_mdl = mdlr.train_mdl(sp.df_ht, sp.ht_confn, perfn)
+    sw_mdl = mdlr.train_mdl(sp.df_sw, sp.sw_confn, perfn)
+    cpnt_mdls = [ht_mdl, sw_mdl]
     cpnt_confns = (sp.ht_confn, sp.sw_confn)
     confn = sp.hs_confn
     if (perfn == 'exec_time'):
@@ -178,10 +178,12 @@ elif (wf == 'hs'):
         print("Error: unknown performance metrics!")
         exit()
 elif (wf == 'gvpv'):
-    mdl_cnpt1 = mdlr.train_mdl(sp.df_gs, sp.gs_confn, perfn)
-    mdl_cnpt2 = mdlr.train_mdl(sp.df_pdf, sp.pdf_confn, perfn)
-    cpnt_mdls = [mdl_cnpt1, mdl_cnpt2]
-    cpnt_confns = (sp.gs_confn, sp.pdf_confn)
+    gs_mdl = mdlr.train_mdl(sp.df_gs, sp.gs_confn, perfn)
+    pdf_mdl = mdlr.train_mdl(sp.df_pdf, sp.pdf_confn, perfn)
+    gplot_perf = sp.df_gplot[perfn].values[0]
+    pplot_perf = sp.df_pplot[perfn].values[0]
+    cpnt_mdls = [gs_mdl, pdf_mdl, gplot_perf, pplot_perf]
+    cpnt_confns = (sp.gs_confn, sp.pdf_confn, sp.gplot_confn, sp.pplot_confn)
     confn = sp.gvpv_confn
     if (perfn == 'comp_time'):
         if (num_smpl == 50):
@@ -227,19 +229,19 @@ else:
 
 for rand_seed in range(1, num_runs + 1):
     if (wf == 'lv'):
-        df_cnpt1 = sp.df_lmp.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
-        df_cnpt2 = sp.df_vr.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
-        dfs_cpnt = (df_cnpt1, df_cnpt2)
+        df_lmp = sp.df_lmp.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
+        df_vr = sp.df_vr.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
+        dfs_cpnt = (df_lmp, df_vr)
         df_wf = sp.df_lv.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
     elif (wf == 'hs'):
-        df_cnpt1 = sp.df_ht.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
-        df_cnpt2 = sp.df_sw.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
-        dfs_cpnt = (df_cnpt1, df_cnpt2)
+        df_ht = sp.df_ht.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
+        df_sw = sp.df_sw.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
+        dfs_cpnt = (df_ht, df_sw)
         df_wf = sp.df_hs.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
     elif (wf == 'gvpv'):
-        df_cnpt1 = sp.df_gs.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
-        df_cnpt2 = sp.df_pdf.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
-        dfs_cpnt = (df_cnpt1, df_cnpt2)
+        df_gs = sp.df_gs.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
+        df_pdf = sp.df_pdf.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
+        dfs_cpnt = (df_gs, df_pdf, gplot_perf, pplot_perf)
         df_wf = sp.df_gvpv.sample(frac=1, random_state=rand_seed).reset_index(drop=True)
     else:
         print("Error: unknown workflow!")
