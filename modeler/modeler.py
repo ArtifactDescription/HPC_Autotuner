@@ -338,6 +338,7 @@ def pred_top_anal_cmbn(cpnt_mdls, df_test, cpnt_confns, confn, perfn, num_top=1,
         X_cpnt_test = df_test[cpnt_confns[i]].values
         if isinstance(cpnt_mdls[i], xgb.sklearn.XGBRegressor):
             y_cpnt_pred = cpnt_mdls[i].predict(X_cpnt_test)
+            print(i)
         elif isinstance(cpnt_mdls[i], float):
             y_cpnt_pred = cpnt_mdls[i] * np.ones(X_cpnt_test.shape[0])
         else:
@@ -493,6 +494,10 @@ def ceal(cpnt_mdls, df_smpl, cpnt_confns, confn, perfn, num_smpl, pct_rand, \
     comp_time = sum_comp_time(df_train)
     return top_perf, df_recall, df_mape, comp_time
 
+print("Best execution time of LV:")
+print(gen_top_df(sp.df_lv, 'exec_time'))
+print("Best computer time of LV:")
+print(gen_top_df(sp.df_lv, 'comp_time'))
 '''
 perfn = 'comp_time'
 gs_mdl = train_mdl(sp.df_gs, sp.gs_confn, perfn)

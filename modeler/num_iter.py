@@ -37,8 +37,8 @@ if (wf == 'lv'):
                 pct_rand = 0.05
                 pct_repl = 0.45
             elif (algo == 'ceal'):
-                pct_rand = 0.25
-                pct_repl = 0.6
+                pct_rand = 0.05
+                pct_repl = 0.45
             elif (algo == 'alph'):
                 pct_rand = 0.15
             elif (algo == 'alich'):
@@ -52,7 +52,7 @@ if (wf == 'lv'):
             if (algo == 'geist'):
                 pct_rand = 0.4
             elif (algo == 'al'):
-                pct_rand = 0.4
+                pct_rand = 0.25
             elif (algo == 'alic'):
                 pct_rand = 0.05
                 pct_repl = 0.8
@@ -73,9 +73,9 @@ if (wf == 'lv'):
             if (algo == 'geist'):
                 pct_rand = 0.25
             elif (algo == 'al'):
-                pct_rand = 0.5
+                pct_rand = 0.45
             elif (algo == 'ceal'):
-                pct_rand = 0.1
+                pct_rand = 0.05
                 pct_repl = 0.6
             elif (algo == 'alic'):
                 pct_rand = 0.05
@@ -93,7 +93,7 @@ if (wf == 'lv'):
             if (algo == 'geist'):
                 pct_rand = 0.05
             elif (algo == 'al'):
-                pct_rand = 0.1
+                pct_rand = 0.05
             elif (algo == 'alic'):
                 pct_rand = 0.1
                 pct_repl = 0.5

@@ -33,7 +33,7 @@ if (wf == 'lv'):
                 pct_rand = 0.05
                 num_iter = 6
             elif (algo == 'ceal'):
-                pct_rand = 0.25
+                pct_rand = 0.05
                 num_iter = 9
             else:
                 print("Error: unknown algorithm!")
@@ -44,7 +44,7 @@ if (wf == 'lv'):
                 num_iter = 7
             elif (algo == 'ceal'):
                 pct_rand = 0.05
-                num_iter = 7
+                num_iter = 10
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -54,8 +54,8 @@ if (wf == 'lv'):
                 pct_rand = 0.05
                 num_iter = 6
             elif (algo == 'ceal'):
-                pct_rand = 0.1
-                num_iter = 7
+                pct_rand = 0.05
+                num_iter = 6
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -160,7 +160,7 @@ else:
     exit()
 
 pct_repl_start = 0.05
-pct_repl_end = 0.95 - pct_rand
+pct_repl_end = 1 - pct_rand
 pct_repl_step = 0.05
 
 for rand_seed in range(1, num_run + 1):

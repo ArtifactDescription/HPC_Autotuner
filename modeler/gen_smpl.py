@@ -166,25 +166,113 @@ def gen_smpl_lv(num_smpl_lv, filename_lv, filename_lmp, filename_vr, smll_smpl=T
     df2csv(df_smpl_vrc, filename_vr + "c.csv")
     
     if (smll_smpl):
-        df_smpl_lv_smll = df_smpl_lv.copy()
-        df_smpl_lmp_smll = df_smpl_lmp.copy()
-        df_smpl_vr_smll = df_smpl_vr.copy()
+        df_smpl_lvc_smll = df_smpl_lvc.copy()
         ratio = 2
         for i in range(num_levl):
-            df_smpl_lv_smll = scal_input(df_smpl_lv_smll, ['lmp_l2s', 'lmp_sld'], ratio)
-            df_smpl_lv_smll = scal_nproc(df_smpl_lv_smll, ['lmp_nproc', 'vr_nproc'], ratio)
-            print(df_smpl_lv_smll.head(3))
-            df2csv(df_smpl_lv_smll, filename_lv + str(i+1) + ".csv")
+            df_smpl_lvc_smll = scal_input(df_smpl_lvc_smll, ['lmp_l2s', 'lmp_sld'], ratio)
+            df_smpl_lvc_smll = scal_nproc(df_smpl_lvc_smll, ['lmp_nproc', 'vr_nproc'], ratio)
+            print(df_smpl_lvc_smll.head(3))
+            df2csv(df_smpl_lvc_smll, filename_lv + "c" + str(i+1) + ".csv")
 
-            df_smpl_lmp_smll = scal_input(df_smpl_lmp_smll, ['lmp_l2s', 'lmp_sld'], ratio)
-            df_smpl_lmp_smll = scal_nproc(df_smpl_lmp_smll, ['lmp_nproc'], ratio)
-            print(df_smpl_lmp_smll.head(3))
-            df2csv(df_smpl_lmp_smll, filename_lmp + str(i+1) + ".csv")
+def gen_smpl_lmp(num_smpl_lmp, filename_lmp, smll_smpl=True):
+    random.seed(2021)
+    smpls_lmp = set([])
+    lmp_nstep_out_c = 200
+    lmp_l2s_c = 16000
+    lmp_sld_c = 20000
+    while (len(smpls_lmp) < num_smpl_lmp):
+        lmp_nproc = random.randint(2, (num_core - 1) * num_node_lv)
+        lmp_ppn = random.randint(1, num_core - 1)
+        lmp_tpn = random.randint(1, 2 * (num_core - 1))
+        lmp_nstep_out = random.randint(1, 8) * 50
+        lmp_l2s = int(16000 / (2 ** random.randint(0, 5)))
+        lmp_sld = int(20000 / (2 ** random.randint(0, 5)))
 
-            df_smpl_vr_smll = scal_input(df_smpl_vr_smll, ['lmp_l2s', 'lmp_sld'], ratio)
-            df_smpl_vr_smll = scal_nproc(df_smpl_vr_smll, ['vr_nproc'], ratio)
-            print(df_smpl_vr_smll.head(3))
-            df2csv(df_smpl_vr_smll, filename_vr + str(i+1) + ".csv")
+        if (lmp_nproc >= lmp_ppn):
+            if (lmp_tpn % lmp_ppn == 0):
+                lmp_tpp = lmp_tpn // lmp_ppn
+            else:
+                lmp_tpp = lmp_tpn // lmp_ppn + 1
+            if (lmp_nproc % lmp_ppn == 0):
+                lmp_nnode = lmp_nproc // lmp_ppn
+            else:
+                lmp_nnode = lmp_nproc // lmp_ppn + 1
+            if (lmp_nnode <= num_node_lv):
+                smpls_lmp.add((lmp_nproc, lmp_ppn, lmp_tpp, lmp_nstep_out, lmp_l2s, lmp_sld))
+
+    df_smpl_lmp = pd.DataFrame(data = list(smpls_lmp), columns=lmp_paramn)
+    df_smpl_lmp = df_smpl_lmp.drop_duplicates().reset_index(drop=True).astype(int)
+    print("The number of LAMMPS samples =", df_smpl_lmp.shape[0])
+    print(df_smpl_lmp.head(10))
+    df2csv(df_smpl_lmp, filename_lmp + ".csv")
+
+    df_smpl_lmpc = pd.DataFrame(np.c_[df_smpl_lmp.values[:, 0:3]], columns=lmp_confn)
+    df_smpl_lmpc = df_smpl_lmpc.drop_duplicates().reset_index(drop=True).astype(int)
+    df_smpl_lmpc['lmp_nstep_out'] = lmp_nstep_out_c
+    df_smpl_lmpc['lmp_l2s'] = lmp_l2s_c
+    df_smpl_lmpc['lmp_sld'] = lmp_sld_c
+    print("The number of LAMMPS samples =", df_smpl_lmpc.shape[0])
+    print(df_smpl_lmpc.head(3))
+    df2csv(df_smpl_lmpc, filename_lmp + "c.csv")
+
+    if (smll_smpl):
+        df_smpl_lmpc_smll = df_smpl_lmpc.copy()
+        ratio = 2
+        for i in range(num_levl):
+            df_smpl_lmpc_smll = scal_input(df_smpl_lmpc_smll, ['lmp_l2s', 'lmp_sld'], ratio)
+            df_smpl_lmpc_smll = scal_nproc(df_smpl_lmpc_smll, ['lmp_nproc'], ratio)
+            print(df_smpl_lmpc_smll.head(3))
+            df2csv(df_smpl_lmpc_smll, filename_lmp + "c" + str(i+1) + ".csv")
+
+def gen_smpl_vr(num_smpl_vr, filename_vr, smll_smpl=True):
+    random.seed(2021)
+    smpls_vr = set([])
+    lmp_nstep_out_c = 200
+    lmp_l2s_c = 16000
+    lmp_sld_c = 20000
+    while (len(smpls_vr) < num_smpl_vr):
+        vr_nproc = random.randint(2, (num_core - 1) * num_node_lv)
+        vr_ppn = random.randint(1, num_core - 1)
+        vr_tpn = random.randint(1, 2 * (num_core - 1))
+        lmp_nstep_out = random.randint(1, 8) * 50
+        lmp_l2s = int(16000 / (2 ** random.randint(0, 5)))
+        lmp_sld = int(20000 / (2 ** random.randint(0, 5)))
+
+        if (vr_nproc >= vr_ppn):
+            if (vr_tpn % vr_ppn == 0):
+                vr_tpp = vr_tpn // vr_ppn
+            else:
+                vr_tpp = vr_tpn // vr_ppn + 1
+            if (vr_nproc % vr_ppn == 0):
+                vr_nnode = vr_nproc // vr_ppn
+            else:
+                vr_nnode = vr_nproc // vr_ppn + 1
+            if (vr_nnode <= num_node_lv):
+                smpls_vr.add((vr_nproc, vr_ppn, vr_tpp, lmp_nstep_out, lmp_l2s, lmp_sld))
+
+    df_smpl_vr = pd.DataFrame(data = list(smpls_vr), columns=vr_paramn)
+    df_smpl_vr = df_smpl_vr.drop_duplicates().reset_index(drop=True).astype(int)
+    print("The number of Voro++ samples =", df_smpl_vr.shape[0])
+    print(df_smpl_vr.head(10))
+    df2csv(df_smpl_vr, filename_vr + ".csv")
+
+    df_smpl_vrc = pd.DataFrame(np.c_[df_smpl_vr.values[:, 0:3]], columns=vr_confn)
+    df_smpl_vrc = df_smpl_vrc.drop_duplicates().reset_index(drop=True).astype(int)
+    df_smpl_vrc['lmp_nstep_out'] = lmp_nstep_out_c
+    df_smpl_vrc['lmp_l2s'] = lmp_l2s_c
+    df_smpl_vrc['lmp_sld'] = lmp_sld_c
+    print("The number of Voro++ samples =", df_smpl_vrc.shape[0])
+    print(df_smpl_vrc.head(3))
+    df2csv(df_smpl_vrc, filename_vr + "c.csv")
+
+    if (smll_smpl):
+        df_smpl_vrc_smll = df_smpl_vrc.copy()
+        ratio = 2
+        for i in range(num_levl):
+            df_smpl_vrc_smll = scal_input(df_smpl_vrc_smll, ['lmp_l2s', 'lmp_sld'], ratio)
+            df_smpl_vrc_smll = scal_nproc(df_smpl_vrc_smll, ['vr_nproc'], ratio)
+            print(df_smpl_vrc_smll.head(3))
+            df2csv(df_smpl_vrc_smll, filename_vr + "c" + str(i+1) + ".csv")
 
 
 def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, smll_smpl=True):
@@ -286,31 +374,124 @@ def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, smll_smpl=Tr
     df2csv(df_smpl_swc, filename_sw + "c.csv")
 
     if (smll_smpl):
-        df_smpl_hs_smll = df_smpl_hs.copy()
-        df_smpl_ht_smll = df_smpl_ht.copy()
-        df_smpl_sw_smll = df_smpl_sw.copy()
+        df_smpl_hsc_smll = df_smpl_hsc.copy()
         ratio = 2
         for i in range(num_levl):
             if (i % 2 == 0):
-                df_smpl_hs_smll = scal_input(df_smpl_hs_smll, ['ht_x'], ratio)
-                df_smpl_hs_smll = scal_nproc(df_smpl_hs_smll, ['ht_x_nproc', 'sw_nproc'], ratio)
-                df_smpl_ht_smll = scal_input(df_smpl_ht_smll, ['ht_x'], ratio)
-                df_smpl_ht_smll = scal_nproc(df_smpl_ht_smll, ['ht_x_nproc'], ratio)
-                df_smpl_sw_smll = scal_input(df_smpl_sw_smll, ['ht_x'], ratio)
+                df_smpl_hsc_smll = scal_input(df_smpl_hsc_smll, ['ht_x'], ratio)
+                df_smpl_hsc_smll = scal_nproc(df_smpl_hsc_smll, ['ht_x_nproc', 'sw_nproc'], ratio)
             else:
-                df_smpl_hs_smll = scal_input(df_smpl_hs_smll, ['ht_y'], ratio)
-                df_smpl_hs_smll = scal_nproc(df_smpl_hs_smll, ['ht_y_nproc', 'sw_nproc'], ratio)
-                df_smpl_ht_smll = scal_input(df_smpl_ht_smll, ['ht_y'], ratio)
-                df_smpl_ht_smll = scal_nproc(df_smpl_ht_smll, ['ht_y_nproc'], ratio)
-                df_smpl_sw_smll = scal_input(df_smpl_sw_smll, ['ht_y'], ratio)
-            df_smpl_sw_smll = scal_nproc(df_smpl_sw_smll, ['sw_nproc'], ratio)
+                df_smpl_hsc_smll = scal_input(df_smpl_hsc_smll, ['ht_y'], ratio)
+                df_smpl_hsc_smll = scal_nproc(df_smpl_hsc_smll, ['ht_y_nproc', 'sw_nproc'], ratio)
+            print(df_smpl_hsc_smll.head(3))
+            df2csv(df_smpl_hsc_smll, filename_hs + "c" + str(i+1) + ".csv")
 
-            print(df_smpl_hs_smll.head(3))
-            df2csv(df_smpl_hs_smll, filename_hs + str(i+1) + ".csv")
-            print(df_smpl_ht_smll.head(3))
-            df2csv(df_smpl_ht_smll, filename_ht + str(i+1) + ".csv")
-            print(df_smpl_sw_smll.head(3))
-            df2csv(df_smpl_sw_smll, filename_sw + str(i+1) + ".csv")
+def gen_smpl_ht(num_smpl_ht, filename_ht, smll_smpl=True):
+    random.seed(2021)
+    smpls_ht = set([])
+    ht_nout_c = 16
+    ht_x_c = 2048
+    ht_y_c = 2048
+    ht_iter_c = 1024
+    while (len(smpls_ht) < num_smpl_ht):
+        ht_x_nproc = random.randint(2, 32)
+        ht_y_nproc = random.randint(2, 32)
+        ht_ppn = random.randint(1, num_core - 1)
+        ht_bufsize = random.randint(1, 40)
+        ht_nout = random.randint(1, 8) * 4
+        ht_x = int(2048 / (2 ** random.randint(0, 5)))
+        ht_y = int(2048 / (2 ** random.randint(0, 5)))
+        ht_iter = int(1024 / (2 ** random.randint(0, 5)))
+
+        ht_nproc = ht_x_nproc * ht_y_nproc
+        if (ht_nproc >= ht_ppn):
+            if (ht_nproc % ht_ppn == 0):
+                ht_nnode = ht_nproc // ht_ppn
+            else:
+                ht_nnode = ht_nproc // ht_ppn + 1
+            if (ht_nnode <= num_node_hs):
+                smpls_ht.add((ht_x_nproc, ht_y_nproc, ht_ppn, ht_bufsize, \
+                        ht_nout, ht_x, ht_y, ht_iter))
+
+    df_smpl_ht = pd.DataFrame(data = list(smpls_ht), columns=ht_paramn)
+    df_smpl_ht = df_smpl_ht.drop_duplicates().reset_index(drop=True).astype(int)
+    print("The number of Heat-transfer samples = ", df_smpl_ht.shape[0])
+    print(df_smpl_ht.head(10))
+    df2csv(df_smpl_ht, filename_ht + ".csv")
+    
+    df_smpl_htc = pd.DataFrame(np.c_[df_smpl_ht.values[:, 0:4]], columns=ht_confn)
+    df_smpl_htc = df_smpl_htc.drop_duplicates().reset_index(drop=True).astype(int)
+    df_smpl_htc['ht_nout'] = ht_nout_c
+    df_smpl_htc['ht_x'] = ht_x_c
+    df_smpl_htc['ht_y'] = ht_y_c
+    df_smpl_htc['ht_iter'] = ht_iter_c
+    print("The number of Heat-transfer samples =", df_smpl_htc.shape[0])
+    print(df_smpl_htc.head(3))
+    df2csv(df_smpl_htc, filename_ht + "c.csv")
+
+    if (smll_smpl):
+        df_smpl_htc_smll = df_smpl_htc.copy()
+        ratio = 2
+        for i in range(num_levl):
+            if (i % 2 == 0):
+                df_smpl_htc_smll = scal_input(df_smpl_htc_smll, ['ht_x'], ratio)
+                df_smpl_htc_smll = scal_nproc(df_smpl_htc_smll, ['ht_x_nproc'], ratio)
+            else:
+                df_smpl_htc_smll = scal_input(df_smpl_htc_smll, ['ht_y'], ratio)
+                df_smpl_htc_smll = scal_nproc(df_smpl_htc_smll, ['ht_y_nproc'], ratio)
+            print(df_smpl_htc_smll.head(3))
+            df2csv(df_smpl_htc_smll, filename_ht + "c" + str(i+1) + ".csv")
+
+def gen_smpl_sw(num_smpl_sw, filename_sw, smll_smpl=True):
+    random.seed(2021)
+    smpls_sw = set([])
+    ht_nout_c = 16
+    ht_x_c = 2048
+    ht_y_c = 2048
+    ht_iter_c = 1024
+    while (len(smpls_sw) < num_smpl_sw):
+        sw_nproc = random.randint(2, (num_core - 1) * num_node_hs)
+        sw_ppn = random.randint(1, num_core - 1)
+        ht_nout = random.randint(1, 8) * 4
+        ht_x = int(2048 / (2 ** random.randint(0, 5)))
+        ht_y = int(2048 / (2 ** random.randint(0, 5)))
+        ht_iter = int(1024 / (2 ** random.randint(0, 5)))
+
+        if (sw_nproc >= sw_ppn):
+            if (sw_nproc % sw_ppn == 0):
+                sw_nnode = sw_nproc // sw_ppn
+            else:
+                sw_nnode = sw_nproc // sw_ppn + 1
+            if (sw_nnode <= num_node_hs):
+                smpls_sw.add((sw_nproc, sw_ppn, ht_nout, ht_x, ht_y, ht_iter))
+
+    df_smpl_sw = pd.DataFrame(data = list(smpls_sw), columns=sw_paramn)
+    df_smpl_sw = df_smpl_sw.drop_duplicates().reset_index(drop=True).astype(int)
+    print("The number of Stage-write samples = ", df_smpl_sw.shape[0])
+    print(df_smpl_sw.head(10))
+    df2csv(df_smpl_sw, filename_sw + ".csv")
+    
+    df_smpl_swc = pd.DataFrame(np.c_[df_smpl_sw.values[:, 0:2]], columns=sw_confn)
+    df_smpl_swc = df_smpl_swc.drop_duplicates().reset_index(drop=True).astype(int)
+    df_smpl_swc['ht_nout'] = ht_nout_c
+    df_smpl_swc['ht_x'] = ht_x_c
+    df_smpl_swc['ht_y'] = ht_y_c
+    df_smpl_swc['ht_iter'] = ht_iter_c
+    print("The number of Stage-write samples =", df_smpl_swc.shape[0])
+    print(df_smpl_swc.head(3))
+    df2csv(df_smpl_swc, filename_sw + "c.csv")
+
+    if (smll_smpl):
+        df_smpl_swc_smll = df_smpl_swc.copy()
+        ratio = 2
+        for i in range(num_levl):
+            if (i % 2 == 0):
+                df_smpl_swc_smll = scal_input(df_smpl_swc_smll, ['ht_x'], ratio)
+            else:
+                df_smpl_swc_smll = scal_input(df_smpl_swc_smll, ['ht_y'], ratio)
+            df_smpl_swc_smll = scal_nproc(df_smpl_swc_smll, ['sw_nproc'], ratio)
+            print(df_smpl_swc_smll.head(3))
+            df2csv(df_smpl_swc_smll, filename_sw + "c" + str(i+1) + ".csv")
 
 
 def gen_smpl_gp(num_smpl_gp, filename_gp, filename_gs, filename_pdf, smll_smpl=True):
@@ -374,33 +555,40 @@ def gen_smpl_gp(num_smpl_gp, filename_gp, filename_gs, filename_pdf, smll_smpl=T
     print(df_smpl_pdf.head(3))
     df2csv(df_smpl_pdf, filename_pdf + ".csv")
 
-    gp_smll_smpls_df = df_smpl_gp.copy()
-    gs_smll_smpls_df = df_smpl_gs.copy()
-    pdf_smll_smpls_df = df_smpl_pdf.copy()
-    ratio = 1.259921
-    for i in range(num_levl):
-        gp_smll_smpls_df = scal_input(gp_smll_smpls_df, ['gs_cs'], ratio)
-        gp_smll_smpls_df = scal_nproc(gp_smll_smpls_df, ['gs_nproc', 'pdf_nproc'], ratio ** 3)
-        print(gp_smll_smpls_df.head(3))
-        df2csv(gp_smll_smpls_df, filename_gp + str(i+1) + ".csv")
+    if (smll_smpl):
+        df_smpl_gp_smll = df_smpl_gp.copy()
+        df_smpl_gs_smll = df_smpl_gs.copy()
+        df_smpl_pdf_smll = df_smpl_pdf.copy()
+        ratio = 1.259921
+        for i in range(num_levl):
+            df_smpl_gp_smll = scal_input(df_smpl_gp_smll, ['gs_cs'], ratio)
+            df_smpl_gp_smll = scal_nproc(df_smpl_gp_smll, ['gs_nproc', 'pdf_nproc'], ratio ** 3)
+            print(df_smpl_gp_smll.head(3))
+            df2csv(df_smpl_gp_smll, filename_gp + str(i+1) + ".csv")
 
-        gs_smll_smpls_df = scal_input(gs_smll_smpls_df, ['gs_cs'], ratio)
-        gs_smll_smpls_df = scal_nproc(gs_smll_smpls_df, ['gs_nproc'], ratio ** 3)
-        print(gs_smll_smpls_df.head(3))
-        df2csv(gs_smll_smpls_df, filename_gs + str(i+1) + ".csv")
+            df_smpl_gs_smll = scal_input(df_smpl_gs_smll, ['gs_cs'], ratio)
+            df_smpl_gs_smll = scal_nproc(df_smpl_gs_smll, ['gs_nproc'], ratio ** 3)
+            print(df_smpl_gs_smll.head(3))
+            df2csv(df_smpl_gs_smll, filename_gs + str(i+1) + ".csv")
 
-        pdf_smll_smpls_df = scal_input(pdf_smll_smpls_df, ['gs_cs'], ratio)
-        pdf_smll_smpls_df = scal_nproc(pdf_smll_smpls_df, ['pdf_nproc'], ratio ** 3)
-        print(pdf_smll_smpls_df.head(3))
-        df2csv(pdf_smll_smpls_df, filename_pdf + str(i+1) + ".csv")
+            df_smpl_pdf_smll = scal_input(df_smpl_pdf_smll, ['gs_cs'], ratio)
+            df_smpl_pdf_smll = scal_nproc(df_smpl_pdf_smll, ['pdf_nproc'], ratio ** 3)
+            print(df_smpl_pdf_smll.head(3))
+            df2csv(df_smpl_pdf_smll, filename_pdf + str(i+1) + ".csv")
 
 
 if (wf == 'lv'):
-    gen_smpl_lv(2500, "lv/smpl_lv", "lv/smpl_lmp", "lv/smpl_vr")
+    gen_smpl_lv(2500, "lv/smpl_lv", "lv/smpl_lmp-lv", "lv/smpl_vr-lv", False)
+    gen_smpl_lmp(600, "lv/smpl_lmp", False)
+    gen_smpl_vr(600, "lv/smpl_vr", False)
 elif (wf == 'hs'):
-    gen_smpl_hs(2500, "hs/smpl_hs", "hs/smpl_ht", "hs/smpl_sw")
+    gen_smpl_hs(2500, "hs/smpl_hs", "hs/smpl_ht-hs", "hs/smpl_sw-hs", False)
+    gen_smpl_ht(600, "hs/smpl_ht", False)
+    gen_smpl_sw(600, "hs/smpl_sw", False)
 elif (wf == 'gvpv'):
-    gen_smpl_gp(2500, "gp/smpl_gp", "gp/smpl_gs", "gp/smpl_pdf")
+    gen_smpl_gp(2500, "gp/smpl_gp", "gp/smpl_gs-gp", "gp/smpl_pdf-gp", False)
+    gen_smpl_gs(600, "gp/smpl_gs", False)
+    gen_smpl_pdf(600, "gp/smpl_pdf", False)
 else:
     print("Error: unknown workflow!")
     exit()
