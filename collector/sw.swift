@@ -22,13 +22,13 @@ import sys;
 	{
 		int sw_proc = params[0];	// StageWrite: total number of processes
 		int sw_ppw = params[1];		// StageWrite: number of processes per worker
-		int ht_step = params[2];	// HeatTransfer: the total number of steps to output
+		int ht_output = params[2];	// HeatTransfer: the total number of outputs
 		int ht_x = params[3];		// HeatTransfer: total array size in X dimension
 		int ht_y = params[4];		// HeatTransfer: total array size in Y dimension
 		int ht_iter = params[5];	// HeatTransfer: total number of iterations
 
 		string workflow_root = getenv("WORKFLOW_ROOT");
-		string srcDir = "%s/exp_hs/ht-%0.2i-%0.4i-%0.4i-%0.4i" % (workflow_root, ht_step, ht_x, ht_y, ht_iter);
+		string srcDir = "%s/exp_hs/ht-%0.2i-%0.4i-%0.4i-%0.4i" % (workflow_root, ht_output, ht_x, ht_y, ht_iter);
 		string turbine_output = getenv("TURBINE_OUTPUT");
 		string parDir = "%s/run" % turbine_output;
 		string dir = "%s/%s" % (parDir, run_id);
@@ -154,7 +154,7 @@ main()
 
 	// 0) StageWrite: total number of processes
 	// 1) StageWrite: number of processes per worker
-	// 2) HeatTransfer: total number of steps to output
+	// 2) HeatTransfer: total number of outputs
 	// 3) HeatTransfer: total array size in X dimension
 	// 4) HeatTransfer: total array size in Y dimension
 	// 5) HeatTransfer: total number of iterations
