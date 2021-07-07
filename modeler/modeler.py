@@ -338,7 +338,6 @@ def pred_top_anal_cmbn(cpnt_mdls, df_test, cpnt_confns, confn, perfn, num_top=1,
         X_cpnt_test = df_test[cpnt_confns[i]].values
         if isinstance(cpnt_mdls[i], xgb.sklearn.XGBRegressor):
             y_cpnt_pred = cpnt_mdls[i].predict(X_cpnt_test)
-            print(i)
         elif isinstance(cpnt_mdls[i], float):
             y_cpnt_pred = cpnt_mdls[i] * np.ones(X_cpnt_test.shape[0])
         else:

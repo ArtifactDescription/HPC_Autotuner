@@ -190,7 +190,7 @@ df_lv = df_lv.sort_values(lv_confn).reset_index(drop=True)
 
 
 df_ht = csv2df(glob.glob('../data/hs/ht*.csv'), ht_paramns, 'exec_time')
-df_ht = df_ht[df_ht.ht_nout == 16]
+df_ht = df_ht[df_ht.ht_nout == 8]
 df_ht = df_ht[df_ht.ht_x == 2048]
 df_ht = df_ht[df_ht.ht_y == 2048]
 df_ht = df_ht[df_ht.ht_iter == 1024]
@@ -200,7 +200,7 @@ df_ht = df_ht.sort_values(ht_confn).reset_index(drop=True)
 #print(df_ht)
 
 df_sw = csv2df(glob.glob('../data/hs/sw*.csv'), sw_paramns, 'exec_time')
-df_sw = df_sw[df_sw.ht_nout == 16]
+df_sw = df_sw[df_sw.ht_nout == 8]
 df_sw = df_sw[df_sw.ht_x == 2048]
 df_sw = df_sw[df_sw.ht_y == 2048]
 df_sw = df_sw[df_sw.ht_iter == 1024]
@@ -210,7 +210,7 @@ df_sw = df_sw.sort_values(sw_confn).reset_index(drop=True)
 #print(df_sw)
 
 df_hs = csv2df(glob.glob('../data/hs/hs*.csv'), hs_paramns, 'exec_time')
-df_hs = df_hs[df_hs.ht_nout == 16]
+df_hs = df_hs[df_hs.ht_nout == 8]
 df_hs = df_hs[df_hs.ht_x == 2048]
 df_hs = df_hs[df_hs.ht_y == 2048]
 df_hs = df_hs[df_hs.ht_iter == 1024]
