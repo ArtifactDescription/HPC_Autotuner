@@ -29,12 +29,12 @@ if (wf == 'lv'):
         if (num_smpl == 50):
             geist_num_iter = 7
             geist_pct_rand = 0.25
-            al_num_iter = 7
+            al_num_iter = 9
             al_pct_rand = 0.3
             alic_num_iter = 6
             alic_pct_rand = 0.05
             alic_pct_repl = 0.45
-            ceal_num_iter = 6
+            ceal_num_iter = 9
             ceal_pct_rand = 0.05
             ceal_pct_repl = 0.45
             alph_num_iter = 7
@@ -71,7 +71,7 @@ if (wf == 'lv'):
             alic_pct_repl = 0.5
             ceal_num_iter = 6
             ceal_pct_rand = 0.05
-            ceal_pct_repl = 0.5
+            ceal_pct_repl = 0.6
             alph_num_iter = 8
             alph_pct_rand = 0.5
             alich_num_iter = 9

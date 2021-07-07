@@ -32,7 +32,7 @@ if (wf == 'lv'):
     if (perfn == 'exec_time'):
         if (num_smpl == 50):
             if (algo == 'geist'):
-                num_iter = 7
+                num_iter = 6
             elif (algo == 'al'):
                 num_iter = 9
             elif (algo == 'alic'):
@@ -42,11 +42,11 @@ if (wf == 'lv'):
                 num_iter = 9
                 pct_repl = 0.45
             elif (algo == 'alph'):
-                num_iter = 7
+                num_iter = 8
             elif (algo == 'alich'):
                 num_iter = 1
             elif (algo == 'cealh'):
-                num_iter = 1
+                num_iter = 9
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -54,12 +54,12 @@ if (wf == 'lv'):
             if (algo == 'geist'):
                 num_iter = 6
             elif (algo == 'al'):
-                num_iter = 7
+                num_iter = 5
             elif (algo == 'alic'):
                 num_iter = 7
                 pct_repl = 0.8
             elif (algo == 'ceal'):
-                num_iter = 7
+                num_iter = 10
                 pct_repl = 0.8
             elif (algo == 'alph'):
                 num_iter = 4
@@ -80,7 +80,7 @@ if (wf == 'lv'):
                 num_iter = 6
                 pct_repl = 0.5
             elif (algo == 'ceal'):
-                num_iter = 7
+                num_iter = 6
                 pct_repl = 0.6
             elif (algo == 'alph'):
                 num_iter = 8
@@ -95,7 +95,7 @@ if (wf == 'lv'):
             if (algo == 'geist'):
                 num_iter = 2
             elif (algo == 'al'):
-                num_iter = 9
+                num_iter = 8
             elif (algo == 'alic'):
                 num_iter = 7
                 pct_repl = 0.5
@@ -262,7 +262,7 @@ else:
     exit()
 
 pct_rand_start = 0.05
-pct_rand_end = 0.95 - pct_repl
+pct_rand_end = 1 - pct_repl
 pct_rand_step = 0.05
 
 for rand_seed in range(1, num_run + 1):
