@@ -175,7 +175,7 @@ def gen_smpl_lv(num_smpl_lv, filename_lv, filename_lmp, filename_vr, smll_smpl=T
             df2csv(df_smpl_lvc_smll, filename_lv + "c" + str(i+1) + ".csv")
 
 def gen_smpl_lmp(num_smpl_lmp, filename_lmp, smll_smpl=True):
-    random.seed(2021)
+    random.seed(2020)
     smpls_lmp = set([])
     lmp_nstep_out_c = 200
     lmp_l2s_c = 16000
@@ -280,7 +280,7 @@ def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, smll_smpl=Tr
     smpls_hs = set([])
     smpls_ht = set([])
     smpls_sw = set([])
-    ht_nout_c = 16
+    ht_nout_c = 8
     ht_x_c = 2048
     ht_y_c = 2048
     ht_iter_c = 1024
@@ -387,9 +387,9 @@ def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, smll_smpl=Tr
             df2csv(df_smpl_hsc_smll, filename_hs + "c" + str(i+1) + ".csv")
 
 def gen_smpl_ht(num_smpl_ht, filename_ht, smll_smpl=True):
-    random.seed(2021)
+    random.seed(2020)
     smpls_ht = set([])
-    ht_nout_c = 16
+    ht_nout_c = 8
     ht_x_c = 2048
     ht_y_c = 2048
     ht_iter_c = 1024
@@ -445,7 +445,7 @@ def gen_smpl_ht(num_smpl_ht, filename_ht, smll_smpl=True):
 def gen_smpl_sw(num_smpl_sw, filename_sw, smll_smpl=True):
     random.seed(2021)
     smpls_sw = set([])
-    ht_nout_c = 16
+    ht_nout_c = 8
     ht_x_c = 2048
     ht_y_c = 2048
     ht_iter_c = 1024
