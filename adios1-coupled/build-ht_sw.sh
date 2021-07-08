@@ -21,6 +21,7 @@ fi
 echo
 echo "Build heat transfer ..."
 cd Example-Heat_Transfer
+git checkout e2353b06d0ded82ff00402e072987b7c1ed506a9
 sed -i 's/^CC=cc$/CC=mpicc #cc/' Makefile
 sed -i 's/^FC=ftn$/FC=mpif90 #ftn/' Makefile
 make
