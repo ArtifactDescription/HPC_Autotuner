@@ -17,6 +17,7 @@ git clone https://github.com/CODARcode/Example-LAMMPS.git
 
 # Build Example-LAMMPS
 cd Example-LAMMPS
+git checkout b4eb2a1823bcde6982a0e558acfb4c282ce7efee
 
 # Compile lammps
 cd lammps/src
