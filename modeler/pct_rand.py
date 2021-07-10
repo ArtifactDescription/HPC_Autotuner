@@ -10,7 +10,7 @@ if (len(sys.argv) != 6):
     print("\tperformance: exec_time, comp_time")
     print("\tnumber of samples: 25, 50, 100")
     print("\t#runs: 10, 100")
-    print("\talgorithm: al, geist, alic, ceal, alph, alich, cealh")
+    print("\talgorithm: geist, al, ceal, cealh, alph")
     exit()
 
 wf = sys.argv[1]
@@ -35,17 +35,12 @@ if (wf == 'lv'):
                 num_iter = 6
             elif (algo == 'al'):
                 num_iter = 9
-            elif (algo == 'alic'):
-                num_iter = 6
-                pct_repl = 0.45
             elif (algo == 'ceal'):
                 num_iter = 7
-                pct_repl = 0.45
-            elif (algo == 'alph'):
-                num_iter = 8
-            elif (algo == 'alich'):
-                num_iter = 1
+                pct_repl = 0.6
             elif (algo == 'cealh'):
+                num_iter = 10
+            elif (algo == 'alph'):
                 num_iter = 9
             else:
                 print("Error: unknown algorithm!")
@@ -55,18 +50,13 @@ if (wf == 'lv'):
                 num_iter = 6
             elif (algo == 'al'):
                 num_iter = 5
-            elif (algo == 'alic'):
-                num_iter = 7
-                pct_repl = 0.8
             elif (algo == 'ceal'):
                 num_iter = 9
                 pct_repl = 0.55
-            elif (algo == 'alph'):
-                num_iter = 4
-            elif (algo == 'alich'):
-                num_iter = 2
             elif (algo == 'cealh'):
                 num_iter = 5
+            elif (algo == 'alph'):
+                num_iter = 9
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -76,18 +66,13 @@ if (wf == 'lv'):
                 num_iter = 9
             elif (algo == 'al'):
                 num_iter = 10
-            elif (algo == 'alic'):
-                num_iter = 6
-                pct_repl = 0.5
             elif (algo == 'ceal'):
-                num_iter = 10
-                pct_repl = 0.8
-            elif (algo == 'alph'):
                 num_iter = 8
-            elif (algo == 'alich'):
-                num_iter = 9
+                pct_repl = 0.8
             elif (algo == 'cealh'):
-                num_iter = 9
+                num_iter = 3
+            elif (algo == 'alph'):
+                num_iter = 10
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -96,17 +81,12 @@ if (wf == 'lv'):
                 num_iter = 2
             elif (algo == 'al'):
                 num_iter = 8
-            elif (algo == 'alic'):
-                num_iter = 7
-                pct_repl = 0.5
             elif (algo == 'ceal'):
-                num_iter = 10
-                pct_repl = 0.55
-            elif (algo == 'alph'):
                 num_iter = 9
-            elif (algo == 'alich'):
-                num_iter = 8
+                pct_repl = 0.55
             elif (algo == 'cealh'):
+                num_iter = 9
+            elif (algo == 'alph'):
                 num_iter = 10
             else:
                 print("Error: unknown algorithm!")
@@ -126,18 +106,13 @@ elif (wf == 'hs'):
                 num_iter = 2
             elif (algo == 'al'):
                 num_iter = 9
-            elif (algo == 'alic'):
-                num_iter = 8
-                pct_repl = 0.7
             elif (algo == 'ceal'):
                 num_iter = 8
                 pct_repl = 0.7
-            elif (algo == 'alph'):
-                num_iter = 8
-            elif (algo == 'alich'):
-                num_iter = 2
             elif (algo == 'cealh'):
                 num_iter = 2
+            elif (algo == 'alph'):
+                num_iter = 8
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -146,18 +121,13 @@ elif (wf == 'hs'):
                 num_iter = 5
             elif (algo == 'al'):
                 num_iter = 5
-            elif (algo == 'alic'):
-                num_iter = 10
-                pct_repl = 0.25
             elif (algo == 'ceal'):
                 num_iter = 10
                 pct_repl = 0.25
-            elif (algo == 'alph'):
-                num_iter = 8
-            elif (algo == 'alich'):
-                num_iter = 3
             elif (algo == 'cealh'):
                 num_iter = 3
+            elif (algo == 'alph'):
+                num_iter = 8
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -167,18 +137,13 @@ elif (wf == 'hs'):
                 num_iter = 4
             elif (algo == 'al'):
                 num_iter = 9
-            elif (algo == 'alic'):
-                num_iter = 10
-                pct_repl = 0.55
             elif (algo == 'ceal'):
                 num_iter = 10
                 pct_repl = 0.55
-            elif (algo == 'alph'):
-                num_iter = 9
-            elif (algo == 'alich'):
-                num_iter = 1
             elif (algo == 'cealh'):
                 num_iter = 1
+            elif (algo == 'alph'):
+                num_iter = 9
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -187,18 +152,13 @@ elif (wf == 'hs'):
                 num_iter = 6
             elif (algo == 'al'):
                 num_iter = 8
-            elif (algo == 'alic'):
-                num_iter = 5
-                pct_repl = 0.35
             elif (algo == 'ceal'):
                 num_iter = 5
                 pct_repl = 0.35
-            elif (algo == 'alph'):
-                num_iter = 5
-            elif (algo == 'alich'):
-                num_iter = 2
             elif (algo == 'cealh'):
                 num_iter = 2
+            elif (algo == 'alph'):
+                num_iter = 5
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -219,18 +179,13 @@ elif (wf == 'gvpv'):
                 num_iter = 6
             elif (algo == 'al'):
                 num_iter = 7
-            elif (algo == 'alic'):
-                num_iter = 7
-                pct_repl = 0.1
             elif (algo == 'ceal'):
                 num_iter = 7
                 pct_repl = 0.1
-            elif (algo == 'alph'):
-                num_iter = 8
-            elif (algo == 'alich'):
-                num_iter = 9
             elif (algo == 'cealh'):
                 num_iter = 9
+            elif (algo == 'alph'):
+                num_iter = 8
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -239,18 +194,13 @@ elif (wf == 'gvpv'):
                 num_iter = 3
             elif (algo == 'al'):
                 num_iter = 8
-            elif (algo == 'alic'):
-                num_iter = 7
-                pct_repl = 0.6
             elif (algo == 'ceal'):
                 num_iter = 7
                 pct_repl = 0.6
-            elif (algo == 'alph'):
-                num_iter = 7
-            elif (algo == 'alich'):
-                num_iter = 6
             elif (algo == 'cealh'):
                 num_iter = 6
+            elif (algo == 'alph'):
+                num_iter = 7
             else:
                 print("Error: unknown algorithm!")
                 exit()

@@ -10,7 +10,7 @@ if (len(sys.argv) != 6):
     print("\tperformance: exec_time, comp_time")
     print("\tnumber of samples: 25, 50, 100")
     print("\t#runs: 10, 100")
-    print("\talgorithm: al, geist, alic, ceal, alph, alich, cealh")
+    print("\talgorithm: geist, al, ceal, cealh, alph")
     exit()
 
 wf = sys.argv[1]
@@ -33,18 +33,13 @@ if (wf == 'lv'):
                 pct_rand = 0.25
             elif (algo == 'al'):
                 pct_rand = 0.3
-            elif (algo == 'alic'):
-                pct_rand = 0.05
-                pct_repl = 0.45
             elif (algo == 'ceal'):
                 pct_rand = 0.1
-                pct_repl = 0.45
-            elif (algo == 'alph'):
-                pct_rand = 0.4
-            elif (algo == 'alich'):
-                pct_rand = 0.15
+                pct_repl = 0.6
             elif (algo == 'cealh'):
-                pct_rand = 0.1
+                pct_rand = 0.05
+            elif (algo == 'alph'):
+                pct_rand = 0.35
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -53,18 +48,13 @@ if (wf == 'lv'):
                 pct_rand = 0.4
             elif (algo == 'al'):
                 pct_rand = 0.25
-            elif (algo == 'alic'):
-                pct_rand = 0.05
-                pct_repl = 0.8
             elif (algo == 'ceal'):
                 pct_rand = 0.05
                 pct_repl = 0.55
-            elif (algo == 'alph'):
-                pct_rand = 0.25
-            elif (algo == 'alich'):
-                pct_rand = 0.45
             elif (algo == 'cealh'):
                 pct_rand = 0.15
+            elif (algo == 'alph'):
+                pct_rand = 0.25
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -77,34 +67,24 @@ if (wf == 'lv'):
             elif (algo == 'ceal'):
                 pct_rand = 0.05
                 pct_repl = 0.8
-            elif (algo == 'alic'):
-                pct_rand = 0.05
-                pct_repl = 0.5
-            elif (algo == 'alph'):
-                pct_rand = 0.65
-            elif (algo == 'alich'):
-                pct_rand = 0.3
             elif (algo == 'cealh'):
-                pct_rand = 0.3
+                pct_rand = 0.15
+            elif (algo == 'alph'):
+                pct_rand = 0.4
             else:
                 print("Error: unknown algorithm!")
                 exit()
         else:    # 25 samples
             if (algo == 'geist'):
-                pct_rand = 0.05
+                pct_rand = 0.15
             elif (algo == 'al'):
                 pct_rand = 0.05
-            elif (algo == 'alic'):
-                pct_rand = 0.1
-                pct_repl = 0.5
             elif (algo == 'ceal'):
                 pct_rand = 0.1
                 pct_repl = 0.55
-            elif (algo == 'alph'):
-                pct_rand = 0.1
-            elif (algo == 'alich'):
-                pct_rand = 0.15
             elif (algo == 'cealh'):
+                pct_rand = 0.35
+            elif (algo == 'alph'):
                 pct_rand = 0.1
             else:
                 print("Error: unknown algorithm!")
@@ -124,18 +104,13 @@ elif (wf == 'hs'):
                 pct_rand = 0.25
             elif (algo == 'al'):
                 pct_rand = 0.45
-            elif (algo == 'alic'):
-                pct_rand = 0.15
-                pct_repl = 0.7
             elif (algo == 'ceal'):
                 pct_rand = 0.15
                 pct_repl = 0.7
-            elif (algo == 'alph'):
-                pct_rand = 0.25
-            elif (algo == 'alich'):
-                pct_rand = 0.3
             elif (algo == 'cealh'):
                 pct_rand = 0.3
+            elif (algo == 'alph'):
+                pct_rand = 0.25
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -144,18 +119,13 @@ elif (wf == 'hs'):
                 pct_rand = 0.4
             elif (algo == 'al'):
                 pct_rand = 0.35
-            elif (algo == 'alic'):
-                pct_rand = 0.3
-                pct_repl = 0.25
             elif (algo == 'ceal'):
                 pct_rand = 0.3
                 pct_repl = 0.25
-            elif (algo == 'alph'):
-                pct_rand = 0.3
-            elif (algo == 'alich'):
-                pct_rand = 0.15
             elif (algo == 'cealh'):
                 pct_rand = 0.15
+            elif (algo == 'alph'):
+                pct_rand = 0.3
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -165,18 +135,13 @@ elif (wf == 'hs'):
                 pct_rand = 0.4
             elif (algo == 'al'):
                 pct_rand = 0.35
-            elif (algo == 'alic'):
-                pct_rand = 0.2
-                pct_repl = 0.55
             elif (algo == 'ceal'):
                 pct_rand = 0.2
                 pct_repl = 0.55
-            elif (algo == 'alph'):
-                pct_rand = 0.35
-            elif (algo == 'alich'):
-                pct_rand = 0.05
             elif (algo == 'cealh'):
                 pct_rand = 0.05
+            elif (algo == 'alph'):
+                pct_rand = 0.35
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -185,18 +150,13 @@ elif (wf == 'hs'):
                 pct_rand = 0.05
             elif (algo == 'al'):
                 pct_rand = 0.35
-            elif (algo == 'alic'):
-                pct_rand = 0.2
-                pct_repl = 0.35
             elif (algo == 'ceal'):
                 pct_rand = 0.2
                 pct_repl = 0.35
-            elif (algo == 'alph'):
-                pct_rand = 0.45
-            elif (algo == 'alich'):
-                pct_rand = 0.05
             elif (algo == 'cealh'):
                 pct_rand = 0.05
+            elif (algo == 'alph'):
+                pct_rand = 0.45
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -217,18 +177,13 @@ elif (wf == 'gvpv'):
                 pct_rand = 0.05
             elif (algo == 'al'):
                 pct_rand = 0.15
-            elif (algo == 'alic'):
-                pct_rand = 0.1
-                pct_repl = 0.1
             elif (algo == 'ceal'):
                 pct_rand = 0.1
                 pct_repl = 0.1
-            elif (algo == 'alph'):
-                pct_rand = 0.4
-            elif (algo == 'alich'):
-                pct_rand = 0.15
             elif (algo == 'cealh'):
                 pct_rand = 0.15
+            elif (algo == 'alph'):
+                pct_rand = 0.4
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -237,18 +192,13 @@ elif (wf == 'gvpv'):
                 pct_rand = 0.1
             elif (algo == 'al'):
                 pct_rand = 0.35
-            elif (algo == 'alic'):
-                pct_rand = 0.15
-                pct_repl = 0.6
             elif (algo == 'ceal'):
                 pct_rand = 0.15
                 pct_repl = 0.6
-            elif (algo == 'alph'):
-                pct_rand = 0.35
-            elif (algo == 'alich'):
-                pct_rand = 0.1
             elif (algo == 'cealh'):
                 pct_rand = 0.1
+            elif (algo == 'alph'):
+                pct_rand = 0.35
             else:
                 print("Error: unknown algorithm!")
                 exit()

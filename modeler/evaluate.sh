@@ -15,16 +15,11 @@ perfn=$2
 num_smpl=$3
 num_run=$4
 
-dir_name=../plot/$wf/$perfn
+dir_name=../plot/$wf'_'$perfn
 
 if [ ! -d ../plot ]
 then
 	mkdir ../plot
-fi
-
-if [ ! -d ../plot/$wf ]
-then
-	mkdir ../plot/$wf
 fi
 
 if [ ! -d $dir_name ]

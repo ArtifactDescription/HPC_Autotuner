@@ -280,7 +280,7 @@ def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, smll_smpl=Tr
     smpls_hs = set([])
     smpls_ht = set([])
     smpls_sw = set([])
-    ht_nout_c = 8
+    ht_nout_c = 16
     ht_x_c = 2048
     ht_y_c = 2048
     ht_iter_c = 1024
@@ -389,7 +389,7 @@ def gen_smpl_hs(num_smpl_hs, filename_hs, filename_ht, filename_sw, smll_smpl=Tr
 def gen_smpl_ht(num_smpl_ht, filename_ht, smll_smpl=True):
     random.seed(2020)
     smpls_ht = set([])
-    ht_nout_c = 8
+    ht_nout_c = 16
     ht_x_c = 2048
     ht_y_c = 2048
     ht_iter_c = 1024
@@ -445,7 +445,7 @@ def gen_smpl_ht(num_smpl_ht, filename_ht, smll_smpl=True):
 def gen_smpl_sw(num_smpl_sw, filename_sw, smll_smpl=True):
     random.seed(2021)
     smpls_sw = set([])
-    ht_nout_c = 8
+    ht_nout_c = 16
     ht_x_c = 2048
     ht_y_c = 2048
     ht_iter_c = 1024

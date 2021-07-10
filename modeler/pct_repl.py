@@ -10,7 +10,7 @@ if (len(sys.argv) != 6):
     print("\tperformance: exec_time, comp_time")
     print("\tnumber of samples: 25, 50, 100")
     print("\t#runs: 10, 100")
-    print("\talgorithm: alic, ceal")
+    print("\talgorithm: ceal")
     exit()
 
 wf = sys.argv[1]
@@ -29,20 +29,14 @@ if (wf == 'lv'):
     confn = sp.lv_confn
     if (perfn == 'exec_time'):
         if (num_smpl == 50):
-            if (algo == 'alic'):
-                pct_rand = 0.05
-                num_iter = 6
-            elif (algo == 'ceal'):
+            if (algo == 'ceal'):
                 pct_rand = 0.1
                 num_iter = 7
             else:
                 print("Error: unknown algorithm!")
                 exit()
         else:    # 100 samples
-            if (algo == 'alic'):
-                pct_rand = 0.05
-                num_iter = 7
-            elif (algo == 'ceal'):
+            if (algo == 'ceal'):
                 pct_rand = 0.05
                 num_iter = 9
             else:
@@ -50,22 +44,16 @@ if (wf == 'lv'):
                 exit()
     elif (perfn == 'comp_time'):
         if (num_smpl == 50):
-            if (algo == 'alic'):
+            if (algo == 'ceal'):
                 pct_rand = 0.05
-                num_iter = 6
-            elif (algo == 'ceal'):
-                pct_rand = 0.05
-                num_iter = 10
+                num_iter = 8
             else:
                 print("Error: unknown algorithm!")
                 exit()
         else:    # 25 samples
-            if (algo == 'alic'):
+            if (algo == 'ceal'):
                 pct_rand = 0.1
-                num_iter = 7
-            elif (algo == 'ceal'):
-                pct_rand = 0.1
-                num_iter = 10
+                num_iter = 9
             else:
                 print("Error: unknown algorithm!")
                 exit()
@@ -80,20 +68,14 @@ elif (wf == 'hs'):
     confn = sp.hs_confn
     if (perfn == 'exec_time'):
         if (num_smpl == 50):
-            if (algo == 'alic'):
-                pct_rand = 0.15
-                num_iter = 8
-            elif (algo == 'ceal'):
+            if (algo == 'ceal'):
                 pct_rand = 0.15
                 num_iter = 8
             else:
                 print("Error: unknown algorithm!")
                 exit()
         else:    # 100 samples
-            if (algo == 'alic'):
-                pct_rand = 0.3
-                num_iter = 10
-            elif (algo == 'ceal'):
+            if (algo == 'ceal'):
                 pct_rand = 0.3
                 num_iter = 10
             else:
@@ -101,20 +83,14 @@ elif (wf == 'hs'):
                 exit()
     elif (perfn == 'comp_time'):
         if (num_smpl == 50):
-            if (algo == 'alic'):
-                pct_rand = 0.2
-                num_iter = 10
-            elif (algo == 'ceal'):
+            if (algo == 'ceal'):
                 pct_rand = 0.2
                 num_iter = 10
             else:
                 print("Error: unknown algorithm!")
                 exit()
         else:    # 25 samples
-            if (algo == 'alic'):
-                pct_rand = 0.2
-                num_iter = 5
-            elif (algo == 'ceal'):
+            if (algo == 'ceal'):
                 pct_rand = 0.2
                 num_iter = 5
             else:
@@ -133,20 +109,14 @@ elif (wf == 'gvpv'):
     confn = sp.gvpv_confn
     if (perfn == 'comp_time'):
         if (num_smpl == 50):
-            if (algo == 'alic'):
-                pct_rand = 0.1
-                num_iter = 7
-            elif (algo == 'ceal'):
+            if (algo == 'ceal'):
                 pct_rand = 0.1
                 num_iter = 7
             else:
                 print("Error: unknown algorithm!")
                 exit()
         else:    # 25 samples
-            if (algo == 'alic'):
-                pct_rand = 0.15
-                num_iter = 7
-            elif (algo == 'ceal'):
+            if (algo == 'ceal'):
                 pct_rand = 0.15
                 num_iter = 7
             else:
